@@ -25,13 +25,13 @@ NeoForge release.
 | Node | Mod | Version | Modrinth id | Teapot | Dripstone into teapot |
 |---|---|---|---|---|---|
 | `1.21.1-neoforge` | official | `1.6.0-neoforge+mc1.21.1` (published 2026-09-22, same targets as 1.5.0) | `g8w0b2ly` | yes | yes |
-| `1.21.1` | Refabricated | `1.6.0.5-fabric+mc1.21.1` | `QwvfHVMm` | yes | yes |
+| `1.21.1` | Refabricated | `1.6.0.7-fabric+mc1.21.1` | `uX05gQkC` | yes | yes |
 | `1.20.1-forge` | official | `1.6.0-forge+mc1.20.1` | `Ghp0qCKY` | yes | yes |
-| `1.20.1` | Refabricated | `1.6.0.5-fabric+mc1.20.1` | `pgMmnpfW` | yes | yes |
+| `1.20.1` | Refabricated | `1.6.0.7-fabric+mc1.20.1` | `eY332oBj` | yes | yes |
 | `1.21.11` | Refabricated | `1.3.0.10-fabric+mc1.21.11`, hotfixes only from 1.3.0.10 on ("no longer update future contents") | `T5QYqq9P` | yes | no |
-| `26.1.x` | Refabricated | `1.6.0.5-fabric+mc26.1.2` | `8BX1GmjK` | yes | no |
-| `26.2.x` | Refabricated | `1.6.0.5-fabric+mc26.2` | `8pmEOLME` | yes | no |
-| `26.3.x` | Refabricated | `1.6.0.6-fabric+mc26.3` | `7cocw8Co` | yes | no |
+| `26.1.x` | Refabricated | `1.6.0.7-fabric+mc26.1.2` | `4jaTjBVV` | yes | no |
+| `26.2.x` | Refabricated | `1.6.0.7-fabric+mc26.2` | `sflwXftd` | yes | no |
+| `26.3.x` | Refabricated | `1.6.0.7-fabric+mc26.3` | `Ou0n4j1X` | yes | no |
 | `26.x-neoforge` | none | — | — | — | — |
 
 The official mod has no NeoForge build past 1.21.1, so the NeoForge nodes past 1.21.1 get nothing.
@@ -132,8 +132,8 @@ of different Minecraft versions share one version number). Nothing in the other 
 # [fabric."26.3.x"]
 # Kaleidoscope Cookery Refabricated, the unofficial Fabric port with the official team's permission:
 # the official Fabric build stopped at 1.0.1. See docs/dev/integration/cooking/KALEIDOSCOPE-COOKERY-INTEGRATION.md.
-# 1.6.0.6-fabric+mc26.3, the Fabric upload.
-deps.kaleidoscope_cookery = "7cocw8Co"
+# 1.6.0.7-fabric+mc26.3, the Fabric upload.
+deps.kaleidoscope_cookery = "Ou0n4j1X"
 ```
 
 Add to `MODRINTH_DEPS` in `../../../../.github/scripts/update_mc_deps.py`, with `by_id=True`, **under two project
