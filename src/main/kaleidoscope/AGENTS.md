@@ -54,7 +54,7 @@ kaleidoscope/java/com/thirstwastaken2/kaleidoscope/
   BrewedWaterQuality         the only place that reads a grade off what goes in, and stores it
   ReturnedWater              the grade on its way back out, per thread, for one remove call
   mixin/StockpotBlockEntityMixin   addSoupBase, removeSoupBase, save and load
-  mixin/TeapotBlockEntityMixin     addTeaFluid, removeTeaFluid, getDrops, save and load, and tick (no tea from sea water)
+  mixin/TeapotBlockEntityMixin     addTeaFluid (every overload), removeTeaFluid, getDrops, save and load, and tick (no tea from sea water)
   mixin/TeapotDripstoneMixin       receiveDripstoneFluid, which only the 1.21.1 builds have
   mixin/TeapotItemMixin            an empty teapot scooping world water
   mixin/ItemUtilsMixin             stamps the bucket both blocks hand back through ItemUtils

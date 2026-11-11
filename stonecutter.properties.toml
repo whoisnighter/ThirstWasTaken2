@@ -14,8 +14,8 @@ deps.fabric_loader = "0.19.5"
 # fabric.mod.json's `>=` stay on deps.fabric_loader, the minimum players need, which is raised by hand
 # when an integration or a fix needs a newer loader. The same pair for NeoForge and Forge below.
 deps.fabric_loader_latest = "0.20.1"
-# Pinned to a release rather than `1.18-SNAPSHOT`, so the same commit builds the same jars later.
-loomx.loom_version = "1.18.4"
+# Pinned to a release rather than `1.19-SNAPSHOT`, so the same commit builds the same jars later.
+loomx.loom_version = "1.19.4"
 
 [fabric."1.20.1"]
 # The node older than data components, payload types and Fabric's attachment sync; see

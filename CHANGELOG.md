@@ -2,6 +2,20 @@
 
 All notable changes to ThirstWasTaken2 are documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Extra Delight, on NeoForge 1.21.1: its new strawberry drinks and treats restore thirst, from Strawberry
+  Juice, Pink Lemonade, Strawberry Milk and the Strawberry Milkshake to the popsicle, ice cream and
+  custard.
+- Cultural Delights, on NeoForge 1.21.1: Ice Cream restores a little thirst.
+
+### Fixed
+
+- Kaleidoscope Cookery Refabricated, on Fabric: a teapot filled by a Recipe Item keeps the grade of the
+  water it took. It used to keep the grade of whatever water was in it before.
+
 ## [1.10.1] - 2026-10-27
 
 Gensokyo Delight ~ Youkais' Feasts joins on NeoForge 1.21.1 and Forge 1.20.1, and Immersive Engineering's

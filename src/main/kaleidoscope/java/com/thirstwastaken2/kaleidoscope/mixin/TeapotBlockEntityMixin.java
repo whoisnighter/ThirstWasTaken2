@@ -4,6 +4,9 @@ import com.github.ysbbbbbb.kaleidoscopecookery.api.blockentity.ITeapot;
 import com.github.ysbbbbbb.kaleidoscopecookery.blockentity.kitchen.TeapotBlockEntity;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.thirstwastaken2.kaleidoscope.BrewedWater;
 import com.thirstwastaken2.kaleidoscope.BrewedWaterQuality;
 import com.thirstwastaken2.kaleidoscope.ReturnedWater;
@@ -19,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * The teapot keeps the grade of the water poured into it: back out in a bucket, and in the item when the
@@ -46,13 +50,24 @@ abstract class TeapotBlockEntityMixin implements BrewedWater {
         thirst$quality = quality;
     }
 
-    @WrapMethod(method = "addTeaFluid")
-    private boolean thirst$keepPouredGrade(Level level, LivingEntity user, ItemStack itemStack, Operation<Boolean> original) {
+    /**
+     * Every overload of {@code addTeaFluid}. Refabricated 1.6.0.7 added one that also takes the Transfer
+     * API's {@code ContainerItemContext}: the old one now calls it, and the recipe item calls it straight,
+     * so a selector by name alone, which takes only the first overload, missed the recipe item and left
+     * the last grade in the teapot. The stack is read by type, so this names no Fabric class and matches
+     * the single overload the other builds have. Nested calls read the same full bucket and store the
+     * same grade.
+     */
+    @Inject(method = "addTeaFluid*", at = @At("HEAD"))
+    private void thirst$readPouredGrade(CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) ItemStack itemStack,
+                                        @Share("poured") LocalRef<WaterQuality> poured) {
         // Read before the call: it empties the bucket.
-        WaterQuality poured = BrewedWaterQuality.of(itemStack);
-        boolean added = original.call(level, user, itemStack);
-        if (added) thirst$quality = poured;
-        return added;
+        poured.set(BrewedWaterQuality.of(itemStack));
+    }
+
+    @Inject(method = "addTeaFluid*", at = @At("RETURN"))
+    private void thirst$keepPouredGrade(CallbackInfoReturnable<Boolean> cir, @Share("poured") LocalRef<WaterQuality> poured) {
+        if (cir.getReturnValueZ()) thirst$quality = poured.get();
     }
 
     /**

@@ -5,7 +5,7 @@ its taps, jars, kegs and kitchen blocks treat water the way the rest of this mod
 
 ::: warning Supported versions
 Everything on this page works on NeoForge, Minecraft 1.21.1, with
-![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2FyRrY3XII%2Fcec2396cf9f6f74a5b0cff196301a4b8b8124e1e.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Extra Delight](https://modrinth.com/mod/extradelight) 2.6.6. The mod has no Fabric build and no
+![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2FyRrY3XII%2Fcec2396cf9f6f74a5b0cff196301a4b8b8124e1e.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Extra Delight](https://modrinth.com/mod/extradelight) 2.7. The mod has no Fabric build and no
 build for another Minecraft version.
 :::
 

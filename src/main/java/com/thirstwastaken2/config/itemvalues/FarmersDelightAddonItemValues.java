@@ -69,6 +69,8 @@ final class FarmersDelightAddonItemValues {
         putMissing(foods, 1, 0, "culturaldelights:cut_cucumber");
         putMissing(foods, 2, 0, "culturaldelights:hearty_salad");
         putMissing(foods, 1, 0, "culturaldelights:creamed_corn", "culturaldelights:poached_eggplants");
+        // 0.19.6's ice cream, in a wafer: Extra Delight's and Croptopia's ice cream.
+        putMissing(foods, 1, 0, "culturaldelights:ice_cream");
     }
 
     /**
@@ -229,17 +231,18 @@ final class FarmersDelightAddonItemValues {
      */
     static void extraDelightDrinks(Map<String, int[]> drinks) {
         for (String juice : new String[]{"lemonade", "limeade", "orangeade", "punch", "glow_berry_juice",
-                "sweet_berry_juice", "tomato_juice", "cactus_juice", "orange_juice", "grapefruit_juice"}) {
+                "sweet_berry_juice", "tomato_juice", "cactus_juice", "orange_juice", "grapefruit_juice",
+                "strawberry_juice", "pink_lemonade"}) {
             putMissing(drinks, 6, 4, "extradelight:" + juice);
         }
         putMissing(drinks, 4, 2, "extradelight:lemon_juice", "extradelight:lime_juice");
         for (String shake : new String[]{"milkshake", "chocolate_milkshake", "glow_berry_milkshake",
                 "sweet_berry_milkshake", "pumpkin_milkshake", "honey_milkshake", "apple_milkshake",
-                "cookie_dough_milkshake", "mint_chip_milkshake", "nut_butter_milkshake"}) {
+                "cookie_dough_milkshake", "mint_chip_milkshake", "nut_butter_milkshake", "strawberry_milkshake"}) {
             putMissing(drinks, 6, 4, "extradelight:" + shake);
         }
         putMissing(drinks, 6, 4, "extradelight:gourmet_hot_chocolate");
-        putMissing(drinks, 6, 4, "extradelight:chocolate_milk", "extradelight:eggnog", "extradelight:horchata", "extradelight:xocolati", "extradelight:ginger_beer");
+        putMissing(drinks, 6, 4, "extradelight:chocolate_milk", "extradelight:eggnog", "extradelight:horchata", "extradelight:xocolati", "extradelight:ginger_beer", "extradelight:strawberry_milk");
         putMissing(drinks, 4, 0, "extradelight:soy_milk");
         putMissing(drinks, 6, 4, "extradelight:tea");
         putMissing(drinks, 6, 4, "extradelight:coffee", "extradelight:dalgona_coffee");
@@ -259,13 +262,14 @@ final class FarmersDelightAddonItemValues {
         }
         putMissing(foods, 6, 4, "extradelight:melon_gazpacho");
         putMissing(foods, 2, 0, "extradelight:curry", "extradelight:chili_con_carne", "extradelight:white_chili");
-        putMissing(foods, 2, 0, "extradelight:apple_popsicle", "extradelight:glow_berry_popsicle", "extradelight:sweet_berry_popsicle", "extradelight:honey_popsicle");
+        putMissing(foods, 2, 0, "extradelight:apple_popsicle", "extradelight:glow_berry_popsicle", "extradelight:sweet_berry_popsicle", "extradelight:honey_popsicle", "extradelight:strawberry_popsicle");
         putMissing(foods, 2, 0, "extradelight:caramel_popsicle", "extradelight:cinnamon_popsicle", "extradelight:fudge_popsicle");
         for (String cold : new String[]{"ice_cream", "apple_ice_cream", "chocolate_ice_cream",
                 "cookie_dough_ice_cream", "glow_berry_ice_cream", "honey_ice_cream", "mint_chip_ice_cream",
                 "nut_butter_ice_cream", "pumpkin_ice_cream", "sweet_berry_ice_cream", "stuffed_apple_ice_cream",
                 "ice_cream_sundae", "affogato", "apple_custard", "caramel_custard", "chocolate_custard",
-                "honey_custard", "nut_butter_custard", "pumpkin_custard", "sweet_berry_custard"}) {
+                "honey_custard", "nut_butter_custard", "pumpkin_custard", "sweet_berry_custard",
+                "strawberry_ice_cream", "strawberry_custard"}) {
             putMissing(foods, 1, 0, "extradelight:" + cold);
         }
     }

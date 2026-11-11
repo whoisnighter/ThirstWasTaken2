@@ -8,7 +8,7 @@ the Sink poured Clean water from nothing; sea water pickled, mixed lemonade and 
 fresh water did. This directory fixes that. The plan and its decisions are in
 [docs/dev/integration/cooking/EXTRA-DELIGHT-INTEGRATION.md](../../../docs/dev/integration/cooking/EXTRA-DELIGHT-INTEGRATION.md).
 
-**Built on `1.21.1-neoforge` only**, the mod's build 2.6.6, its only official one. What it does:
+**Built on `1.21.1-neoforge` only**, the mod's build 2.7, its only official one. What it does:
 
 - **a tank keeps the grade** poured into it, by bottle or by bucket: the Jar, the Keg, and the fluid
   slots of the Vat, the Mixing Bowl and the Chiller. Two grades never share a tank: the tanks compare
@@ -72,7 +72,7 @@ extradelight/resources/
 - **Recipes.** The Vat, Mixing Bowl and Evaporator match water by fluid alone. Their `matches` mixins read
   the tank: sea water stops the first two, fresh water stops the Evaporator. The tank keeps what it holds.
 - **Compiled against the mod.** The mixins name its classes, so `build.neoforge.gradle.kts` has it as
-  `compileOnly`. Every injection point was checked against the 2.6.6 jar's bytecode.
+  `compileOnly`. Every injection point was checked against the 2.6.6 jar's bytecode, and again against 2.7's.
 
 ## Not covered
 
