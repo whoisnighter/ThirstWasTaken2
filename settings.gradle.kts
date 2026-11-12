@@ -16,7 +16,7 @@ pluginManagement {
 
 plugins {
     // One source tree, one jar per Minecraft version. See the root AGENTS.md.
-    id("dev.kikugie.stonecutter") version "0.9.8"
+    id("dev.kikugie.stonecutter") version "0.10"
     // 26.1 dropped obfuscation, which changed how Loom consumes mod dependencies. This applies the
     // Loom variant each version needs and keeps `modImplementation` meaning the same thing on both.
     id("dev.kikugie.loom-back-compat") version "0.4.2"
