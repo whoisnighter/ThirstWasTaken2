@@ -90,6 +90,11 @@ export const INTEGRATIONS: Mod[] = [
     name: 'Immersive Engineering',
     icon: 'https://cdn.modrinth.com/data/tIm2nV03/icon.png',
     link: '/docs/integrations/immersive-engineering'
+  },
+  {
+    name: 'Little Logistics',
+    icon: 'https://cdn.modrinth.com/data/1zZJrh9c/fdee529567ce17536fcc53177731e28304ece5af_96.webp',
+    link: '/docs/integrations/little-logistics'
   }
 ]
 

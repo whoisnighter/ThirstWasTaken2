@@ -1,0 +1,50 @@
+// Water quality through Little Logistics on NeoForge 1.21.1 (src/main/littlelogistics, 1.21.1.1-beta.2),
+// issue #52:
+// - an empty bucket on a Fluid Tank Car of Murky water comes back a Murky water bucket, "bucketCheck";
+// - that bucket poured into an empty car leaves Murky water there, "pourCheck".
+// Before the fix both were plain water, so Clean.
+//
+// Little Logistics' runClientMod line in build.neoforge.gradle.kts must be uncommented. Every
+// "...Check" line has to say "Test passed" in run/1.21.1-neoforge/agent/client/out.jsonl. The car keeps its
+// tank at the top of its own NBT, under "Fluid".
+//
+//     python tools/agent/new_world.py 1.21.1-neoforge LLAgent
+//     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/little-logistics.jsonl -Pquickplay=LLAgent
+
+{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "joined", "command": "client.state"}
+{"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:resistance 600 4 true"}}
+{"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
+// The ground first, then the player on top of it: filling stone around a standing player suffocates them.
+{"id": "air", "command": "server.command", "args": {"command": "fill -6 199 -6 12 208 12 minecraft:air"}}
+{"id": "floor", "command": "server.command", "args": {"command": "fill -6 199 -6 12 201 12 minecraft:stone"}}
+{"id": "plains", "command": "server.command", "args": {"command": "fillbiome -6 190 -6 12 210 12 minecraft:plains"}}
+// Cars left from an earlier run of this script would be picked instead of the new ones.
+{"id": "oldCars", "command": "server.command", "args": {"command": "kill @e[type=littlelogistics:fluid_car]"}}
+{"id": "railA", "command": "server.command", "args": {"command": "setblock 0 202 2 minecraft:rail"}}
+{"id": "railB", "command": "server.command", "args": {"command": "setblock 6 202 2 minecraft:rail"}}
+{"id": "murkyCar", "command": "server.command", "args": {"command": "summon littlelogistics:fluid_car 0.5 202.0625 2.5 {Fluid:{id:\"minecraft:water\",amount:10000,components:{\"thirstwastaken2:water_purity\":1}}}"}}
+{"id": "emptyCar", "command": "server.command", "args": {"command": "summon littlelogistics:fluid_car 6.5 202.0625 2.5"}}
+{"id": "placed", "command": "wait", "args": {"ticks": 40}}
+{"id": "carRead", "command": "server.command", "args": {"command": "data get entity @e[type=littlelogistics:fluid_car,x=0.5,y=202,z=2.5,distance=..1,limit=1] Fluid"}}
+
+{"id": "clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "bucket", "command": "server.command", "args": {"command": "give @p minecraft:bucket"}}
+{"id": "atMurkyCar", "command": "server.command", "args": {"command": "tp @p 0.5 202 0.5 0 35"}}
+{"id": "settle1", "command": "wait", "args": {"ticks": 20}}
+{"id": "useDown1", "command": "client.key", "args": {"key": "use", "down": true}}
+{"id": "using1", "command": "wait", "args": {"ticks": 3}}
+{"id": "useUp1", "command": "client.key", "args": {"key": "use", "down": false}}
+{"id": "used1", "command": "wait", "args": {"ticks": 10}}
+{"id": "bucketRead", "command": "server.command", "args": {"command": "data get entity @p SelectedItem"}}
+{"id": "bucketCheck", "command": "server.command", "args": {"command": "execute if data entity @p SelectedItem{id:\"minecraft:water_bucket\",components:{\"thirstwastaken2:water_purity\":1}}"}}
+
+{"id": "atEmptyCar", "command": "server.command", "args": {"command": "tp @p 6.5 202 0.5 0 35"}}
+{"id": "settle2", "command": "wait", "args": {"ticks": 20}}
+{"id": "useDown2", "command": "client.key", "args": {"key": "use", "down": true}}
+{"id": "using2", "command": "wait", "args": {"ticks": 3}}
+{"id": "useUp2", "command": "client.key", "args": {"key": "use", "down": false}}
+{"id": "used2", "command": "wait", "args": {"ticks": 10}}
+{"id": "pourRead", "command": "server.command", "args": {"command": "data get entity @e[type=littlelogistics:fluid_car,x=6.5,y=202,z=2.5,distance=..1,limit=1] Fluid"}}
+{"id": "pourCheck", "command": "server.command", "args": {"command": "execute if data entity @e[type=littlelogistics:fluid_car,x=6.5,y=202,z=2.5,distance=..1,limit=1] Fluid{amount:1000,components:{\"thirstwastaken2:water_purity\":1}}"}}
+{"id": "end", "command": "wait", "args": {"ticks": 20}}

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.thirstwastaken2.littlelogisticsforge.mixin",
+  "plugin": "com.thirstwastaken2.littlelogisticsforge.LittleLogisticsForgeMixinPlugin",
+  "compatibilityLevel": "${java}",
+  "mixins": [
+    "FluidHopperTileEntityMixin",
+    "FluidTankBargeEntityMixin",
+    "FluidTankCarEntityMixin",
+    "ForgeFluidUtilMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

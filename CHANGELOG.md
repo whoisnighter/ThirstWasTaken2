@@ -10,6 +10,9 @@ All notable changes to ThirstWasTaken2 are documented in this file.
   Juice, Pink Lemonade, Strawberry Milk and the Strawberry Milkshake to the popsicle, ice cream and
   custard.
 - Cultural Delights, on NeoForge 1.21.1: Ice Cream restores a little thirst.
+- Little Logistics, on NeoForge 1.21.1 and Forge 1.20.1: a bucket filled from or poured into a Fluid
+  Tank Car, a Fluid Barge or, on 1.20.1, a Fluid Hopper keeps the grade of the water. It used to come
+  out Clean whatever the tank held.
 
 ### Fixed
 

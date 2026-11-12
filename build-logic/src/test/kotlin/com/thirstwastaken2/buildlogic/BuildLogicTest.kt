@@ -53,7 +53,7 @@ class BuildLogicTest {
         val everything: (String) -> Boolean = { true }
         assertEquals(listOf("createfly", "farmersdelight", "supplementaries", "kaleidoscope", "kaleidoscopetavern", "brewinandchewin", "sereneseasons", "farmandcharm", "herbalbrews", "beachparty", "meadow", "spelunkery", "croptopia", "bountifulfares"),
             integrationsFor(Loader.FABRIC, everything).map { it.dir })
-        assertEquals(listOf("create", "sophisticated", "supplementaries", "kaleidoscope", "kaleidoscopetavern", "brewinandchewin", "coldsweat", "culturaldelights", "fruitsdelight", "youkaisfeasts", "expandeddelight", "minersdelight", "sereneseasons", "farmandcharm", "herbalbrews", "beachparty", "meadow", "spelunkery", "hearthandharvest", "extradelight", "nomansland", "croptopia", "mekanism", "immersiveengineering", "bountifulfares"),
+        assertEquals(listOf("create", "sophisticated", "supplementaries", "kaleidoscope", "kaleidoscopetavern", "brewinandchewin", "coldsweat", "culturaldelights", "fruitsdelight", "youkaisfeasts", "expandeddelight", "minersdelight", "sereneseasons", "farmandcharm", "herbalbrews", "beachparty", "meadow", "spelunkery", "hearthandharvest", "extradelight", "nomansland", "croptopia", "mekanism", "immersiveengineering", "bountifulfares", "littlelogistics"),
             integrationsFor(Loader.NEOFORGE, everything).map { it.dir })
         assertEquals(listOf("supplementaries", "kaleidoscope", "kaleidoscopetavern", "brewinandchewin", "fruitsdelight", "youkaisfeasts", "minersdelight", "sereneseasons", "farmandcharm", "herbalbrews", "beachparty", "meadow", "spelunkery", "croptopia", "bountifulfares"), integrations.filter { it.loaderIndependent }.map { it.dir })
     }

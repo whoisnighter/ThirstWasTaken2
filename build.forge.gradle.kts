@@ -308,6 +308,14 @@ dependencies {
         // Keeps `-PwithoutOptional=immersiveengineering` in the agent scripts a known name while the line above is off.
         optionalRunMods.include(listOf("immersiveengineering"))
     }
+    findProperty("deps.little_logistics")?.let { ll ->
+        // Mixed into, and in SRG names, so remapped. See src/main/littlelogisticsforge/AGENTS.md. Off in
+        // runClient by default, like the other mods worked on one at a time; uncomment the line below to work on it.
+        modCompileOnly("maven.modrinth:little-logistics:$ll") { isTransitive = false }
+        // runClientMod(listOf("littlelogistics", "little-logistics"), "maven.modrinth:little-logistics:$ll") { isTransitive = false }
+        // Keeps `-PwithoutOptional=littlelogistics` in the agent scripts a known name while the line above is off.
+        optionalRunMods.include(listOf("littlelogistics", "little-logistics"))
+    }
     // Croptopia: nothing compiles against it, as on Fabric; see build.gradle.kts. In SRG names, so remapped.
     // Off in runClient by default; uncomment the two lines below only to work on it.
     findProperty("deps.croptopia")?.let {

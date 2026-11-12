@@ -333,6 +333,16 @@ dependencies {
         optionalRunMods.include(listOf("immersiveengineering"))
     }
 
+    // Little Logistics, on the node that sets it. src/main/littlelogistics's mixins name its Fluid Tank Car
+    // and Fluid Barge, so they compile against it. Off in runClient by default, like the other mods worked
+    // on one at a time; its Ponder and Flywheel are nested in its jar. Uncomment the line below to work on it.
+    findProperty("deps.little_logistics")?.let {
+        compileOnly("maven.modrinth:little-logistics:$it") { isTransitive = false }
+        // runClientMod(listOf("littlelogistics", "little-logistics"), "maven.modrinth:little-logistics:$it") { isTransitive = false }
+        // Keeps `-PwithoutOptional=littlelogistics` in the agent scripts a known name while the line above is off.
+        optionalRunMods.include(listOf("littlelogistics", "little-logistics"))
+    }
+
     if (createVersion != null && createLibraries != null) {
         compileOnly("maven.modrinth:create:$createVersion") { isTransitive = false }
         compileOnly(files(createLibraries.map { it.destinationDir.listFiles().orEmpty().toList() })

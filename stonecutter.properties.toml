@@ -113,6 +113,9 @@ deps.mekanism = "uxe1WQp4"
 # Immersive Engineering; see [neoforge."1.21.1"]. See src/main/immersiveengineeringforge/AGENTS.md.
 # 10.2.0-183, the Forge upload.
 deps.immersive_engineering = "WUzj4tgJ"
+# Little Logistics; see [neoforge."1.21.1"]. See src/main/littlelogisticsforge/AGENTS.md.
+# 1.20.1.1, one upload for Forge and NeoForge.
+deps.little_logistics = "TgyyhU8M"
 
 # No shared ["1.21.1"] table: the two loaders claim different releases there.
 [fabric."1.21.1"]
@@ -372,6 +375,10 @@ deps.mekanism = "5KzzycBT"
 # See src/main/immersiveengineering/AGENTS.md.
 # 12.4.2-194, the NeoForge upload.
 deps.immersive_engineering = "uNRARSH2"
+# Little Logistics, whose Fluid Tank Car and Fluid Barge fill and empty a bucket with the grade in
+# their tank. NeoForge 1.21.1 is its newest build. See src/main/littlelogistics/AGENTS.md.
+# 1.21.1.1-beta.2, the NeoForge upload.
+deps.little_logistics = "tqtMdQcW"
 
 ["1.21.11"]
 mod.mc_releases = ["1.21.11"]

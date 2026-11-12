@@ -466,6 +466,24 @@ val integrations: List<Integration> = listOf(
         mixinConfig = "thirstwastaken2.bountifulfares.mixins.json",
         neoForgeDependencies = listOf("bountifulfares"),
     ),
+    // NeoForge only: Little Logistics' newest build is NeoForge 1.21.1. A bucket clicked on its Fluid Tank
+    // Car or Fluid Barge keeps the grade of the water. See src/main/littlelogistics/AGENTS.md.
+    Integration(
+        dir = "littlelogistics",
+        depsKey = "deps.little_logistics",
+        loaders = setOf(Loader.NEOFORGE),
+        mixinConfig = "thirstwastaken2.littlelogistics.mixins.json",
+        neoForgeDependencies = listOf("littlelogistics"),
+    ),
+    // The same on Forge 47, for its 1.20.1 build, which adds the Fluid Hopper: the same deps key, its own
+    // directory, since the mixins name the loader's fluid handler. See src/main/littlelogisticsforge/AGENTS.md.
+    Integration(
+        dir = "littlelogisticsforge",
+        depsKey = "deps.little_logistics",
+        loaders = setOf(Loader.FORGE),
+        mixinConfig = "thirstwastaken2.littlelogisticsforge.mixins.json",
+        neoForgeDependencies = listOf("littlelogistics"),
+    ),
 )
 
 /**

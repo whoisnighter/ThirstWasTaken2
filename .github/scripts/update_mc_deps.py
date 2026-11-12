@@ -251,6 +251,8 @@ MODRINTH_DEPS = [
     ModrinthDep("mekanism", "mekanism", by_id=True),
     # Immersive Engineering, 1.21.1 NeoForge and 1.20.1 Forge, pinned by id like the others.
     ModrinthDep("immersive_engineering", "immersiveengineering", by_id=True),
+    # Little Logistics, 1.21.1 NeoForge and 1.20.1 Forge, pinned by id like the others.
+    ModrinthDep("little_logistics", "little-logistics", by_id=True),
     # Bountiful Fares, both 1.21.1 nodes, and the NexusLib it requires, runClient only. Both share one
     # version number between their Fabric and NeoForge uploads, so both are pinned by id.
     ModrinthDep("bountiful_fares", "bountiful-fares", by_id=True),
