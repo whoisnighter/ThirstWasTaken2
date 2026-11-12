@@ -36,6 +36,14 @@ Vanilla hooks. Everything the mod cannot do through a Fabric API event lands her
 | `CauldronBlockMixin` | `handlePrecipitation`, `receiveStalactiteDrip` | the same two fills, on the empty cauldron they turn into a water cauldron |
 | `BlocksMixin` | 1.21.1 only: the two `new LayeredCauldronBlock` in `Blocks`' static init | mark which one is the water cauldron, for `Vanilla.isWaterCauldron` |
 
+A canteen or flask keeps its servings through a furnace by `CookingRecipeMixin`, on the recipe's
+`assemble`. Vanilla's furnace before 1.21.2 never calls it: it copies the recipe's own result
+(`getResultItem`), so on Fabric 1.20.1 and 1.21.1 the vessel came out empty (issue #55). Forge and
+NeoForge patch their furnace to assemble. The Fabric-only `FurnaceMixin` in `src/main/fabric/java`
+under `com.thirstwastaken2.fabric.mixin`, listed in `thirstwastaken2.fabric.mixins.json`, gives that
+result the input's servings in `burn`; it is empty from 1.21.2. Anything else that cooks from
+`getResultItem` (another mod's furnace) needs the same fix of its own.
+
 `BlocksMixin` exists because 1.21.1 computes a block's description id from the registry and caches
 it. Asking a cauldron for it inside its own constructor, which is where the quality property has to
 be added, would find it unregistered and name it air for good. The water cauldron is told apart from

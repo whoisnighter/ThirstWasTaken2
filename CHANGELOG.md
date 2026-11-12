@@ -13,6 +13,8 @@ All notable changes to ThirstWasTaken2 are documented in this file.
 
 ### Fixed
 
+- On Fabric 1.20.1 and 1.21.1, a canteen or flask boiled in a furnace comes out full of Clean water. It
+  used to come out empty.
 - Let's Do: Candlelight 2.1.14 or newer no longer crashes the game at launch on Fabric 1.21.1. Sea
   water still cooks nothing in its Large Cooking Pot.
 - Kaleidoscope Cookery Refabricated, on Fabric: a teapot filled by a Recipe Item keeps the grade of the

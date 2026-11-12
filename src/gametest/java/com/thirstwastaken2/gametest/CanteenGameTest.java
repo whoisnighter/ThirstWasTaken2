@@ -213,6 +213,41 @@ public final class CanteenGameTest {
         helper.succeed();
     }
 
+    /**
+     * A real furnace, ticked until it is done, hands back the vessel still full. Asking the recipe, as
+     * the test above does, was not enough: before 1.21.2 the Fabric furnace takes the recipe's own
+     * result rather than assembling one, and a boiled canteen came out empty (issue #55).
+     */
+    @GameTest
+    public void aFurnaceHandsBackTheVesselStillFull(GameTestHelper helper) {
+        BlockPos at = helper.absolutePos(CAMPFIRE);
+        int furnaces = 0;
+        for (Item vessel : List.of(ThirstItems.COPPER_CANTEEN, ThirstItems.IRON_FLASK)) {
+            for (WaterQuality grade : List.of(DIRTY, WaterQuality.fresh(1))) {
+                BlockPos pos = at.offset(2 * (furnaces % 2), 0, 2 * (furnaces++ / 2));
+                helper.getLevel().setBlockAndUpdate(pos, Blocks.FURNACE.defaultBlockState());
+                net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity furnace =
+                        (net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity) helper.getLevel().getBlockEntity(pos);
+                ItemStack input = filled(vessel, grade, WaterskinItem.capacity(new ItemStack(vessel)));
+                int ticks = WaterskinItem.furnaceTicks(input);
+                furnace.setItem(0, input.copy());
+                furnace.setItem(1, new ItemStack(Items.COAL));
+                for (int tick = 0; tick < ticks + 20 && furnace.getItem(2).isEmpty(); tick++) {
+                    net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.serverTick(
+                            helper.getLevel(), pos, helper.getLevel().getBlockState(pos), furnace);
+                }
+                ItemStack result = furnace.getItem(2);
+                TestFixtures.check(helper, result.is(vessel) && furnace.getItem(0).isEmpty()
+                                && WaterskinItem.servings(result) == WaterskinItem.servings(input)
+                                && CLEAN.equals(WaterPurity.quality(result)),
+                        "a furnace should boil " + vessel + " of " + grade + " into one still holding "
+                                + WaterskinItem.servings(input) + " Clean, got " + result + " holding "
+                                + WaterskinItem.servings(result) + " of " + WaterPurity.quality(result));
+            }
+        }
+        helper.succeed();
+    }
+
     @GameTest
     public void bothAreCraftedFromScratch(GameTestHelper helper) {
         ItemStack copper = new ItemStack(Items.COPPER_INGOT);

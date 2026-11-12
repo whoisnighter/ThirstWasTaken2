@@ -117,6 +117,19 @@ public final class WaterskinItem extends DrinkItem {
     }
 
     /**
+     * {@code result} with the servings of {@code input}, for a caller handed the recipe's own result
+     * stack rather than an assembled copy: a copy when servings had to be added, else {@code result}
+     * itself, so the recipe's stack is never changed. Before 1.21.2 the Fabric furnace takes its result
+     * this way; see {@code com.thirstwastaken2.fabric.mixin.FurnaceMixin}.
+     */
+    public static ItemStack withServingsOf(ItemStack input, ItemStack result) {
+        if (!is(input) || !is(result) || servings(result) != 0 || servings(input) <= 0) return result;
+        ItemStack copy = result.copy();
+        setServings(copy, servings(input));
+        return copy;
+    }
+
+    /**
      * Ticks each serving in {@code stack} takes to boil over a campfire, or 0 when it cannot boil, which
      * is every vessel while the config switches boiling in hand off.
      */

@@ -29,6 +29,7 @@
   "accessWidener": "thirstwastaken2.accesswidener",
   "mixins": [
     "thirstwastaken2.mixins.json",
+    "thirstwastaken2.fabric.mixins.json",
     { "config": "thirstwastaken2.client.mixins.json", "environment": "client" },
     { "config": "thirstwastaken2.fabric.client.mixins.json", "environment": "client" }
   ],
