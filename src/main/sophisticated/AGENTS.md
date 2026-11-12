@@ -2,7 +2,8 @@
 
 [Sophisticated Backpacks](https://modrinth.com/mod/sophisticated-backpacks) keeps its upgrades in
 Sophisticated Core, which Sophisticated Storage shares, so everything here targets Core and works for
-both. Today it fixes four of Sophisticated's upgrades and adds one of its own:
+both. Today it fixes five of Sophisticated's upgrades, counting the cooking ones as one, and adds one
+of its own:
 
 - the **Tank upgrade** keeps water's grade: a dirty bucket poured in comes back out as dirty bottles,
   and sea water stays sea water. Without it the tank handed out plain water, which the mod reads as
@@ -13,6 +14,8 @@ both. Today it fixes four of Sophisticated's upgrades and adds one of its own:
   water;
 - the **Pump upgrade** grades the water it collects from the world where it lies, keeps the grade of
   buckets it empties or fills in a player's hand, and can pump graded water back out at all;
+- the **Smelting, Smoking and Blasting upgrades**, and their Auto versions, leave a canteen or flask
+  as full as it went in. On older Cores it came out purified and empty;
 - the **Drinking upgrade**, the mod's own, drinks from the backpack when the thirst bar is low, the
   cleanest water first, bottles and other drinks as well as water from a Tank upgrade.
 
@@ -38,6 +41,7 @@ sophisticated/java/com/thirstwastaken2/sophisticated/     every NeoForge node bu
   SophisticatedEntrypoint    a second @Mod class that registers the Drinking upgrade after the gate
   mixin/FeedingUpgradeWrapperMixin  hands out thirst where the Feeding upgrade finishes eating
   mixin/AlchemyUpgradeWrapperMixin  the same for the Alchemy upgrade, and keeps plain water out of it
+  mixin/CookingLogicMixin           a canteen or flask cooked by a Smelting, Smoking or Blasting upgrade keeps its servings
   drinking/DrinkingUpgrade           items, the two settings components, the settings containers
   drinking/DrinkingUpgradeItem       basic and advanced, told apart by filter size and `isAdvanced`
   drinking/DrinkingUpgradeWrapper    what to drink and when, on the upgrade tick
@@ -381,11 +385,21 @@ script.
 
 ### Cooking upgrades
 
-Nothing in this directory: the Smelting and Smoking upgrades cook with the vanilla recipe types, and
-the mod ships smoking recipes for water alongside the smelting ones.
+The Smelting and Smoking upgrades cook with the vanilla recipe types, and the mod ships smoking
+recipes for water alongside the smelting ones, so bottles need nothing here. Canteens and flasks do:
+their recipe matches any fill, and core's `CookingRecipeMixin` copies the servings over when the recipe
+is assembled. Core's `CookingLogic` long skipped `assemble` and took the recipe's result as it is
+(`getResultItem` on 1.21.1 up to Core 1.5.18, the `result` field on 26.x up to at least 1.5.19), so the
+vessel came out purified and empty (issue #53). `CookingLogicMixin` gives the result the input's
+servings where `smelt` hands it to `setCookOutput`, which every Core version checked does with a copy of
+its own. On a Core that assembles it finds the servings already there and does nothing. The upgrade still
+cooks a vessel for the recipe's own time, the default fill's, not per serving as a furnace does.
+
 [tools/agent/integrations/sophisticated/sophisticated-cooking.jsonl](../../../tools/agent/integrations/sophisticated/sophisticated-cooking.jsonl) gives each
 upgrade a purity-0 bottle and a piece of coal. Checked on 2026-09-19: both came out with
-`water_purity: 2`, through `purify_water_bottle_0_smoking` and `_smelting`.
+`water_purity: 2`, through `purify_water_bottle_0_smoking` and `_smelting`. Its last case smelts an
+iron flask of three purity-0 servings, which has to come out with `water_servings: 3` and
+`water_purity: 2`.
 
 ### Effects on the test player
 

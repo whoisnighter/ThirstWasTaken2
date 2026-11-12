@@ -5,6 +5,7 @@
   "compatibilityLevel": "${java}",
   "mixins": [
     "AlchemyUpgradeWrapperMixin",
+    "CookingLogicMixin",
     "FeedingUpgradeWrapperMixin",
     "FluidFilterLogicMixin",
     "PumpUpgradeWrapperMixin",

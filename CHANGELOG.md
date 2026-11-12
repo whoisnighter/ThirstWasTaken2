@@ -19,6 +19,8 @@ All notable changes to ThirstWasTaken2 are documented in this file.
   water still cooks nothing in its Large Cooking Pot.
 - Kaleidoscope Cookery Refabricated, on Fabric: a teapot filled by a Recipe Item keeps the grade of the
   water it took. It used to keep the grade of whatever water was in it before.
+- Sophisticated Backpacks: a canteen or flask boiled in a Smelting, Smoking or Blasting upgrade no
+  longer comes out empty with older versions of Sophisticated Core.
 
 ## [1.10.1] - 2026-10-27
 

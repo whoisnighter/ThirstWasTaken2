@@ -28,6 +28,7 @@ waterskin and bowl fluid containers of item 6 need no Sophisticated and do work 
 | 5 | Drinking upgrade | feature | **Done** on `1.21.1-neoforge` |
 | 8 | Newer NeoForge nodes (1.21.11, 26.1, 26.2) | port | **Done**: items 1 to 5 on every NeoForge node |
 | 9 | Changelog and player docs | docs | **Done** |
+| 10 | Cooking upgrades keep a canteen or flask's servings (issue #53) | bug | **Done** on every node that builds Sophisticated; see `src/main/sophisticated/AGENTS.md`, "Cooking upgrades" |
 
 The order is the one agreed on: the bugs first, the Tank before the others because it let any water
 turn Clean, then the cheapest feature, then the rest. All four bugs are fixed, the Drinking upgrade is
