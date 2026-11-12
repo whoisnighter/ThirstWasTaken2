@@ -18,7 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
  *
  * <p>Each block finds its recipe with a matcher of its own, testing each ingredient against each slot:
  * the Cooking Pot, the Stove (and Candlelight's, which extend it), the Crafting Bowl, and Candlelight's
- * Large Cooking Pot, named by string since Candlelight is not compiled against; the plugin skips it when
+ * Large Cooking Pot up to 2.1.13, named by string since Candlelight is not compiled against. From 2.1.14
+ * that pot extends the Cooking Pot, whose target covers it, and the plugin skips it, as it does when
  * Candlelight is absent. Only water containers carry salt, so a salty stack matching nothing is the same
  * as sea water not matching water. Fresh water of any grade still matches: the pot and stove are heated,
  * and what they make is its own item, as tea is.
@@ -27,8 +28,10 @@ import org.spongepowered.asm.mixin.injection.At;
         targets = "net.satisfy.candlelight.core.block.entity.LargeCookingPotBlockEntity", remap = false)
 abstract class SeaWaterIngredientMixin {
     // Minecraft's own method, so remapped on Fabric, whose Farm & Charm jar is in intermediary. Each
-    // target has at least one of these methods; the plugin checks that before applying.
-    @WrapOperation(method = {"matchesInventory", "findBestMatchingSlot", "countMatchingSlots", "matchExact"},
+    // target has at least one of these methods; the plugin checks that before applying. require = 0 on
+    // top: a matcher that changes shape upstream turns this off for that block instead of stopping the
+    // game, as a Candlelight pot that had lost its matcher once did (issue #56).
+    @WrapOperation(method = {"matchesInventory", "findBestMatchingSlot", "countMatchingSlots", "matchExact"}, require = 0,
             at = @At(value = "INVOKE", remap = true,
                     target = "Lnet/minecraft/world/item/crafting/Ingredient;test(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean thirst$seaWaterIsNotWater(Ingredient ingredient, ItemStack stack, Operation<Boolean> original) {

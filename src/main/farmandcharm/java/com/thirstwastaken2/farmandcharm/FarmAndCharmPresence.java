@@ -44,6 +44,16 @@ public final class FarmAndCharmPresence {
      * upstream change the integration has to follow.
      */
     public static boolean hasMethod(String targetClassName, String method) {
+        boolean found = declaresMethod(targetClassName, method);
+        if (!found && hasTarget(targetClassName)) {
+            LOGGER.warn("{} has no {}, so it is not a version ThirstWasTaken2 supports; "
+                    + "sea water may cook there", targetClassName, method);
+        }
+        return found;
+    }
+
+    /** {@link #hasMethod}, without the warning, for a target whose method may be gone on purpose. */
+    public static boolean declaresMethod(String targetClassName, String method) {
         if (!hasTarget(targetClassName)) return false;
         return METHODS.computeIfAbsent(targetClassName + '#' + method, key -> readMethod(targetClassName, method));
     }
@@ -60,10 +70,6 @@ public final class FarmAndCharmPresence {
                     return null;
                 }
             }, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-            if (!found[0]) {
-                LOGGER.warn("{} has no {}, so it is not a version ThirstWasTaken2 supports; "
-                        + "sea water may cook there", targetClassName, method);
-            }
             return found[0];
         } catch (IOException e) {
             LOGGER.warn("Could not read {} to look for {}; leaving that part of the integration off", targetClassName, method, e);

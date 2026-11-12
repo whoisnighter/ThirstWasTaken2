@@ -22,7 +22,9 @@ against. What it does:
 - **Kitchen sink** (Candlelight): the same as the trough. It still fills from nothing, as its authors
   meant, but its water wants boiling.
 - **Cooking Pot, Stove, Crafting Bowl** (Farm & Charm) **and Large Cooking Pot** (Candlelight): a salty
-  stack matches no ingredient, so sea water cooks nothing. Fresh water of any grade still cooks; what
+  stack matches no ingredient, so sea water cooks nothing. From Candlelight 2.1.14 the Large Cooking Pot
+  extends Farm & Charm's Cooking Pot, so the Cooking Pot's target covers it; its own target is only for
+  2.1.13 and older, which had a matcher of their own. Fresh water of any grade still cooks; what
   comes out is its own item, as tea is.
 
 The drink and food values are not here. They are ids in `config/itemvalues/LetsDoItemValues` (`farmAndCharmDrinks`,
@@ -31,7 +33,7 @@ The drink and food values are not here. They are ids in `config/itemvalues/LetsD
 ```
 farmandcharm/java/com/thirstwastaken2/farmandcharm/
   FarmAndCharmPresence      the gate: each target class looked up as a resource, the mods' own methods read off the class file
-  FarmAndCharmMixinPlugin   applies each mixin on the targets that are there, Candlelight's pot only with Candlelight
+  FarmAndCharmMixinPlugin   applies each mixin on the targets that are there, Candlelight's pot only while it has its own matcher
   StandingWater             the grades: Murky for standing water, the well's groundwater sample, the salty bucket test
   mixin/TimberWellMixin     TimberWellBlock.useItemOn: stamps the filled bucket before ItemUtils.createFilledResult
   mixin/WaterTroughMixin    WaterTroughBlock.useItemOn: refuses a salty bucket; Murky through setItemInHand
@@ -68,6 +70,14 @@ remapped by Loom (`method_55765`, `Ingredient.test` as `method_8093`), which is 
 `remap = true` on its `@At`, and names Candlelight's pot by string, since Candlelight is not compiled
 against. The plugin checks only the mods' own method names: `useItemOn` is a different name in each
 loader's jar, so a block's mixin asks only that its class is there.
+
+Loom writes a target named by string into the Fabric jar with slashes
+(`net/satisfy/candlelight/...`), and Mixin hands it to `shouldApplyMixin` that way, while a target named
+by class comes dotted. The plugin turns slashes into dots before it looks a target up. It did not up to
+1.10.1, so the Large Cooking Pot was applied unchecked on Fabric and crashed every client with
+Candlelight 2.1.14 or later, whose pot has no `matchesInventory` (issue #56; NeoForge, dotted, was
+fine). `SeaWaterIngredientMixin` also has `require = 0`, so a matcher that changes shape upstream turns
+it off for that block rather than stopping the game.
 
 ## How it stays optional
 

@@ -135,6 +135,16 @@ does not: the Large Cooking Pot has its own copy of the Cooking Pot's matcher. S
 Candlelight is absent. Candlelight's stoves extend Farm & Charm's and are covered by its target. The
 Crafting Bowl's mozzarella is refused too, through Farm & Charm's bowl.
 
+**From 2.1.14** (2026-10-08) the Large Cooking Pot extends Farm & Charm's `CookingPotBlockEntity` and
+overrides only its lit and cooking properties and its extra output, so it has no `matchesInventory` of
+its own and the Cooking Pot's target covers it. The plugin skips the pot's own target when its class
+declares no `matchesInventory`, quietly, since that is the new shape and not a break. On Fabric that
+check never ran up to 1.10.1: Loom writes the string target with slashes, the plugin looked it
+up dotted, missed, and applied the mixin unchecked, which crashed every Fabric client at launch with
+Candlelight 2.1.14 or 2.1.15 ([issue #56](https://github.com/whoisnighter/ThirstWasTaken2/issues/56)).
+NeoForge passes the name dotted and only logged a warning. The plugin now turns slashes into dots, and
+the injector has `require = 0`.
+
 ## 6. Optional seam (done)
 
 `tools/agent/smoke/boot.jsonl` with `-PwithoutOptional=candlelight` comes up and stays up on both nodes,
