@@ -191,10 +191,11 @@ MODRINTH_DEPS = [
                 neoforge_project="kaleidoscope-cookery"),
     # Kaleidoscope Tavern, the same shape as Kaleidoscope Cookery: Refabricated on the Fabric nodes, the
     # official mod (a project of its own) on NeoForge 1.21.1 and Forge 1.20.1, pinned by id. Its plan's
-    # table prints every build with its id.
+    # table prints every build with its id. `1.20.1` stays on 1.2.0.12: Refabricated's 1.2.0.13 for
+    # 1.20.1 is Java 21 bytecode and asks for Java 21, which the node's `release = 17` cannot compile against.
     ModrinthDep("kaleidoscope_tavern", "kaleidoscope-tavern-refabricated", by_id=True,
                 mirrors=(INSTALLATION, TAVERN_DOC), neoforge_mirrors=(INSTALLATION, TAVERN_DOC),
-                neoforge_project="kaleidoscopetavern"),
+                neoforge_project="kaleidoscopetavern", frozen=("1.20.1",)),
     # Kaleidoscope Chinese Food, whose mixin lets Tavern's tap fill Cookery's stockpot and teapot.
     # NeoForge 1.21.1 and Forge 1.20.1, runClient only, pinned by id like the others.
     ModrinthDep("kaleidoscope_chinese_food", "kaleidoscopechinesefood", by_id=True, **NO_PAGE),

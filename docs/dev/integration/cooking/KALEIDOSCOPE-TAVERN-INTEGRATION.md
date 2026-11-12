@@ -29,7 +29,7 @@ every Fabric node, nothing on NeoForge past 1.21.1.
 |---|---|---|---|
 | `1.21.1-neoforge` | official | `1.2.0-neoforge+mc1.21.1` (2026-07-01) | `W9ILsQt7` |
 | `1.20.1-forge` | official | `1.2.0-forge+mc1.20.1` (2026-07-01) | `mUnU2u9e` |
-| `1.20.1` | Refabricated | `1.2.0.13-fabric+mc1.20.1` | `iU6XwfBv` |
+| `1.20.1` | Refabricated, held (1.2.0.13 is Java 21) | `1.2.0.12-fabric+mc1.20.1` | `6vWzRtqD` |
 | `1.21.1` | Refabricated | `1.2.0.13-fabric+mc1.21.1` | `xLKaK5UA` |
 | `1.21.11` | Refabricated, hotfixes only | `1.2.0.6-fabric+mc1.21.11` | `rcsRCqe1` |
 | `26.1.x` | Refabricated | `1.2.0.13-fabric+mc26.1.2` | `LONHwOG0` |
