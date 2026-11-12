@@ -26,5 +26,12 @@ littlelogisticsforge/resources/
 ## Checking it
 
 [tools/agent/integrations/little-logistics-1.20.1.jsonl](../../../tools/agent/integrations/little-logistics-1.20.1.jsonl)
-makes the same car checks as on NeoForge, in Forge's NBT. Uncomment Little Logistics' `runClientMod` line
-in `build.forge.gradle.kts` first. Passed on 2026-11-11.
+makes the same car checks as on NeoForge, in Forge's NBT, then the same two on a Fluid Barge floating on a
+pool and on a Fluid Hopper. Uncomment Little Logistics' `runClientMod` line in `build.forge.gradle.kts`
+first. The car passed on 2026-11-11, the barge and hopper on 2026-11-12. With the mixin list emptied, all
+six checks fail and every bucket comes out plain, so the script does catch the bug.
+
+The shipped reobf jar was also booted on a real Forge 47.4.28 dedicated server with Little Logistics
+1.20.1.1 and `-Dmixin.debug.export=true`: all four targets were exported with their `thirst$` member, the
+car's from its SRG `m_6096_` through the refmap, and a Fluid Hopper emptying Murky water into a car left
+the car Murky. The same server without Little Logistics starts clean.

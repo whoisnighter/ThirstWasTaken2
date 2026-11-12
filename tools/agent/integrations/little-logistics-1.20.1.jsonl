@@ -1,11 +1,14 @@
 // Water quality through Little Logistics on Forge 1.20.1 (src/main/littlelogisticsforge, 1.20.1.1), the
 // same checks as little-logistics.jsonl in Forge's NBT, issue #52:
 // - an empty bucket on a Fluid Tank Car of Murky water comes back a Murky water bucket, "bucketCheck";
-// - that bucket poured into an empty car leaves Murky water there, "pourCheck".
+// - that bucket poured into an empty car leaves Murky water there, "pourCheck";
+// - the same two on a Fluid Barge floating on a pool, "bargeBucketCheck" and "bargePourCheck";
+// - the same two on a Fluid Hopper, which only the 1.20.1 build has, "hopperBucketCheck" and
+//   "hopperPourCheck".
 //
 // Little Logistics' runClientMod line in build.forge.gradle.kts must be uncommented. Every "...Check"
-// line has to say "Test passed" in run/1.20.1-forge/agent/client/out.jsonl. The car keeps its tank at
-// the top of its own NBT: FluidName, Amount, Tag.
+// line has to say "Test passed" in run/1.20.1-forge/agent/client/out.jsonl. The car, the barge and the
+// hopper keep their tank at the top of their own NBT: FluidName, Amount, Tag.
 //
 //     python tools/agent/new_world.py 1.20.1-forge LLAgent
 //     ./gradlew ":1.20.1-forge:runClient" -Pagent=tools/agent/integrations/little-logistics-1.20.1.jsonl -Pquickplay=LLAgent
@@ -46,4 +49,54 @@
 {"id": "used2", "command": "wait", "args": {"ticks": 10}}
 {"id": "pourRead", "command": "server.command", "args": {"command": "data get entity @e[type=littlelogistics:fluid_car,x=6.5,y=202,z=2.5,distance=..1,limit=1]"}}
 {"id": "pourCheck", "command": "server.command", "args": {"command": "execute if entity @e[type=littlelogistics:fluid_car,x=6.5,y=202,z=2.5,distance=..1,limit=1,nbt={Amount:1000,Tag:{thirstwastaken2:{purity:1}}}]"}}
+
+// The barges: one pool each, the player on the stone edge looking north at the barge.
+{"id": "oldBarges", "command": "server.command", "args": {"command": "kill @e[type=littlelogistics:fluid_barge]"}}
+{"id": "poolA", "command": "server.command", "args": {"command": "fill -2 201 -5 1 201 -2 minecraft:water"}}
+{"id": "poolB", "command": "server.command", "args": {"command": "fill 4 201 -5 7 201 -2 minecraft:water"}}
+{"id": "murkyBarge", "command": "server.command", "args": {"command": "summon littlelogistics:fluid_barge 0.0 202.0 -3.0 {FluidName:\"minecraft:water\",Amount:4000,Tag:{thirstwastaken2:{purity:1}}}"}}
+{"id": "emptyBarge", "command": "server.command", "args": {"command": "summon littlelogistics:fluid_barge 6.0 202.0 -3.0"}}
+{"id": "floated", "command": "wait", "args": {"ticks": 60}}
+{"id": "bargeRead", "command": "server.command", "args": {"command": "data get entity @e[type=littlelogistics:fluid_barge,x=0,y=202,z=-3,distance=..2,limit=1]"}}
+{"id": "bargeClear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "bargeBucket", "command": "server.command", "args": {"command": "give @p minecraft:bucket"}}
+{"id": "atMurkyBarge", "command": "server.command", "args": {"command": "tp @p 0.0 202 -0.5 180 30"}}
+{"id": "settle3", "command": "wait", "args": {"ticks": 20}}
+{"id": "useDown3", "command": "client.key", "args": {"key": "use", "down": true}}
+{"id": "using3", "command": "wait", "args": {"ticks": 3}}
+{"id": "useUp3", "command": "client.key", "args": {"key": "use", "down": false}}
+{"id": "used3", "command": "wait", "args": {"ticks": 10}}
+{"id": "bargeBucketRead", "command": "server.command", "args": {"command": "data get entity @p SelectedItem"}}
+{"id": "bargeBucketCheck", "command": "server.command", "args": {"command": "execute if data entity @p SelectedItem{id:\"minecraft:water_bucket\",tag:{thirstwastaken2:{purity:1}}}"}}
+{"id": "atEmptyBarge", "command": "server.command", "args": {"command": "tp @p 6.0 202 -0.5 180 30"}}
+{"id": "settle4", "command": "wait", "args": {"ticks": 20}}
+{"id": "useDown4", "command": "client.key", "args": {"key": "use", "down": true}}
+{"id": "using4", "command": "wait", "args": {"ticks": 3}}
+{"id": "useUp4", "command": "client.key", "args": {"key": "use", "down": false}}
+{"id": "used4", "command": "wait", "args": {"ticks": 10}}
+{"id": "bargePourRead", "command": "server.command", "args": {"command": "data get entity @e[type=littlelogistics:fluid_barge,x=6,y=202,z=-3,distance=..2,limit=1]"}}
+{"id": "bargePourCheck", "command": "server.command", "args": {"command": "execute if entity @e[type=littlelogistics:fluid_barge,x=6,y=202,z=-3,distance=..2,limit=1,nbt={Amount:1000,Tag:{thirstwastaken2:{purity:1}}}]"}}
+
+// The Fluid Hoppers, facing east into stone so neither passes its water on.
+{"id": "murkyHopper", "command": "server.command", "args": {"command": "setblock 10 202 2 littlelogistics:fluid_hopper[facing=east]{FluidName:\"minecraft:water\",Amount:4000,Tag:{thirstwastaken2:{purity:1}}} replace"}}
+{"id": "emptyHopper", "command": "server.command", "args": {"command": "setblock 10 202 8 littlelogistics:fluid_hopper[facing=east] replace"}}
+{"id": "hopperRead", "command": "server.command", "args": {"command": "data get block 10 202 2"}}
+{"id": "hopperClear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "hopperBucket", "command": "server.command", "args": {"command": "give @p minecraft:bucket"}}
+{"id": "atMurkyHopper", "command": "server.command", "args": {"command": "tp @p 10.5 202 0.5 0 35"}}
+{"id": "settle5", "command": "wait", "args": {"ticks": 20}}
+{"id": "useDown5", "command": "client.key", "args": {"key": "use", "down": true}}
+{"id": "using5", "command": "wait", "args": {"ticks": 3}}
+{"id": "useUp5", "command": "client.key", "args": {"key": "use", "down": false}}
+{"id": "used5", "command": "wait", "args": {"ticks": 10}}
+{"id": "hopperBucketRead", "command": "server.command", "args": {"command": "data get entity @p SelectedItem"}}
+{"id": "hopperBucketCheck", "command": "server.command", "args": {"command": "execute if data entity @p SelectedItem{id:\"minecraft:water_bucket\",tag:{thirstwastaken2:{purity:1}}}"}}
+{"id": "atEmptyHopper", "command": "server.command", "args": {"command": "tp @p 10.5 202 6.5 0 35"}}
+{"id": "settle6", "command": "wait", "args": {"ticks": 20}}
+{"id": "useDown6", "command": "client.key", "args": {"key": "use", "down": true}}
+{"id": "using6", "command": "wait", "args": {"ticks": 3}}
+{"id": "useUp6", "command": "client.key", "args": {"key": "use", "down": false}}
+{"id": "used6", "command": "wait", "args": {"ticks": 10}}
+{"id": "hopperPourRead", "command": "server.command", "args": {"command": "data get block 10 202 8"}}
+{"id": "hopperPourCheck", "command": "server.command", "args": {"command": "execute if data block 10 202 8 {Amount:1000,Tag:{thirstwastaken2:{purity:1}}}"}}
 {"id": "end", "command": "wait", "args": {"ticks": 20}}

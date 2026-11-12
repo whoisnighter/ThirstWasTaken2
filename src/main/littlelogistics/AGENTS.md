@@ -42,6 +42,6 @@ littlelogistics/resources/
 ## Checking it
 
 [tools/agent/integrations/little-logistics.jsonl](../../../tools/agent/integrations/little-logistics.jsonl)
-fills a Fluid Tank Car with Murky water by NBT, draws a bucket from it and pours that into an empty car.
-Passed on 2026-11-11. The barge is the same call and was not clicked in game. Its header says what
-each line should read.
+fills a Fluid Tank Car with Murky water by NBT, draws a bucket from it and pours that into an empty car,
+then does the same with Fluid Barges floating on a pool. The car passed on 2026-11-11, the barge on
+2026-11-12. Its header says what each line should read.
