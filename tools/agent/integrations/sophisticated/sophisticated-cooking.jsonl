@@ -9,6 +9,14 @@
 // holding a bottle with water_purity 2 and water_salty false, and no bottle left in slot 0.
 // cook_smelting_flask smelts an iron flask of three purity-0 servings instead: slot 2 has to hold the
 // flask with water_servings 3 and water_purity 2 (issue #53, where older Cores emptied it).
+// cook_smelting_canteen does the same with a copper canteen of four purity-0 servings: slot 2 has to
+// hold it with water_servings 4 and water_purity 2.
+// cook_auto_smelting_flask puts a Murky (purity 1) iron flask of three servings and a piece of coal
+// straight into an Auto-Smelting upgrade's cooking slots, since its input filter starts empty and pulls
+// nothing from the backpack. The upgrade pushes the result out: the backpack's inventory has to hold the
+// flask with water_servings 3 and water_purity 2.
+// cook_smoking_flask (Dirty) and cook_blasting_flask (Murky) are the controls: the mod has no smoking or
+// blasting recipe for a canteen or flask, so slot 0 has to keep the flask exactly as given, slot 2 empty.
 //
 // SophisticatedAgent is a throwaway world, made fresh for each run by
 //     python tools/agent/new_world.py 1.21.1-neoforge SophisticatedAgent --datapack tools/agent/integrations/sophisticated/sophisticated-pack
@@ -58,3 +66,51 @@
 {"id": "cook_smelting_flask_cooking", "command": "wait", "args": {"ticks": 500}}
 {"id": "cook_smelting_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smelting_flask true", "as": "Dev"}}
 {"id": "cook_smelting_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smelting_flask", "as": "Dev"}}
+
+{"id": "cook_smelting_canteen_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "cook_smelting_canteen_give", "command": "server.command", "args": {"command": "sophisticatedbackpacks template give thirsttest:cook_smelting_canteen", "as": "Dev"}}
+{"id": "cook_smelting_canteen_hand", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand from entity @p hotbar.0"}}
+{"id": "cook_smelting_canteen_dedupe", "command": "server.command", "args": {"command": "execute unless data entity @p {SelectedItemSlot:0} run item replace entity @p hotbar.0 with minecraft:air"}}
+{"id": "cook_smelting_canteen_lookUp", "command": "server.command", "args": {"command": "tp @p -240.5 201 160.5 0 -90"}}
+{"id": "cook_smelting_canteen_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
+{"id": "cook_smelting_canteen_opened", "command": "wait", "args": {"ticks": 10}}
+{"id": "cook_smelting_canteen_close", "command": "client.screen", "args": {"open": "none"}}
+{"id": "cook_smelting_canteen_cooking", "command": "wait", "args": {"ticks": 300}}
+{"id": "cook_smelting_canteen_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smelting_canteen true", "as": "Dev"}}
+{"id": "cook_smelting_canteen_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smelting_canteen", "as": "Dev"}}
+
+{"id": "cook_auto_smelting_flask_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "cook_auto_smelting_flask_give", "command": "server.command", "args": {"command": "sophisticatedbackpacks template give thirsttest:cook_auto_smelting_flask", "as": "Dev"}}
+{"id": "cook_auto_smelting_flask_hand", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand from entity @p hotbar.0"}}
+{"id": "cook_auto_smelting_flask_dedupe", "command": "server.command", "args": {"command": "execute unless data entity @p {SelectedItemSlot:0} run item replace entity @p hotbar.0 with minecraft:air"}}
+{"id": "cook_auto_smelting_flask_lookUp", "command": "server.command", "args": {"command": "tp @p -240.5 201 160.5 0 -90"}}
+{"id": "cook_auto_smelting_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
+{"id": "cook_auto_smelting_flask_opened", "command": "wait", "args": {"ticks": 10}}
+{"id": "cook_auto_smelting_flask_close", "command": "client.screen", "args": {"open": "none"}}
+{"id": "cook_auto_smelting_flask_cooking", "command": "wait", "args": {"ticks": 600}}
+{"id": "cook_auto_smelting_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_auto_smelting_flask true", "as": "Dev"}}
+{"id": "cook_auto_smelting_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_auto_smelting_flask", "as": "Dev"}}
+
+{"id": "cook_smoking_flask_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "cook_smoking_flask_give", "command": "server.command", "args": {"command": "sophisticatedbackpacks template give thirsttest:cook_smoking_flask", "as": "Dev"}}
+{"id": "cook_smoking_flask_hand", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand from entity @p hotbar.0"}}
+{"id": "cook_smoking_flask_dedupe", "command": "server.command", "args": {"command": "execute unless data entity @p {SelectedItemSlot:0} run item replace entity @p hotbar.0 with minecraft:air"}}
+{"id": "cook_smoking_flask_lookUp", "command": "server.command", "args": {"command": "tp @p -240.5 201 160.5 0 -90"}}
+{"id": "cook_smoking_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
+{"id": "cook_smoking_flask_opened", "command": "wait", "args": {"ticks": 10}}
+{"id": "cook_smoking_flask_close", "command": "client.screen", "args": {"open": "none"}}
+{"id": "cook_smoking_flask_cooking", "command": "wait", "args": {"ticks": 400}}
+{"id": "cook_smoking_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smoking_flask true", "as": "Dev"}}
+{"id": "cook_smoking_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smoking_flask", "as": "Dev"}}
+
+{"id": "cook_blasting_flask_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "cook_blasting_flask_give", "command": "server.command", "args": {"command": "sophisticatedbackpacks template give thirsttest:cook_blasting_flask", "as": "Dev"}}
+{"id": "cook_blasting_flask_hand", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand from entity @p hotbar.0"}}
+{"id": "cook_blasting_flask_dedupe", "command": "server.command", "args": {"command": "execute unless data entity @p {SelectedItemSlot:0} run item replace entity @p hotbar.0 with minecraft:air"}}
+{"id": "cook_blasting_flask_lookUp", "command": "server.command", "args": {"command": "tp @p -240.5 201 160.5 0 -90"}}
+{"id": "cook_blasting_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
+{"id": "cook_blasting_flask_opened", "command": "wait", "args": {"ticks": 10}}
+{"id": "cook_blasting_flask_close", "command": "client.screen", "args": {"open": "none"}}
+{"id": "cook_blasting_flask_cooking", "command": "wait", "args": {"ticks": 400}}
+{"id": "cook_blasting_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_blasting_flask true", "as": "Dev"}}
+{"id": "cook_blasting_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_blasting_flask", "as": "Dev"}}
