@@ -153,8 +153,8 @@ deps.forge_config_api_port = "N5qzq0XV"
 # official mod publishes no Fabric build. Same mod id and package as the official one, so one
 # integration serves both, and pinned by Modrinth version id for the same reason as Cookery. It requires
 # Forge Config API Port here too. See docs/dev/integration/cooking/KALEIDOSCOPE-TAVERN-INTEGRATION.md.
-# 1.2.0.13-fabric+mc1.21.1, the Fabric upload.
-deps.kaleidoscope_tavern = "xLKaK5UA"
+# 1.2.0.14-fabric+mc1.21.1, the Fabric upload.
+deps.kaleidoscope_tavern = "sVQ85oVD"
 # Brewin' and Chewin', whose keg holds water. Both 1.21.1 nodes build it, and only they: it has no
 # release for a newer Minecraft version. Pinned by Modrinth version id, since its Fabric and NeoForge
 # uploads share a version number. Its Greenhouse Config is nested in its jar. See
@@ -234,7 +234,7 @@ mod.mc_releases = ["1.21.1"]
 
 deps.neoforge = "21.1.262"
 # The newest build, for the deps pull request only; see deps.fabric_loader_latest.
-deps.neoforge_latest = "21.1.265"
+deps.neoforge_latest = "21.1.266"
 # 3.0.9+mc1.21, the NeoForge upload.
 deps.appleskin = "uAKA6Laj"
 deps.cloth_config = "15.0.140+neoforge"
@@ -430,8 +430,8 @@ deps.create_fly = "26.1.2-6.0.9-4"
 deps.kaleidoscope_cookery = "ay4H3A23"
 # Kaleidoscope Tavern Refabricated, as in the 1.21.1 table. It needs no Forge Config API Port from
 # 26.1 on.
-# 1.2.0.13-fabric+mc26.1.2, the Fabric upload.
-deps.kaleidoscope_tavern = "LONHwOG0"
+# 1.2.0.14-fabric+mc26.1.2, the Fabric upload.
+deps.kaleidoscope_tavern = "SecId3a4"
 # Serene Seasons and GlitchCore, as in the 1.21.1 tables.
 # 26.1.2.0.7, the Fabric upload.
 deps.serene_seasons = "kxB8vG5W"
@@ -499,8 +499,8 @@ deps.create_fly = "26.2-rc-2-6.0.9-1"
 # 1.6.0.8-fabric+mc26.2, the Fabric upload.
 deps.kaleidoscope_cookery = "qDGUWEp4"
 # Kaleidoscope Tavern Refabricated, as in the 26.1.x table.
-# 1.2.0.13-fabric+mc26.2, the Fabric upload.
-deps.kaleidoscope_tavern = "o1wBLTt3"
+# 1.2.0.14-fabric+mc26.2, the Fabric upload.
+deps.kaleidoscope_tavern = "awGIBfHe"
 # Serene Seasons and GlitchCore, as in the 1.21.1 tables.
 # 26.1.2.0.6, the Fabric upload.
 deps.serene_seasons = "q5mzi8wy"
@@ -551,10 +551,10 @@ mod.mc_releases = ["26.3"]
 [fabric."26.3.x"]
 mod.mc_compat = "~26.3"
 
-deps.fabric_api = "0.166.0+26.3"
+deps.fabric_api = "0.166.2+26.3"
 # The only Mod Menu upload built for 26.3 so far. A node stays on the channel its pinned version is on,
 # so update_mc_deps.py keeps offering betas here until a 21.0.0 release catches up.
-deps.modmenu = "21.0.0"
+deps.modmenu = "21.0.1"
 # 3.0.10+mc26.3, the Fabric upload.
 deps.appleskin = "PHjDtQay"
 deps.cloth_config = "26.3.159+fabric"
@@ -566,8 +566,8 @@ deps.farmersdelight = "26.3-3.6.30"
 # 1.6.0.8-fabric+mc26.3, the Fabric upload.
 deps.kaleidoscope_cookery = "t4YYs2U3"
 # Kaleidoscope Tavern Refabricated, as in the 26.1.x table.
-# 1.2.0.13-fabric+mc26.3, the Fabric upload.
-deps.kaleidoscope_tavern = "f7tIhCOi"
+# 1.2.0.14-fabric+mc26.3, the Fabric upload.
+deps.kaleidoscope_tavern = "faSdmcyk"
 # Serene Seasons and GlitchCore, as in the 1.21.1 tables.
 # 26.1.2.0.7, the Fabric upload.
 deps.serene_seasons = "V9PxJPuw"
