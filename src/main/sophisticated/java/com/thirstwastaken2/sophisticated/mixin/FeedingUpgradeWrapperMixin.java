@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
  */
 @Mixin(value = FeedingUpgradeWrapper.class, remap = false)
 abstract class FeedingUpgradeWrapperMixin {
-    @WrapOperation(method = "tryFeedingStack", at = @At(value = "INVOKE",
+    @WrapOperation(method = "tryFeedingStack", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/Item;finishUsingItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack thirst$quenchFedItem(Item item, ItemStack stack, Level level, LivingEntity entity,
                                            Operation<ItemStack> original) {

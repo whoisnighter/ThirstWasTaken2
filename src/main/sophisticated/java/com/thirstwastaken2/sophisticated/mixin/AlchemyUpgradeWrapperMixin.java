@@ -36,7 +36,7 @@ abstract class AlchemyUpgradeWrapperMixin {
      * of the backpack, where refusing at the end would leave the upgrade starting to drink again every
      * check.
      */
-    @WrapOperation(method = "applyTo", at = @At(value = "INVOKE",
+    @WrapOperation(method = "applyTo", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/p3pp3rf1y/sophisticatedcore/upgrades/alchemy/AlchemyCondition;test(Lnet/minecraft/world/entity/LivingEntity;F)Z"))
     private boolean thirst$refusePlainWater(AlchemyCondition condition, LivingEntity entity, float value,
                                             Operation<Boolean> original, @Local AlchemyFilterAttribute attribute) {
@@ -45,7 +45,7 @@ abstract class AlchemyUpgradeWrapperMixin {
 
     // Thirst for what a player drinks or eats, before the item is used up. A thrown potion is neither.
     //? if <1.21.2 {
-    /*@WrapOperation(method = "tick", at = @At(value = "INVOKE",
+    /*@WrapOperation(method = "tick", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/p3pp3rf1y/sophisticatedcore/upgrades/alchemy/AlchemyUpgradeWrapper$FinishUsing;apply(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack thirst$quenchAppliedItem(AlchemyUpgradeWrapper.FinishUsing finishUsing, ItemStack stack,
                                                LivingEntity entity, Operation<ItemStack> original) {

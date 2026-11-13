@@ -36,8 +36,9 @@ the mixin config is shared.
 
 ```
 sophisticated/java/com/thirstwastaken2/sophisticated/     every NeoForge node but 26.3
-  SophisticatedPresence      the gate: FML's mod file for `sophisticatedcore`, and the generation's marker class inside it
-  SophisticatedMixinPlugin   applies the mixins only when the gate passes
+  SophisticatedPresence      the gate: FML's mod file for `sophisticatedcore`, and the generation's marker class inside it;
+                             and Core's class files, read without loading them, for the plugin's checks
+  SophisticatedMixinPlugin   applies the mixins only when the gate passes, each only where Core still has what it hooks
   SophisticatedEntrypoint    a second @Mod class that registers the Drinking upgrade after the gate
   mixin/FeedingUpgradeWrapperMixin  hands out thirst where the Feeding upgrade finishes eating
   mixin/AlchemyUpgradeWrapperMixin  the same for the Alchemy upgrade, and keeps plain water out of it
@@ -48,11 +49,12 @@ sophisticated/java/com/thirstwastaken2/sophisticated/     every NeoForge node bu
   drinking/DrinkingUpgradeContainer  the settings tab's server half
   drinking/DrinkAt                   how thirsty to be first: any, half a drink, a whole drink
 sophisticated-fluidhandler/java/…/sophisticated/          1.21.1
-  SophisticatedGeneration    the marker class the gate looks for
+  SophisticatedGeneration    the marker class the gate looks for, and what this generation's mixins need of Core
   (WaterQualityFluidHandler, a container's IFluidHandlerItem with the grade carried across it, is in
    core's src/main/neoforge-fluidhandler, shared with Extra Delight)
   StampedWaterSource         world water as an IFluidHandler that hands out its sampled grade
-  mixin/TankUpgradeWrapperMixin     wraps the one method the Tank upgrade finds container handlers through
+  mixin/TankContainerHandlerMixin   wraps the one method the Tank finds container handlers through, Core 1.5.35 and later
+  mixin/TankUpgradeWrapperMixin     the same method where it was up to Core 1.5.33
   mixin/PumpUpgradeWrapperMixin     the Pump upgrade: world pickup, buckets in hand, pumping out
   mixin/FluidFilterLogicMixin       a pump filter set to water takes water of any grade
   drinking/DrinkingStorage          the storage's slots and tanks, as the Drinking upgrade reads them
@@ -61,7 +63,7 @@ sophisticated-transfer/java/…/sophisticated/              1.21.11 and later
   WaterQualityResourceHandler  a container's fluid ResourceHandler with the grade carried across it
   UnstampedItemAccess          the container's ItemAccess, as the handler underneath sees it
   CollectedWaterStorage        the tanks while the Pump fills them from world water, stamping it
-  mixin/…, drinking/DrinkingStorage   the same four classes as 1.21.1
+  mixin/…, drinking/DrinkingStorage   the same five classes as 1.21.1
 sophisticated/resources/                                  every NeoForge node but 26.3
   thirstwastaken2.sophisticated.mixins.json
   assets/…                  the two upgrade textures, models and item model definitions, the tab's button icons
@@ -97,7 +99,17 @@ The same three layers as [src/main/create](../create/AGENTS.md).
    The plan once split this gate per upgrade, so the Feeding mixin could apply on a node that had no
    tank code yet. With both generations written there is no such node, and a split would only let a
    Core whose Feeding upgrade had moved crash the game, so it stays one gate.
-3. **Data.** Each basic recipe needs its own mod's `upgrade_base` (`neoforge:mod_loaded`) and every
+3. **Each mixin fails soft.** A Core that passes the gate can still have moved a method a mixin
+   hooks: Core 1.21.1-1.5.35 moved the Tank's container code out of `TankUpgradeWrapper`, and the
+   `getFluidHandler` hook, then `require = 1`, crashed every game at loading (issue #61). Now every
+   injector is `require = 0`, and `SophisticatedMixinPlugin` reads each target's class file before it is
+   transformed: a method a mixin names (injected into or shadowed) that is gone skips that mixin, and a
+   call a hook sits on that is gone leaves that hook doing nothing. Both are logged as "not a version of
+   Sophisticated Core ThirstWasTaken2 supports" with what the player loses, so a change upstream turns
+   that one feature off instead of stopping the game. What each mixin needs is listed beside it:
+   `COMMON` in the plugin for Feeding and Cooking, `SophisticatedGeneration.NEEDS` for the rest, whose
+   methods and calls differ by generation. A new hook gets its methods and calls added there.
+4. **Data.** Each basic recipe needs its own mod's `upgrade_base` (`neoforge:mod_loaded`) and every
    recipe needs the upgrade to exist, so a Core the gate refused leaves no broken recipe behind. That
    condition is `neoforge:item_exists` on 1.21.1 and `neoforge:registered` from 1.21.11, which is one
    reason the recipes live in the generation directories; the other is that 1.21.2 changed how a recipe
@@ -107,8 +119,14 @@ The same three layers as [src/main/create](../create/AGENTS.md).
 
 ## The Tank upgrade
 
-`TankUpgradeWrapper.getFluidHandler(ItemStack)` is the only way the tank reaches a container, from its
-input and output slots and from the cursor, so one `@WrapMethod` covers every transfer. The handlers
+`getFluidHandler(ItemStack)` is the only way the tank reaches a container, from its input and output
+slots and from the cursor, so one `@WrapMethod` covers every transfer. Up to Core 1.21.1-1.5.33,
+26.1.2-1.5.34 and 26.2-1.5.32 it is a method of `TankUpgradeWrapper` (`TankUpgradeWrapperMixin`); from
+1.5.35, 1.5.36 and 1.5.34 respectively it is in `TankContainerHandler`, an abstract class of its own that
+the Tank upgrade and Sophisticated Storage's tank block (Storage 1.6.18 on 1.21.1) both extend
+(`TankContainerHandlerMixin`), with the same signature and the same body. The plugin applies the first
+only when `TankContainerHandler` is absent and the second only when it is there, so one integration
+covers both shapes of Core. The handlers
 it returns know nothing of quality: NeoForge's bucket wrapper takes and gives plain water, and Core's
 own bottle handler only matches a water bottle with no components at all. `WaterQualityFluidHandler`:
 
@@ -272,6 +290,14 @@ not with the integration, and the scripts now say so: a waterskin holds four ser
 filled skin, not yet full, in its input slot; Core 1.5.33's tank result slot took all four bottles of a
 bucket at once; and honey (2) and apple cider (6) bring the Drinking "other" case to 12, not 16. Feeding
 went from thirst 4 to 18, Alchemy's potion to 10 and its water stayed at 4.
+
+Later that day, for issue #61, on `1.21.1-neoforge`: with Core 1.5.35 and the old code the client
+stopped at loading on `TankUpgradeWrapperMixin` (the reported crash). With the fix, the Tank, Pump and
+Cooking scripts on Core 1.5.35 gave every result the 1.5.33 run above records (the Pump's Create cases
+aside, Create being off the classpath), with no "not a version" warning in the log; and the Tank script
+on Core 1.5.33, compiled against 1.5.35 with only the runtime jar swapped, gave the same, through
+`TankUpgradeWrapperMixin`. The 26.x nodes, whose newest Cores moved the method the same way, were built
+but not run in a client.
 
 What the scripts and the world need on the newer versions, all already in the files:
 

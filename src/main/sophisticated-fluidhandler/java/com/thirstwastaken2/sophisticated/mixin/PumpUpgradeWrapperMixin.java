@@ -35,7 +35,7 @@ abstract class PumpUpgradeWrapperMixin {
      * and tries each until one transfer works, so a sample is only taken once the tanks have room for
      * water at all: a full backpack by a lake would otherwise sample the whole lake every few seconds.
      */
-    @WrapOperation(method = "fillFromBlock", at = @At(value = "INVOKE",
+    @WrapOperation(method = "fillFromBlock", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/p3pp3rf1y/sophisticatedcore/upgrades/pump/PumpUpgradeWrapper;fillFromFluidHandler(Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;)Z"))
     private boolean thirst$stampCollected(PumpUpgradeWrapper pump, IFluidHandler source, IFluidHandler storage,
                                          Operation<Boolean> original,
@@ -45,14 +45,14 @@ abstract class PumpUpgradeWrapperMixin {
     }
 
     /** A bucket in hand poured into the backpack. */
-    @WrapMethod(method = "fillFromHand")
+    @WrapMethod(method = "fillFromHand", require = 0)
     private boolean thirst$keepQualityFromHand(Player player, InteractionHand hand, IFluidHandlerItem container,
                                               IFluidHandler storage, Operation<Boolean> original) {
         return original.call(player, hand, WaterQualityFluidHandler.of(container), storage);
     }
 
     /** A bucket in hand filled from the backpack. */
-    @WrapMethod(method = "fillContainerInHand")
+    @WrapMethod(method = "fillContainerInHand", require = 0)
     private boolean thirst$keepQualityIntoHand(Player player, InteractionHand hand, IFluidHandlerItem container,
                                               IFluidHandler storage, Operation<Boolean> original) {
         return original.call(player, hand, WaterQualityFluidHandler.of(container), storage);
@@ -63,7 +63,7 @@ abstract class PumpUpgradeWrapperMixin {
      * the backpack only hands out fluid whose components match. Stamped water would never leave, so the
      * request is made of the water actually in the tank.
      */
-    @WrapOperation(method = "fillFluidHandler(Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;I)Z",
+    @WrapOperation(method = "fillFluidHandler(Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;I)Z", require = 0,
             at = @At(value = "INVOKE",
                     target = "Lnet/neoforged/neoforge/fluids/FluidUtil;tryFluidTransfer(Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;Lnet/neoforged/neoforge/fluids/capability/IFluidHandler;Lnet/neoforged/neoforge/fluids/FluidStack;Z)Lnet/neoforged/neoforge/fluids/FluidStack;"))
     private FluidStack thirst$requestStoredWater(IFluidHandler destination, IFluidHandler storage, FluidStack request,

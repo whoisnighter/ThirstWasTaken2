@@ -24,6 +24,9 @@ All notable changes to ThirstWasTaken2 are documented in this file.
   water it took. It used to keep the grade of whatever water was in it before.
 - Sophisticated Backpacks: a canteen or flask boiled in a Smelting, Smoking or Blasting upgrade no
   longer comes out empty with older versions of Sophisticated Core.
+- Sophisticated Backpacks: the game no longer crashes at launch with Sophisticated Core 1.5.35 or newer
+  on 1.21.1, or the matching Cores on 26.1 and 26.2. Water in a Tank upgrade keeps its grade on old and
+  new Cores alike.
 
 ## [1.10.1] - 2026-10-27
 

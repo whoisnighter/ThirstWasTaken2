@@ -249,12 +249,12 @@ deps.create = "UjX6dr61"
 # Sophisticated Core, whose upgrades keep water quality and take the Drinking upgrade. Its tanks move
 # fluid through IFluidHandler here and through NeoForge's transfer API from 1.21.11, so each generation
 # has its own source directory. See src/main/sophisticated/AGENTS.md.
-# 1.21.1-1.5.33.2470, the NeoForge upload.
-deps.sophisticated_core = "9DxpMDZv"
+# 1.21.1-1.5.35.2473, the NeoForge upload.
+deps.sophisticated_core = "FilyXPLY"
 # 1.21.1-3.26.21.2249, only on the runClient classpath, as the storage the upgrades go in.
 deps.sophisticated_backpacks = "tJnK2DE1"
-# 1.21.1-1.6.17.2224, only on the runClient classpath, to check the Drinking upgrade in a placed storage.
-deps.sophisticated_storage = "ikf1wOWI"
+# 1.21.1-1.6.18.2229, only on the runClient classpath, to check the Drinking upgrade in a placed storage.
+deps.sophisticated_storage = "ZviRSUKL"
 # Supplementaries and Moonlight Lib, the same integration the Fabric table builds; see there.
 # 1.21.1-4.0.2, the NeoForge upload.
 deps.supplementaries = "rWq0ko29"
@@ -455,12 +455,12 @@ deps.appleskin = "i8MiVItH"
 deps.cloth_config = "26.1.154+neoforge"
 # The newest release; 26.1.11+neoforge is a beta.
 deps.jade = "26.1.12+neoforge"
-# 26.1.2-1.5.34.2469, the NeoForge upload. The transfer-API generation; see src/main/sophisticated/AGENTS.md.
-deps.sophisticated_core = "szWFBgsm"
+# 26.1.2-1.5.36.2474, the NeoForge upload. The transfer-API generation; see src/main/sophisticated/AGENTS.md.
+deps.sophisticated_core = "txcAoXmL"
 # 26.1.2-3.26.20.2250, only on the runClient classpath.
 deps.sophisticated_backpacks = "bsFkej1I"
-# 26.1.2-1.5.130.2225, only on the runClient classpath.
-deps.sophisticated_storage = "SCqoZzJ8"
+# 26.1.2-1.5.131.2228, only on the runClient classpath.
+deps.sophisticated_storage = "ubQSkHuq"
 # Serene Seasons and GlitchCore, as in the 1.21.1 tables.
 # 26.1.2.0.7, the NeoForge upload.
 deps.serene_seasons = "atclxQCD"
@@ -527,12 +527,12 @@ deps.neoforge_latest = "26.2.0.93"
 deps.appleskin = "slnk1Qah"
 deps.cloth_config = "26.2.155+neoforge"
 deps.jade = "26.2.10+neoforge"
-# 26.2-1.5.32.2471, the NeoForge upload. The transfer-API generation; see src/main/sophisticated/AGENTS.md.
-deps.sophisticated_core = "MXdbEnHl"
+# 26.2-1.5.34.2477, the NeoForge upload. The transfer-API generation; see src/main/sophisticated/AGENTS.md.
+deps.sophisticated_core = "QkZItcYN"
 # 26.2-3.26.19.2251, only on the runClient classpath.
 deps.sophisticated_backpacks = "LzCGr3Z6"
-# 26.2-1.5.130.2226, only on the runClient classpath.
-deps.sophisticated_storage = "ADIsBijt"
+# 26.2-1.5.131.2232, only on the runClient classpath.
+deps.sophisticated_storage = "xH4lRh1X"
 # Serene Seasons and GlitchCore, as in the 1.21.1 tables.
 # 26.1.2.0.6, the NeoForge upload.
 deps.serene_seasons = "MZd2wAtJ"

@@ -29,6 +29,7 @@ waterskin and bowl fluid containers of item 6 need no Sophisticated and do work 
 | 8 | Newer NeoForge nodes (1.21.11, 26.1, 26.2) | port | **Done**: items 1 to 5 on every NeoForge node |
 | 9 | Changelog and player docs | docs | **Done** |
 | 10 | Cooking upgrades keep a canteen or flask's servings (issue #53) | bug | **Done** on every node that builds Sophisticated; see `src/main/sophisticated/AGENTS.md`, "Cooking upgrades" |
+| 11 | Core 1.5.35 crash at loading, and every mixin failing soft (issue #61) | bug | **Done** on every node that builds Sophisticated; see below |
 
 The order is the one agreed on: the bugs first, the Tank before the others because it let any water
 turn Clean, then the cheapest feature, then the rest. All four bugs are fixed, the Drinking upgrade is
@@ -219,6 +220,29 @@ the agent queue and the pointer moved by computer use. A tooltip always covers t
 the image is two captures, one unhovered and one hovered, with the tooltip moved beside the slot.
 
 Nothing is left to do.
+
+### 11. Core 1.5.35 (issue #61)
+
+Core 1.21.1-1.5.35.2473, 26.1.2-1.5.36.2474 and 26.2-1.5.34.2477 (all 2026-11-12) moved the Tank
+upgrade's container code out of `TankUpgradeWrapper` into a new abstract `TankContainerHandler`, which
+Sophisticated Storage 1.6.18's new tank block extends too. `getFluidHandler` kept its signature and body
+but changed class, so `TankUpgradeWrapperMixin`'s `@WrapMethod`, then `require = 1`, found no target and
+NeoForge stopped at loading with "Critical injection failure". Reproduced on `1.21.1-neoforge` with Core
+1.5.35 before the fix. The other five targets (`PumpUpgradeWrapper`, `FluidFilterLogic`, `CookingLogic`,
+`FeedingUpgradeWrapper`, `AlchemyUpgradeWrapper`) and `CapabilityHelper` were compared with `javap`
+against 1.5.33, 1.5.34 and 1.5.32: unchanged, except that 1.21.1's pump now asks the tanks for
+`tankFluid.copyWithAmount` itself, which the pump-out hook still wraps to the same result.
+
+- **Both shapes.** `TankContainerHandlerMixin` wraps the moved method, `TankUpgradeWrapperMixin` stays
+  for older Cores, and the plugin applies exactly one, by whether `TankContainerHandler` exists. Nothing
+  else about the tank changed, so `WaterQualityFluidHandler` and `WaterQualityResourceHandler` are as
+  they were. Storage's tank block goes through the same method, so it should keep the grade too; it was
+  not run.
+- **Fail soft.** Every injector is `require = 0`, and the plugin checks each mixin's methods and the
+  calls its hooks sit on before applying it, logging what is lost. A future move of this kind turns that
+  feature off in the log instead of crashing the game.
+- **Pins** moved to those Cores, and Storage to 1.6.18, 26.1.2-1.5.131 and 26.2-1.5.131. Backpacks was
+  already the newest on each node and accepts them.
 
 ## Testing, for every item
 

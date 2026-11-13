@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
  */
 @Mixin(value = FluidFilterLogic.class, remap = false)
 abstract class FluidFilterLogicMixin {
-    @WrapOperation(method = "matchesFluidFilter", at = @At(value = "INVOKE",
+    @WrapOperation(method = "matchesFluidFilter", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/neoforged/neoforge/fluids/FluidStack;isSameFluidSameComponents(Lnet/neoforged/neoforge/fluids/FluidStack;Lnet/neoforged/neoforge/fluids/FluidStack;)Z"))
     private boolean thirst$anyGradeOfWater(FluidStack filter, FluidStack fluid, Operation<Boolean> original) {
         if (WaterFluids.isWater(filter) && WaterFluids.isWater(fluid)) {

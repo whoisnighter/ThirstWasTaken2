@@ -38,7 +38,7 @@ abstract class PumpUpgradeWrapperMixin {
      * the tanks have room for water at all: a full backpack by a lake would otherwise sample the whole
      * lake every few seconds.
      */
-    @ModifyVariable(method = "fillFromBlock", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "fillFromBlock", require = 0, at = @At("HEAD"), argsOnly = true)
     private ResourceHandler<FluidResource> thirst$stampCollected(ResourceHandler<FluidResource> storage,
                                                                @Local(argsOnly = true) Level level,
                                                                @Local(argsOnly = true) BlockPos pos) {
@@ -52,7 +52,7 @@ abstract class PumpUpgradeWrapperMixin {
      * container itself, not through the Tank upgrade's lookup, so the lookup is handed the unstamped view
      * and the handler it finds comes back wrapped.
      */
-    @WrapOperation(method = "handleFluidContainerInHand", at = @At(value = "INVOKE",
+    @WrapOperation(method = "handleFluidContainerInHand", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/p3pp3rf1y/sophisticatedcore/util/CapabilityHelper;getFromFluidHandler(Lnet/neoforged/neoforge/transfer/access/ItemAccess;Ljava/util/function/Function;Ljava/lang/Object;)Ljava/lang/Object;"))
     private Object thirst$keepQualityInHand(ItemAccess access, Function<ResourceHandler<FluidResource>, Object> get,
                                             Object defaultValue, Operation<Object> original) {

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
  */
 @Mixin(value = FluidFilterLogic.class, remap = false)
 abstract class FluidFilterLogicMixin {
-    @WrapOperation(method = "matchesFluidFilter(Lnet/neoforged/neoforge/transfer/fluid/FluidResource;)Z", at = @At(value = "INVOKE",
+    @WrapOperation(method = "matchesFluidFilter(Lnet/neoforged/neoforge/transfer/fluid/FluidResource;)Z", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/neoforged/neoforge/transfer/fluid/FluidResource;matches(Lnet/neoforged/neoforge/fluids/FluidStack;)Z"))
     private boolean thirst$anyGradeOfWaterResource(FluidResource resource, FluidStack filter, Operation<Boolean> original) {
         if (WaterFluids.isWater(filter) && WaterFluidResources.isWater(resource)) {
@@ -28,7 +28,7 @@ abstract class FluidFilterLogicMixin {
         return original.call(resource, filter);
     }
 
-    @WrapOperation(method = "matchesFluidFilter(Lnet/neoforged/neoforge/fluids/FluidStack;)Z", at = @At(value = "INVOKE",
+    @WrapOperation(method = "matchesFluidFilter(Lnet/neoforged/neoforge/fluids/FluidStack;)Z", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/neoforged/neoforge/fluids/FluidStack;isSameFluidSameComponents(Lnet/neoforged/neoforge/fluids/FluidStack;Lnet/neoforged/neoforge/fluids/FluidStack;)Z"))
     private boolean thirst$anyGradeOfWater(FluidStack filter, FluidStack fluid, Operation<Boolean> original) {
         if (WaterFluids.isWater(filter) && WaterFluids.isWater(fluid)) {

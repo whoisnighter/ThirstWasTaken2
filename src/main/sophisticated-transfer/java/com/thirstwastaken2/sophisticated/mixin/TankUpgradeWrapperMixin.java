@@ -15,10 +15,13 @@ import java.util.Optional;
 /**
  * Every container the Tank upgrade fills or drains, from its two slots or from the cursor, is found
  * through this one method, so wrapping it is enough to keep water's grade on both sides.
+ *
+ * <p>Core up to 26.1.2-1.5.34 and 26.2-1.5.32 only. Later the method is in {@code TankContainerHandler}, which
+ * {@link TankContainerHandlerMixin} wraps, and the plugin leaves this one out.
  */
 @Mixin(value = TankUpgradeWrapper.class, remap = false)
 abstract class TankUpgradeWrapperMixin {
-    @WrapMethod(method = "getFluidHandler")
+    @WrapMethod(method = "getFluidHandler", require = 0)
     private Optional<ResourceHandler<FluidResource>> thirst$keepWaterQuality(ItemStack stack, ItemAccess access,
             Operation<Optional<ResourceHandler<FluidResource>>> original) {
         return WaterQualityResourceHandler.wrap(stack, access, original::call);

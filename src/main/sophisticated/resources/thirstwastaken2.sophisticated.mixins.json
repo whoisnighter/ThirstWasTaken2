@@ -9,6 +9,7 @@
     "FeedingUpgradeWrapperMixin",
     "FluidFilterLogicMixin",
     "PumpUpgradeWrapperMixin",
+    "TankContainerHandlerMixin",
     "TankUpgradeWrapperMixin"
   ],
   "injectors": { "defaultRequire": 1 }
