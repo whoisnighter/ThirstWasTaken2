@@ -21,10 +21,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * line of three or more is endless. Now what is drawn from it is {@link StandingWater#STANDING}, Murky,
  * whatever went in: nothing gets better by passing through a trough. Sea water is refused, since it
  * would come out fresh.
+ *
+ * <p>Every injector is {@code require = 0}, and the plugin checks {@code useItemOn} is there and warns for
+ * a hook that found nothing, so a change upstream turns this off in the log rather than stopping the game
+ * (see {@code FarmAndCharmMixinPlugin}).
  */
 @Mixin(WaterTroughBlock.class)
 abstract class WaterTroughMixin {
-    @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "useItemOn", require = 0, at = @At("HEAD"), cancellable = true)
     private void thirst$noSeaWater(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                    InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<ItemInteractionResult> cir) {
         if (StandingWater.isSaltyBucket(stack)) cir.setReturnValue(ItemInteractionResult.CONSUME);
@@ -32,7 +36,7 @@ abstract class WaterTroughMixin {
 
     // Both branches hand their result through setItemInHand: the empty bucket after pouring, which is no
     // water container and is left alone, and the water bucket drawn.
-    @ModifyArg(method = "useItemOn", at = @At(value = "INVOKE",
+    @ModifyArg(method = "useItemOn", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/player/Player;setItemInHand(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V"),
             index = 1)
     private ItemStack thirst$standingWater(ItemStack drawn) {

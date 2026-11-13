@@ -11,7 +11,7 @@ plans and their decisions are
 and [CANDLELIGHT-INTEGRATION.md](../../../docs/dev/integration/lets-do/CANDLELIGHT-INTEGRATION.md).
 
 **Built on `1.21.1` and `1.21.1-neoforge`**, both mods' only builds for a version this mod supports
-(Farm & Charm 1.1.28, Candlelight 2.1.15). Their 1.20.1 line is no longer updated and is not built
+(Farm & Charm 1.1.29 with Foundation 1.0.7, Candlelight 2.1.15). Their 1.20.1 line is no longer updated and is not built
 against. What it does:
 
 - **Timber Well**: a bucket drawn from it carries the grade of the groundwater the well pumps, sampled
@@ -20,7 +20,9 @@ against. What it does:
   rain collection off, the bucket is left unstamped.
 - **Water Trough**: refuses a bucket of sea water, and what is drawn from it is Murky whatever went in.
 - **Kitchen sink** (Candlelight): the same as the trough. It still fills from nothing, as its authors
-  meant, but its water wants boiling.
+  meant, but its water wants boiling. From Foundation 1.0.6 (Farm & Charm 1.1.28) an empty hand opens
+  its tap, and the basin rises a level every 60 ticks up to three; a bottle draws one level, a bucket
+  all three, and a bucket poured in tops it up.
 - **Cooking Pot, Stove, Crafting Bowl** (Farm & Charm) **and Large Cooking Pot** (Candlelight): a salty
   stack matches no ingredient, so sea water cooks nothing. From Candlelight 2.1.14 the Large Cooking Pot
   extends Farm & Charm's Cooking Pot, so the Cooking Pot's target covers it; its own target is only for
@@ -32,8 +34,8 @@ The drink and food values are not here. They are ids in `config/itemvalues/LetsD
 
 ```
 farmandcharm/java/com/thirstwastaken2/farmandcharm/
-  FarmAndCharmPresence      the gate: each target class looked up as a resource, the mods' own methods read off the class file
-  FarmAndCharmMixinPlugin   applies each mixin on the targets that are there, Candlelight's pot only while it has its own matcher
+  FarmAndCharmPresence      the gate: each target class looked up as a resource, its methods and their calls read off the class file
+  FarmAndCharmMixinPlugin   applies each mixin on the targets that have its methods, warns for a hooked call gone; Candlelight's pot only while it has its own matcher
   StandingWater             the grades: Murky for standing water, the well's groundwater sample, the salty bucket test
   mixin/TimberWellMixin     TimberWellBlock.useItemOn: stamps the filled bucket before ItemUtils.createFilledResult
   mixin/WaterTroughMixin    WaterTroughBlock.useItemOn: refuses a salty bucket; Murky through setItemInHand
@@ -46,7 +48,7 @@ farmandcharm/resources/
 ## How it works
 
 - **One grade for standing water.** `StandingWater.STANDING` is Murky, and the trough and the sink share
-  it so the two mods agree. Neither block can keep a grade (a level, a filled flag), so the grade is
+  it so the two mods agree. Neither block can keep a grade (each holds only a level), so the grade is
   decided as the water comes out, from what the block is rather than what was poured in: nothing gets
   better by going through. Sea water is refused on the way in, since it would come out fresh.
 - **The well samples on the draw.** `StandingWater.wellWater` scans the box `TimberWellBlock.hasGroundwater`
@@ -68,16 +70,33 @@ The Fabric jars are in intermediary. `useItemOn` and every Minecraft call the mi
 remapped by Loom (`method_55765`, `Ingredient.test` as `method_8093`), which is why Farm & Charm is a
 `modCompileOnly`. `SeaWaterIngredientMixin` says `remap = false` for the mods' own method names and
 `remap = true` on its `@At`, and names Candlelight's pot by string, since Candlelight is not compiled
-against. The plugin checks only the mods' own method names: `useItemOn` is a different name in each
-loader's jar, so a block's mixin asks only that its class is there.
+against. `useItemOn` is a different name in each jar the plugin reads (`useItemOn` on NeoForge and in a
+Fabric dev run, `method_55765` in a Fabric player's game), so a block's mixin asks for either.
 
 Loom writes a target named by string into the Fabric jar with slashes
 (`net/satisfy/candlelight/...`), and Mixin hands it to `shouldApplyMixin` that way, while a target named
 by class comes dotted. The plugin turns slashes into dots before it looks a target up. It did not up to
 1.10.1, so the Large Cooking Pot was applied unchecked on Fabric and crashed every client with
 Candlelight 2.1.14 or later, whose pot has no `matchesInventory` (issue #56; NeoForge, dotted, was
-fine). `SeaWaterIngredientMixin` also has `require = 0`, so a matcher that changes shape upstream turns
-it off for that block rather than stopping the game.
+fine).
+
+## When upstream changes
+
+Every injector here is `require = 0`, against the config's `defaultRequire` 1, so no change in Farm &
+Charm, Foundation or Candlelight can stop the game as #56 did. `shouldApplyMixin` keeps a change
+visible instead, reading the target's class file before Mixin transforms it (`NEEDS` in the plugin), and
+logs "not a version ThirstWasTaken2 supports" with what the player loses:
+
+- a target that declares none of the methods its mixin injects into (the matchers, or `useItemOn` under
+  either name) is skipped;
+- a call a hook sits on that those methods no longer make (`createFilledResult`, `setItemInHand`,
+  `Inventory.add`, `Player.drop`, `Ingredient.test`, each under its Mojang and intermediary name) is
+  logged, and the mixin still applies, that hook doing nothing.
+
+Not in `postApply`: MixinExtras applies `@WrapOperation` after it, so a handler looked for there is not
+in yet. A real Fabric 1.21.1 server with the built jar and Farm & Charm 1.1.29 / Candlelight 2.1.15 logs
+neither; with a Foundation sink that has no `method_55765` and a well that no longer calls
+`createFilledResult`, it logs one of each and starts.
 
 ## How it stays optional
 
@@ -104,3 +123,9 @@ it off for that block rather than stopping the game.
 - What it does is checked in a real client with
   [tools/agent/integrations/farm-and-charm.jsonl](../../../tools/agent/integrations/farm-and-charm.jsonl),
   whose header says how to run and verify it.
+  On Fabric, uncommenting the two `runClientMod` lines is not enough: Loom does not load the Foundation
+  nested in Farm & Charm's jar, and Fabric Loader stops on "Incompatible mods found!" (foundation
+  missing). Add Foundation for the run too, for instance
+  `runClientMod(names, files(nestedMods("lets-do-meadow", meadow!!).filter { it.name.startsWith("foundation") }))`
+  (1.0.9, Meadow's copy). NeoForge loads the nested copy (1.0.7) through its jarjar metadata. Passed whole
+  on both nodes on 2026-11-13.

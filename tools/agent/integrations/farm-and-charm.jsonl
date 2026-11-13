@@ -156,39 +156,49 @@
 {"id": "trough_draw_bucket", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:water_bucket[thirstwastaken2:water_purity=1]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "troughGone", "command": "server.command", "args": {"command": "setblock 0 200 2 minecraft:air"}}
 
-// Candlelight's cobblestone kitchen sink, Farm & Charm's sink block: lower half on 0 200 2. A salty
-// bucket is refused. An empty hand fills it from nothing; a glass bottle and a bucket draw Murky water,
-// handed over through addItem, so they are looked for anywhere in the inventory.
+// Candlelight's cobblestone kitchen sink, Foundation's sink block: lower half on 0 200 2, which holds
+// the block entity with the water level (0 to 3). A salty bucket is refused. An empty hand opens the
+// tap, which fills it from nothing a level every 60 ticks; a second click closes it. A glass bottle
+// draws one level and a bucket all three, both Murky, handed over through Inventory.add, so they are
+// looked for anywhere in the inventory. A plain (Clean) bucket poured in comes back out Murky too.
 {"id": "sink_upper_air", "command": "server.command", "args": {"command": "setblock 0 201 2 minecraft:air"}}
-{"id": "sink_lower", "command": "server.command", "args": {"command": "setblock 0 200 2 candlelight:cobblestone_kitchen_sink[half=lower,facing=north,filled=false]"}}
-{"id": "sink_upper", "command": "server.command", "args": {"command": "setblock 0 201 2 candlelight:cobblestone_kitchen_sink[half=upper,facing=north,filled=false]"}}
+{"id": "sink_lower", "command": "server.command", "args": {"command": "setblock 0 200 2 candlelight:cobblestone_kitchen_sink[half=lower,facing=north]"}}
+{"id": "sink_upper", "command": "server.command", "args": {"command": "setblock 0 201 2 candlelight:cobblestone_kitchen_sink[half=upper,facing=north]"}}
 {"id": "sink_salt_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "sink_salt_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:water_bucket[thirstwastaken2:water_salty=true]"}}
 {"id": "sink_salt_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 30"}}
 {"id": "sink_salt_settle", "command": "wait", "args": {"ticks": 10}}
 {"id": "sink_salt_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "sink_salt_used", "command": "wait", "args": {"ticks": 10}}
-{"id": "sink_salt_empty", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink[filled=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "sink_salt_empty", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{WaterLevel:0}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_salt_kept", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:water_bucket[thirstwastaken2:water_salty=true]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_hand_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "sink_hand_settle", "command": "wait", "args": {"ticks": 10}}
 {"id": "sink_hand_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "sink_hand_used", "command": "wait", "args": {"ticks": 10}}
-{"id": "sink_hand_filled", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink[filled=true]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "sink_hand_open", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{Open:1b}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "sink_hand_fill", "command": "wait", "args": {"ticks": 200}}
+{"id": "sink_hand_filled", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{WaterLevel:3}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "sink_hand_close", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "sink_hand_closed_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "sink_hand_closed", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{Open:0b}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_bottle_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
 {"id": "sink_bottle_settle", "command": "wait", "args": {"ticks": 10}}
 {"id": "sink_bottle_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "sink_bottle_used", "command": "wait", "args": {"ticks": 10}}
-{"id": "sink_bottle_drawn", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink[filled=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "sink_bottle_drawn", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{WaterLevel:2}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_bottle_murky", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:potion[thirstwastaken2:water_purity=1]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
-{"id": "sink_bucket_clear", "command": "server.command", "args": {"command": "clear @p"}}
-{"id": "sink_refill_settle", "command": "wait", "args": {"ticks": 10}}
-{"id": "sink_refill_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
-{"id": "sink_refill_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "sink_pour_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "sink_pour_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:water_bucket"}}
+{"id": "sink_pour_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "sink_pour_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "sink_pour_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "sink_pour_full", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{WaterLevel:3}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_bucket_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:bucket"}}
 {"id": "sink_bucket_settle", "command": "wait", "args": {"ticks": 10}}
 {"id": "sink_bucket_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "sink_bucket_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "sink_bucket_drawn", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{WaterLevel:0}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_bucket_murky", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:water_bucket[thirstwastaken2:water_purity=1]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sinkGone", "command": "server.command", "args": {"command": "fill 0 200 2 0 201 2 minecraft:air"}}
 
@@ -237,8 +247,8 @@
 {"id": "kitchenAir", "command": "server.command", "args": {"command": "fill 0 200 4 6 200 6 minecraft:air"}}
 
 // Drinking and eating from thirst 4, quenched 0, looking up so nothing is placed: a tea cup and a tea
-// jug restore 6, Farm & Charm's barley soup 4, its tomato 2, Candlelight's tomato soup 4, its fresh
-// garden salad 4 and its chocolate mousse 2.
+// jug restore 6, Farm & Charm's barley soup 6, its tomato 2, Candlelight's tomato soup 6, its fresh
+// garden salad 2 and its chocolate mousse 1 (config/itemvalues/LetsDoItemValues).
 {"id": "drink_nettle_tea_cup_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_nettle_tea_cup_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_nettle_tea_cup_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
@@ -271,7 +281,7 @@
 {"id": "drink_barley_soup_tooltip", "command": "client.tooltip", "args": {"slot": "mainhand"}}
 {"id": "drink_barley_soup_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 45}}
 {"id": "drink_barley_soup_done", "command": "wait", "args": {"ticks": 10}}
-{"id": "drink_barley_soup_state", "command": "client.state", "expect": {"result.thirst": 8}}
+{"id": "drink_barley_soup_state", "command": "client.state", "expect": {"result.thirst": 10}}
 {"id": "drink_tomato_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_tomato_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_tomato_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
@@ -293,7 +303,7 @@
 {"id": "drink_tomato_soup_tooltip", "command": "client.tooltip", "args": {"slot": "mainhand"}}
 {"id": "drink_tomato_soup_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 45}}
 {"id": "drink_tomato_soup_done", "command": "wait", "args": {"ticks": 10}}
-{"id": "drink_tomato_soup_state", "command": "client.state", "expect": {"result.thirst": 8}}
+{"id": "drink_tomato_soup_state", "command": "client.state", "expect": {"result.thirst": 10}}
 {"id": "drink_fresh_garden_salad_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_fresh_garden_salad_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_fresh_garden_salad_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
@@ -304,7 +314,7 @@
 {"id": "drink_fresh_garden_salad_tooltip", "command": "client.tooltip", "args": {"slot": "mainhand"}}
 {"id": "drink_fresh_garden_salad_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 45}}
 {"id": "drink_fresh_garden_salad_done", "command": "wait", "args": {"ticks": 10}}
-{"id": "drink_fresh_garden_salad_state", "command": "client.state", "expect": {"result.thirst": 8}}
+{"id": "drink_fresh_garden_salad_state", "command": "client.state", "expect": {"result.thirst": 6}}
 {"id": "drink_chocolate_mousse_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_chocolate_mousse_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_chocolate_mousse_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
@@ -315,6 +325,6 @@
 {"id": "drink_chocolate_mousse_tooltip", "command": "client.tooltip", "args": {"slot": "mainhand"}}
 {"id": "drink_chocolate_mousse_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 45}}
 {"id": "drink_chocolate_mousse_done", "command": "wait", "args": {"ticks": 10}}
-{"id": "drink_chocolate_mousse_state", "command": "client.state", "expect": {"result.thirst": 6}}
+{"id": "drink_chocolate_mousse_state", "command": "client.state", "expect": {"result.thirst": 5}}
 
 {"id": "done", "command": "client.state"}

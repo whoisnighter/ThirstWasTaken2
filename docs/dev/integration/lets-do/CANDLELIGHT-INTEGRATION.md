@@ -44,7 +44,9 @@ Candlelight's own recipes add to Farm & Charm's types (7 pot, 7 roaster, 7 stove
 
 ### The kitchen sink
 
-Farm & Charm's `SinkBlock.useItemOn`, a two-block block with one `FILLED` boolean:
+Farm & Charm's `SinkBlock.useItemOn`, a two-block block with one `FILLED` boolean, as it was up to Farm
+& Charm 1.1.27. From 1.1.28 the sink is Foundation's and holds a level; see step 8.
+
 
 | Click on an empty sink with | Result |
 |---|---|
@@ -91,6 +93,7 @@ The ids come from Candlelight's `ObjectRegistry`. Step 3 confirms each one resol
 | 5 | Sea water and Candlelight's pot, stove and bowl | code | both 1.21.1 | **Done** (2026-10-01), with its own target |
 | 6 | Nothing crashes without the mod | test | both 1.21.1 | **Done** (2026-10-01) |
 | 7 | Changelog, player docs, store pages | docs | — | **Done** (2026-10-01) |
+| 8 | Foundation's sink, with a tap and a level | re-check | both 1.21.1 | **Done** (2026-11-13): the mixin still holds, the script followed |
 
 How it works now is in [src/main/farmandcharm/AGENTS.md](../../../../src/main/farmandcharm/AGENTS.md).
 
@@ -117,7 +120,7 @@ passed whole on both nodes on 2026-10-01:
 | A salty bucket on an empty sink | refused, the bucket kept |
 | An empty hand, then a glass bottle, then a bucket | the sink fills from nothing; the bottle and the bucket are Murky |
 | Nettle tea in the Large Cooking Pot, plain and salty bucket | tea from the plain one, nothing from the salty one |
-| Tomato soup, fresh garden salad, chocolate mousse from thirst 4 | 8, 8 and 6 |
+| Tomato soup, fresh garden salad, chocolate mousse from thirst 4 | 8, 8 and 6 (10, 6 and 5 since the values were rebalanced to 6, 2 and 1 on 2026-10-21) |
 
 ## 4. Decision: the kitchen sink (done, (a))
 
@@ -156,6 +159,28 @@ An addon page under Farm & Charm's, as Farmer's Delight's addons have, [integrat
 with a picture of a kitchen sink between a stove and counters; a changelog entry of its own; rows in
 `docs/docs/installation.md`; Candlelight named in Farm & Charm's row on the Modrinth and CurseForge
 pages and in their versions tables.
+
+## 8. Foundation's sink (done, 2026-11-13)
+
+From Farm & Charm 1.1.28 the kitchen sink is `net.satisfy.foundation.block.SinkBlock` (Foundation 1.0.6,
+1.0.7 in Farm & Charm 1.1.29, 1.0.9 in Meadow 1.4.10, the same bytecode), with a `SinkBlockEntity` on the
+lower half. `FILLED` is only read once and turned into a full basin. Read with `javap`:
+
+| Click with | Result |
+|---|---|
+| an **empty hand** | opens or closes the tap; open, the basin rises a level every 60 ticks, up to 3, **from nothing** |
+| a water bucket (or bottle), basin below 3 | pours it in: up to 3 (one level), an empty bucket (bottle) back |
+| a glass bottle, basin 1 or more | one level, a `Potions.WATER` bottle |
+| a bucket, basin 3 | all three, a water bucket |
+| anything else, basin 1 or more | washes it, one level |
+
+Every result still goes through `Inventory.add`, or `Player.drop` when full, and a salty bucket or bottle
+still meets the head of `useItemOn`, so `SinkMixin` applies and works unchanged: what comes out is
+Murky, sea water is refused. The script's sink cases were written for the old flag (an empty hand
+setting `filled=true`) and failed only for that; they now read the block entity's `WaterLevel` and
+`Open`, wait for the tap, and pour a plain bucket in to show it comes back Murky. Passed whole on both
+1.21.1 nodes, Fabric with Foundation 1.0.9 added to `runClient` by hand (Loom does not load the copy
+nested in Farm & Charm), NeoForge with the nested 1.0.7.
 
 ## Not planned
 

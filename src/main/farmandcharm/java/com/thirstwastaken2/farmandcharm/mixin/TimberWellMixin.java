@@ -21,10 +21,14 @@ import org.spongepowered.asm.mixin.injection.At;
  * and one source block under a well is endless water.
  *
  * <p>Wraps the one call that makes the filled bucket, which runs only on the server.
+ *
+ * <p>Every injector is {@code require = 0}, and the plugin checks {@code useItemOn} is there and warns for
+ * a hook that found nothing, so a change upstream turns this off in the log rather than stopping the game
+ * (see {@code FarmAndCharmMixinPlugin}).
  */
 @Mixin(TimberWellBlock.class)
 abstract class TimberWellMixin {
-    @WrapOperation(method = "useItemOn", at = @At(value = "INVOKE",
+    @WrapOperation(method = "useItemOn", require = 0, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemUtils;createFilledResult(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack thirst$gradeWellWater(ItemStack empty, Player player, ItemStack filled, Operation<ItemStack> original,
                                             @Local(argsOnly = true) BlockState state, @Local(argsOnly = true) Level level,

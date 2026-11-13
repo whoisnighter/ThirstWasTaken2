@@ -89,6 +89,7 @@ The ids come from the mod's `en_us.json` and `ObjectRegistry`. Step 3 confirms e
 | 6 | Sea water refused in the Cooking Pot | code | both 1.21.1 | **Done** (2026-10-01), Stove and Crafting Bowl too |
 | 7 | Nothing crashes without the mod | test | both 1.21.1 | **Done** (2026-10-01) |
 | 8 | Changelog, player docs, store pages | docs | — | **Done** (2026-10-01) |
+| 9 | No upstream change can stop the game | code | both 1.21.1 | **Done** (2026-11-13), after #56 |
 
 How it works now is in [src/main/farmandcharm/AGENTS.md](../../../../src/main/farmandcharm/AGENTS.md); what
 follows is what each step did and found.
@@ -123,7 +124,7 @@ so its cases are written for the finished behaviour:
 | A well with no source below | Clean, rain's grade |
 | A trough: salty bucket, then Pure bucket, then draw | the salty one refused and kept; the Pure one fills it; the draw is Murky |
 | The cooking blocks with a plain and a salty bucket | the plain ones make nettle tea and farmers bread, the salty ones nothing, the bucket left in its slot |
-| Drinking and eating from thirst 4 | the tea cup and the jug 10, barley soup 8, tomato 6 |
+| Drinking and eating from thirst 4 | the tea cup and the jug 10, barley soup 8, tomato 6 (barley soup 10 since the values were rebalanced on 2026-10-21: soups 6, 4) |
 
 What the code survey had right: the tag holds only the water bucket, so bottles and canteens are not
 accepted, and the trough and the well never kept a grade. What it had wrong: the cooking blocks do
@@ -168,6 +169,23 @@ taken on a lakeshore in `ShotsAgent` (Fabric 1.21.1), its sidebar entry through 
 rows in `docs/docs/installation.md`, a row with the well picture in the Modrinth and CurseForge main
 tables and a line in their versions tables, the root `AGENTS.md`, `WATER-REFERENCE.md` and
 `SALT-WATER-REFUSALS.md`.
+
+## 9. Failing soft (done, 2026-11-13)
+
+Issue #56 crashed Fabric at launch because an injector with the config's `defaultRequire` 1 met a method
+Candlelight had removed. The Timber Well, Water Trough and sink mixins were the same shape, guarded only
+by their class being there. Now every injector is `require = 0`, and `FarmAndCharmMixinPlugin` reads each
+target's class file before Mixin transforms it: a block with no `useItemOn` (nor `method_55765`, its
+intermediary name in a Fabric player's game) is skipped, and a call a hook sits on that is gone from it
+(`createFilledResult`, `setItemInHand`, `Inventory.add`, `Player.drop`, `Ingredient.test`) is logged,
+the rest of the mixin still applying. Both warnings say "not a version ThirstWasTaken2 supports". A
+first cut looked for the handlers in `postApply` instead, and warned wrongly for every
+`@WrapOperation`, which MixinExtras applies after it.
+
+Checked on a production Fabric 1.21.1 server with the built jar, Farm & Charm 1.1.29 and Candlelight
+2.1.15 and `-Dmixin.debug.export=true`: no warning, and every hook in the exported classes. With a
+Farm & Charm jar edited so that Foundation's sink has no `method_55765` and the well no longer calls
+`createFilledResult`: one warning each, the sink left untransformed, and the server starts.
 
 ## Not planned
 
