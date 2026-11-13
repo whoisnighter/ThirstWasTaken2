@@ -34,9 +34,8 @@ attachment API, which the jar needs for player data. `fabric.mod.json` names
 game crashing.
 
 NeoForge has published only betas for 26.3, so `26.3.x-neoforge` is pinned to one and asks players for
-at least that build. Two of its optional integrations have no 26.3 release yet either: Cloth Config,
-which only AppleSkin's own settings screen needs in runClient, and Sophisticated Core, so that node
-alone among the NeoForge ones builds without the Sophisticated upgrades.
+at least that build. Cloth Config, which only AppleSkin's own settings screen needs in runClient, has
+no 26.3 NeoForge release yet.
 
 **This page is the version axis only.** What differs between Fabric and NeoForge on the *same*
 Minecraft version, and which seam hides it, is in
@@ -124,7 +123,10 @@ never see it.
 | Furnace fuel is the item's cooking fuel component, its burn time resolved in a loot context that names the block entity as the container at work; the level's fuel values are gone | `Vanilla.burnTime`, which takes a block entity that is a container for it; `Vanilla.isFuel` asks whether the item has the component |
 
 Result: 26.3 writes its recipe unlocks with a `recipes` key holding the recipe id, where earlier
-versions write `recipe`. Nothing else in the generated files moved.
+versions write `recipe`. Nothing else in the generated files moved. A hand-written unlock in a
+directory several nodes share cannot be right on both sides of that change, and a wrong key stops a
+world loading, so Sophisticated's Drinking upgrade unlocks (`src/main/sophisticated-transfer`) leave
+the `recipe_unlocked` criterion out and unlock on the item alone.
 
 ### 26.2 (affects 26.1.x, 1.21.11, 1.21.1)
 

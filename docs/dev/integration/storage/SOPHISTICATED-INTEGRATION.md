@@ -12,8 +12,9 @@ Written on 2026-09-19 from Sophisticated Core `1.21.1-1.5.1.2341` and Sophistica
 Core `1.21.11-1.5.0.2340`, `26.1.2-1.5.0.2334` and `26.2-1.5.0.2337`.
 
 "Every NeoForge node" below means the four that existed on that date. `26.3.x-neoforge`, added on
-2026-09-20, has no Sophisticated Core build to compile against, so items 1 to 5 are absent there; the
-waterskin and bowl fluid containers of item 6 need no Sophisticated and do work on it.
+2026-09-20, had no Sophisticated Core build to compile against until November, so items 1 to 5 were
+absent there until item 12; the waterskin and bowl fluid containers of item 6 need no Sophisticated and
+always worked on it.
 
 ## Status
 
@@ -30,6 +31,7 @@ waterskin and bowl fluid containers of item 6 need no Sophisticated and do work 
 | 9 | Changelog and player docs | docs | **Done** |
 | 10 | Cooking upgrades keep a canteen or flask's servings (issue #53) | bug | **Done** on every node that builds Sophisticated; see `src/main/sophisticated/AGENTS.md`, "Cooking upgrades" |
 | 11 | Core 1.5.35 crash at loading, and every mixin failing soft (issue #61) | bug | **Done** on every node that builds Sophisticated; see below |
+| 12 | `26.3.x-neoforge` | port | **Done**: items 1 to 5 on every NeoForge node. The Tank upgrade multiplies the container in its input slot on 26.2 and 26.3 with the newest Cores, still open; see below |
 
 The order is the one agreed on: the bugs first, the Tank before the others because it let any water
 turn Clean, then the cheapest feature, then the rest. All four bugs are fixed, the Drinking upgrade is
@@ -243,6 +245,46 @@ against 1.5.33, 1.5.34 and 1.5.32: unchanged, except that 1.21.1's pump now asks
   feature off in the log instead of crashing the game.
 - **Pins** moved to those Cores, and Storage to 1.6.18, 26.1.2-1.5.131 and 26.2-1.5.131. Backpacks was
   already the newest on each node and accepts them.
+
+### 12. `26.3.x-neoforge`
+
+Sophisticated published 26.3 builds in November 2026, and the node now sets `deps.sophisticated_core`
+(26.3-1.5.36.2476), `deps.sophisticated_backpacks` (26.3-3.26.20.2252) and `deps.sophisticated_storage`
+(26.3-1.5.132.2231). It is the transfer generation, wired by the deps key alone. Every class a mixin
+targets (`TankContainerHandler`, `TankUpgradeWrapper`, `PumpUpgradeWrapper`, `FluidFilterLogic`,
+`CookingLogic`, `FeedingUpgradeWrapper`, `AlchemyUpgradeWrapper`) and `CapabilityHelper` and
+`MutableStackItemAccess` were compared with `javap` against 26.2-1.5.34: the hooked methods are
+unchanged. What moved is outside them (the pump's `placeFluidInWorld` follows NeoForge's new
+`FluidUtil.tryPlaceFluid`, and the cooking upgrades' burn time takes a modifier).
+
+Two fixes were needed. `DrinkingUpgradeWrapper` called `Inventory.placeItemBackInInventory` itself,
+whose signature 26.3 changed; it goes through `Vanilla.placeItemBackInInventory` now. And the Drinking
+upgrade's unlock advancements, hand-written in `src/main/sophisticated-transfer`, stopped every 26.3
+world from loading ("Errors in the currently selected data pack(s)"): 26.3 renamed `recipe_unlocked`'s
+`recipe` key to `recipes`. One copy serves 1.21.11 to 26.3, so they unlock on the item alone now,
+without a `recipe_unlocked` criterion.
+
+Run on 2026-11-13 on `26.3.x-neoforge`, Storage off the classpath as usual, no "not a version"
+warning in the log:
+
+- **Cooking**: every case as the 1.21.1 table above, the flask and canteen keeping their servings.
+- **Pump**: the plains pool gave `water_purity: 1`, the same as a bottle filled from it; the ocean pool
+  salt water; the filtered pump `water_purity: 1`; the purity-0 bucket went in as purity 0; the
+  purity-3 tank filled a bucket and a waterskin (four servings, purity 3). The Create cases need Create,
+  which this node does not have.
+- **Drinking**: thirst 16, 20 (250 mB of Pure left), 4, 10, 6 and 20. The "other" case is 6, honey
+  only, since Farmer's Delight's cider is not on this node's classpath.
+- **Tank: not passing, and not because of 26.3.** The grade comes through every case (dirty bucket
+  and bottle purity 0, unstamped purity 2, sea water salty, the Pure tank refusing a dirty bottle, a
+  murky waterskin and dirty bowl keeping theirs), but the container in the input slot is never used
+  up: from one bucket the result slot held 11 empty buckets and the full bucket was still in slot 0;
+  the bowl case the same with 11 bowls; the salt case kept its bottle in slot 0 with 11 glass bottles
+  and two salty buckets. `26.2.x-neoforge` with Core 1.5.34 gives byte-for-byte the same exports, so
+  it came with the Cores that moved the container code into `TankContainerHandler` (issue #61), which
+  were built but not run in a client on 26.x. With `TankContainerHandlerMixin` left out of the config
+  on 26.3, the bucket and bowl still multiply, so that part is Core's own (or Core's with NeoForge's
+  bucket and the mod's bowl handlers); the salt bottle was refused instead, so whether the bottle case
+  is Core's or the wrapper's is not settled. Not fixed here.
 
 ## Testing, for every item
 

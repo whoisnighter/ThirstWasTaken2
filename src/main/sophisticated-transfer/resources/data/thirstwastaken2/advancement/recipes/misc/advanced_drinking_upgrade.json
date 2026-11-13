@@ -16,17 +16,10 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "thirstwastaken2:advanced_drinking_upgrade"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_the_recipe",
       "has_drinking_upgrade"
     ]
   ],

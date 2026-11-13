@@ -696,8 +696,9 @@ public final class Vanilla {
 
     /**
      * Gives a player an item the inventory has no room for in hand, dropping what does not fit. 26.3
-     * asks every such call whether the client already predicted it; the mod's only caller runs on the
-     * server alone, which is what the older signature meant anyway.
+     * asks every such call whether the client already predicted it; the mod's callers (a waterskin's
+     * remainder, the Sophisticated Drinking upgrade's empty container) run on the server alone, which is
+     * what the older signature meant anyway.
      */
     public static void placeItemBackInInventory(net.minecraft.world.entity.player.Player player, ItemStack stack) {
         //? if >=26.3 {

@@ -586,8 +586,13 @@ deps.neoforge_latest = "26.3.0.102"
 deps.appleskin = "6vok7cLb"
 deps.jade = "26.3.5+neoforge"
 # No `deps.cloth_config`: Cloth Config's 26.3 upload is Fabric only, and it is a runClient convenience
-# here rather than something the mod compiles against. Nor `deps.sophisticated_core`, which has no 26.3
-# build either, so this node skips the Sophisticated upgrades; see src/main/sophisticated/AGENTS.md.
+# here rather than something the mod compiles against.
+# 26.3-1.5.36.2476, the NeoForge upload. The transfer-API generation; see src/main/sophisticated/AGENTS.md.
+deps.sophisticated_core = "wGa0E4M4"
+# 26.3-3.26.20.2252, only on the runClient classpath.
+deps.sophisticated_backpacks = "ViXiwS5d"
+# 26.3-1.5.132.2231, only on the runClient classpath.
+deps.sophisticated_storage = "L0LDHdw0"
 # Farmer's Delight and Create are absent for the reason the 26.2 table gives.
 # Serene Seasons and GlitchCore, as in the 1.21.1 tables.
 # 26.1.2.0.7, the NeoForge upload.

@@ -42,7 +42,7 @@ A check that keeps sea water out reads `WaterPurity.isSalty(stack)` on a stack,
 | Meadow | [CookingCauldronBlockEntityMixin.java](../../../src/main/meadow/java/com/thirstwastaken2/meadow/mixin/CookingCauldronBlockEntityMixin.java) | Sea water poured into the Cooking Pot, which keeps only an amount of water. The click is spent | both 1.21.1 nodes |
 | Bountiful Fares | [FermentationVesselBlockMixin.java](../../../src/main/bountifulfares/java/com/thirstwastaken2/bountifulfares/mixin/FermentationVesselBlockMixin.java) | Sea water poured into an empty Fermentation Vessel, which would ferment it into cider or wine. The click is spent and the water stays in the hand | both 1.21.1 nodes |
 | Bountiful Fares | [ShapedRecipeMixin.java](../../../src/main/bountifulfares/java/com/thirstwastaken2/bountifulfares/mixin/ShapedRecipeMixin.java), [ShapelessRecipeMixin.java](../../../src/main/bountifulfares/java/com/thirstwastaken2/bountifulfares/mixin/ShapelessRecipeMixin.java) | A sea water cup or bucket in any crafting recipe that makes an item of Bountiful Fares': its six teas and the Sponge Cake. The grid keeps its items and shows no result | both 1.21.1 nodes |
-| Sophisticated Backpacks | [DrinkingUpgradeWrapper.java](../../../src/main/sophisticated/java/com/thirstwastaken2/sophisticated/drinking/DrinkingUpgradeWrapper.java) | The Drinking Upgrade drinking sea water on its own | NeoForge nodes but `26.3.x-neoforge` |
+| Sophisticated Backpacks | [DrinkingUpgradeWrapper.java](../../../src/main/sophisticated/java/com/thirstwastaken2/sophisticated/drinking/DrinkingUpgradeWrapper.java) | The Drinking Upgrade drinking sea water on its own | NeoForge nodes |
 
 ## Refused by mixing rules, not by salt
 

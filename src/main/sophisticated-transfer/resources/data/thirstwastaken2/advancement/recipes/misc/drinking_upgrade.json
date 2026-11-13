@@ -11,12 +11,6 @@
   ],
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "thirstwastaken2:drinking_upgrade"
-      },
-      "trigger": "minecraft:recipe_unlocked"
-    },
     "has_upgrade_base": {
       "conditions": {
         "items": [
@@ -30,7 +24,6 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
       "has_upgrade_base"
     ]
   ],

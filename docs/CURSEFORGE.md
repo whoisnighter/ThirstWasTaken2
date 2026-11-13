@@ -305,7 +305,7 @@ Change every setting in game, with a live preview of the thirst bar and the Appl
   <tr>
     <td width="55%">
       <img alt="Sophisticated Backpacks icon" src="https://cdn.modrinth.com/data/TyCTlI4b/e31c7e2f8769d317339e25b2a8d1b40fbf312729_96.webp" width="20" height="20" align="absmiddle"> <b><a href="https://www.curseforge.com/minecraft/mc-mods/sophisticated-backpacks">Sophisticated Backpacks</a></b><br>
-      <i>NeoForge, every version but 26.3</i><br><br>
+      <i>NeoForge, every version</i><br><br>
       Adds the Drinking Upgrade, which drinks from your backpack when you get thirsty, the cleanest water first. Water keeps its purity grade in the Tank and Pump Upgrades. Also works with <img alt="Sophisticated Storage icon" src="https://media.forgecdn.net/avatars/thumbnails/543/206/64/64/637872959580005837.png" width="20" height="20" align="absmiddle"> <a href="https://www.curseforge.com/minecraft/mc-mods/sophisticated-storage">Sophisticated Storage</a>.
     </td>
     <td width="45%">
@@ -392,7 +392,7 @@ Also works with:
   <tr>
     <td><img alt="Sophisticated Backpacks icon" src="https://cdn.modrinth.com/data/TyCTlI4b/e31c7e2f8769d317339e25b2a8d1b40fbf312729_96.webp" width="20" height="20" align="absmiddle"> <a href="https://www.curseforge.com/minecraft/mc-mods/sophisticated-backpacks">Sophisticated Backpacks</a><br><img alt="Sophisticated Storage icon" src="https://media.forgecdn.net/avatars/thumbnails/543/206/64/64/637872959580005837.png" width="20" height="20" align="absmiddle"> <a href="https://www.curseforge.com/minecraft/mc-mods/sophisticated-storage">Sophisticated Storage</a></td>
     <td>–</td>
-    <td>1.21.1, 26.1.x, 26.2</td>
+    <td>every version</td>
     <td>–</td>
   </tr>
   <tr>

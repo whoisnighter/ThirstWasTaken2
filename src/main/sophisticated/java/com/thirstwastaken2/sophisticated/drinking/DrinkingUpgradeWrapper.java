@@ -187,7 +187,7 @@ public final class DrinkingUpgradeWrapper extends UpgradeWrapperBase<DrinkingUpg
         if (result.isEmpty()) return;
         // The empty bottle, bowl or lighter waterskin goes back where it came from, or to the player.
         ItemStack left = storage.insert(result);
-        if (!left.isEmpty()) player.getInventory().placeItemBackInInventory(left);
+        if (!left.isEmpty()) Vanilla.placeItemBackInInventory(player, left);
     }
 
     private static void playDrinkSound(Player player, Level level) {

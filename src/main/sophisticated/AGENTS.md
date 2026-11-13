@@ -23,8 +23,7 @@ What is still to do across Sophisticated's upgrades is in
 [docs/dev/integration/storage/SOPHISTICATED-INTEGRATION.md](../../../docs/dev/integration/storage/SOPHISTICATED-INTEGRATION.md).
 
 This directory is **only compiled by nodes that set `deps.sophisticated_core`** in
-`stonecutter.properties.toml`: every NeoForge node but `26.3.x-neoforge`, which has no Sophisticated
-Core build to compile against yet. Sophisticated Core comes in two generations, the
+`stonecutter.properties.toml`: every NeoForge node. Sophisticated Core comes in two generations, the
 same split as NeoForge's own fluid API. On 1.21.1 its tanks move fluid through `IFluidHandler`; from
 1.21.11 through the transfer API (`ResourceHandler<FluidResource>`, `ItemAccess`, transactions). What
 does not touch fluid is one copy for both, here. Where Minecraft itself changed it calls core
@@ -35,7 +34,7 @@ that fits the node. Both use the same class names, so
 the mixin config is shared.
 
 ```
-sophisticated/java/com/thirstwastaken2/sophisticated/     every NeoForge node but 26.3
+sophisticated/java/com/thirstwastaken2/sophisticated/     every NeoForge node
   SophisticatedPresence      the gate: FML's mod file for `sophisticatedcore`, and the generation's marker class inside it;
                              and Core's class files, read without loading them, for the plugin's checks
   SophisticatedMixinPlugin   applies the mixins only when the gate passes, each only where Core still has what it hooks
@@ -64,7 +63,7 @@ sophisticated-transfer/java/…/sophisticated/              1.21.11 and later
   UnstampedItemAccess          the container's ItemAccess, as the handler underneath sees it
   CollectedWaterStorage        the tanks while the Pump fills them from world water, stamping it
   mixin/…, drinking/DrinkingStorage   the same five classes as 1.21.1
-sophisticated/resources/                                  every NeoForge node but 26.3
+sophisticated/resources/                                  every NeoForge node
   thirstwastaken2.sophisticated.mixins.json
   assets/…                  the two upgrade textures, models and item model definitions, the tab's button icons
   data/…                    both mods' upgrade tags
@@ -270,6 +269,10 @@ tanks; the wrapper is shared.
 base, one recipe per mod's base, and `sophisticatedcore:upgrade_next_tier` with a diamond, two gold and
 three redstone for the Advanced tier, which keeps the filter. Both items are in `sophisticatedbackpacks:upgrade`
 and `sophisticatedstorage:upgrade`. The textures are the mod's own; Sophisticated's are not reused.
+The transfer generation's unlock advancements have no `has_the_recipe` criterion, only the item one:
+26.3 renamed `recipe_unlocked`'s `recipe` key to `recipes`, every older node reads only `recipe`, and
+one copy of the files serves 1.21.11 to 26.3. Either spelling made the other nodes refuse to load a
+world. Picking up the item still unlocks the recipe, so nothing a player sees changed.
 
 ## Testing
 

@@ -207,10 +207,8 @@ turned into the `items` holder set. From 1.21.11 on it is `neoforge:ingredient_t
   vectorwing's original, which puts it on runClient; the mod itself names no class of it on any node.
   The other NeoForge nodes have no build to test against yet. Its recipes load or are skipped
   correctly everywhere, through the translated `neoforge:conditions`.
-- **Sophisticated Backpacks, on `26.3.x-neoforge` only.** Sophisticated Core has no 26.3 build, so that
-  node alone does not set `deps.sophisticated_core` and does not compile `src/main/sophisticated`. Cloth
-  Config, which only AppleSkin's own settings screen needs in runClient, is missing there for the same
-  reason; `build.neoforge.gradle.kts` treats it as optional because of it.
+- **Cloth Config, on `26.3.x-neoforge` only.** It has no 26.3 NeoForge build, and only AppleSkin's own
+  settings screen needs it in runClient; `build.neoforge.gradle.kts` treats it as optional because of it.
 - **`src/dev` and `src/datagen`.** Fabric only; each node reads the files the Fabric node on its
   Minecraft version generates.
 - **Minecraft 1.21.** The Fabric 1.21.1 jar covers it; NeoForge 21.0 is a generation of its own.

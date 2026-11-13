@@ -13,6 +13,8 @@ All notable changes to ThirstWasTaken2 are documented in this file.
 - Little Logistics, on NeoForge 1.21.1 and Forge 1.20.1: a bucket filled from or poured into a Fluid
   Tank Car, a Fluid Barge or, on 1.20.1, a Fluid Hopper keeps the grade of the water. It used to come
   out Clean whatever the tank held.
+- Sophisticated Backpacks and Sophisticated Storage now work on NeoForge 26.3 too, Drinking Upgrade
+  included.
 
 ### Fixed
 

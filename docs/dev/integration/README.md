@@ -30,7 +30,7 @@ record. Small integrations with only thirst values in `ThirstConfig` have no pla
 | Bountiful Fares | [cooking/BOUNTIFUL-FARES](cooking/BOUNTIFUL-FARES-INTEGRATION.md) | `src/main/bountifulfares` | both 1.21.1 | built |
 | Kaleidoscope Cookery | [cooking/KALEIDOSCOPE-COOKERY](cooking/KALEIDOSCOPE-COOKERY-INTEGRATION.md) | `src/main/kaleidoscope` | see plan | see plan |
 | Kaleidoscope Tavern | [cooking/KALEIDOSCOPE-TAVERN](cooking/KALEIDOSCOPE-TAVERN-INTEGRATION.md) | `src/main/kaleidoscopetavern` | `1.21.1-neoforge`, `1.20.1-forge`, every Fabric node but `1.21.11` | built |
-| Sophisticated Backpacks and Storage | [storage/SOPHISTICATED](storage/SOPHISTICATED-INTEGRATION.md) | `src/main/sophisticated` | NeoForge but 26.3 | see plan |
+| Sophisticated Backpacks and Storage | [storage/SOPHISTICATED](storage/SOPHISTICATED-INTEGRATION.md) | `src/main/sophisticated` | NeoForge | see plan |
 | Create Pipes n Physics | [storage/PIPES-N-PHYSICS](storage/PIPES-N-PHYSICS-INTEGRATION.md) | `src/main/create` | `1.21.1-neoforge` | built; upstream #89, #90 open |
 | Mekanism | [storage/MEKANISM](storage/MEKANISM-INTEGRATION.md) | `src/main/mekanism`, `mekanismforge` | `1.21.1-neoforge`, `1.20.1-forge` | built |
 | Immersive Engineering | [storage/IMMERSIVE-ENGINEERING](storage/IMMERSIVE-ENGINEERING-INTEGRATION.md) | `src/main/immersiveengineering`, `immersiveengineeringforge` | `1.21.1-neoforge`, `1.20.1-forge` | built |

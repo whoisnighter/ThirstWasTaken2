@@ -228,7 +228,7 @@ In a world with the mod, on one node per loader:
       `python tools/agent/drive.py run/<node>/agent/client tools/agent/smoke/boot.jsonl --verify --max-age 10`
       (without `--max-age` it reads the last run's answers if this one crashed). Leaving out
       a library leaves out the mods that need it too.
-      - `sophisticated-core` on the NeoForge nodes up to 26.2
+      - `sophisticated-core` on every NeoForge node
       - `moonlight` (Supplementaries goes with it) on both 1.21.1 nodes
       - `create` on `1.21.1-neoforge` and `1.20.1-forge`, and on the Fabric nodes that build Create Fly
       - `farmersdelight` on every Fabric node (the Cooking Pot fix mixes into Refabricated) and on
