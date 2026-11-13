@@ -134,6 +134,9 @@ DEPENDENCIES = {
     "herbalbrews": Dependency("lets-do-herbalbrews", "Eh11TaTm", None),
     "beachparty": Dependency("lets-do-beachparty", "GyKzAh3l", None),
     "meadow": Dependency("lets-do-meadow", "ra7o6Sl7", None),
+    # Little Logistics and Cooking for Blockheads: CurseForge slugs unverified, listed there by hand.
+    "little_logistics": Dependency("little-logistics", "1zZJrh9c", None),
+    "cooking_for_blockheads": Dependency("cooking-for-blockheads", "vJnhuDde", None),
 }
 # The same keys where a NeoForge or Forge node's dependency is a different project: Farmer's Delight
 # Refabricated and Kaleidoscope Cookery Refabricated are Fabric ports, and the other loaders use the originals.
