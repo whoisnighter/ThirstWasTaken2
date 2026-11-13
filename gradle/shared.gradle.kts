@@ -479,11 +479,9 @@ tasks.register("checkOptionalSeam") {
     description = "Fails when a class loaded without an optional mod installed names that mod"
 
     val sourceSets = project.extensions.getByType<SourceSetContainer>()
-    // `client` is Loom's split source set on Fabric. On NeoForge it only exists to be preprocessed and
-    // its classes are compiled into `main`, so it is left out there.
-    val checked = listOfNotNull(sourceSets.getByName("main"),
-        sourceSets.findByName("client")?.takeIf { project.plugins.hasPlugin("fabric-loom") ||
-            project.extensions.findByName("loom") != null })
+    // `client` is Loom's split source set on Fabric. The NeoForge and Forge nodes have none: their client
+    // sources compile into `main`.
+    val checked = listOfNotNull(sourceSets.getByName("main"), sourceSets.findByName("client"))
     dependsOn(checked.map { it.classesTaskName })
     val classDirs = checked.flatMap { it.output.classesDirs.files }
     val resourceDirs = checked.mapNotNull { it.output.resourcesDir }
@@ -776,5 +774,35 @@ tasks.named<ProcessResources>("processGametestResources") {
             entrypoints["fabric-gametest"] = classes.filter { key(it) in gametestFilter }
             manifest.writeText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json)))
         }
+    }
+}
+
+/*
+ * Every versioned directory under `src/`, on every node, including the ones this node does not compile.
+ *
+ * Stonecutter 0.10 preprocesses only the directories a node's source sets list, and "Set active project
+ * to <node>" and "Reset active project" write back only that node's. A directory only some nodes compile,
+ * an integration's or another loader's, would keep whatever node last switched to it: "Reset active
+ * project" from `1.20.1-forge` left `src/main/forge` and every Forge-only integration in 1.20.1's
+ * spelling. Before 0.10 Stonecutter rewrote the whole of `src/<source set>` and this was not needed.
+ *
+ * The `versioned` source set lists every such directory this node's own source sets leave out, so a
+ * switch to any node rewrites the whole tree. It exists only to be preprocessed: nothing compiles,
+ * packages or runs it. `src/main/generated` is datagen output, one directory per Minecraft version,
+ * never versioned.
+ */
+the<SourceSetContainer>().let { sourceSets ->
+    val listed = sourceSets.flatMap { it.java.srcDirs + it.resources.srcDirs }
+        .map { it.relativeTo(projectDir).invariantSeparatorsPath }.toSet()
+    val unlisted = rootProject.file("src").listFiles().orEmpty().filter(File::isDirectory)
+        .flatMap { set -> listOf(set) + set.listFiles().orEmpty()
+            .filter { it.isDirectory && it.name !in setOf("java", "resources", "generated") } }
+        .flatMap { listOf(it.resolve("java"), it.resolve("resources")) }
+        .filter(File::isDirectory)
+        .map { it.relativeTo(rootProject.projectDir).invariantSeparatorsPath }
+        .filterNot(listed::contains)
+    sourceSets.create("versioned") {
+        java.setSrcDirs(unlisted)
+        resources.setSrcDirs(emptyList<Any>())
     }
 }

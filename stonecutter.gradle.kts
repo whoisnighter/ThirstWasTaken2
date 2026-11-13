@@ -22,8 +22,13 @@ stonecutter parameters {
         tags(minecraftOf(current.project), loaderOf(current.project).id)
     }
 
+    // Stonecutter 0.10 reads every file in a source directory, Markdown included, and applies the
+    // replacements below to the ones without comment syntax of its own. The AGENTS.md files there name
+    // both spellings of a rename on purpose, so it leaves them alone.
+    files.exclude("**/*.md")
+
     // Bakes the target Minecraft version into the jar, so the startup log line is never stale.
-    swaps["minecraft"] = "\"${node.metadata.version}\";"
+    swaps["minecraft"] = "\"${current.version}\";"
 
     // Every replacement also runs backwards: on each node whose condition is false, and so on the sources
     // themselves when "Reset active project" brings them back from another node. Two rules keep that a

@@ -126,7 +126,10 @@ A pure rename needs no branch: add it to `replacements` in `stonecutter.gradle.k
 - **A one-line branch** (`//?} else` with no brace) is disabled as `//line`, not `/*line*/`; that is
   the form Stonecutter writes back.
 - **Set and Reset active project must round-trip**: after `"Set active project to <node>"` then
-  `"Reset active project"`, `git diff` shows nothing new under `src/`.
+  `"Reset active project"`, `git diff` shows nothing new under `src/`. Stonecutter rewrites only the
+  directories a node's source sets list, so every node also carries a `versioned` source set, never
+  compiled, listing the rest of `src/` (`gradle/shared.gradle.kts`); a new directory there is covered
+  without a change. Markdown is never rewritten (`files.exclude` in `stonecutter.gradle.kts`).
 
 Every difference between versions is listed in [docs/dev/VERSION-DIFFERENCES.md](docs/dev/VERSION-DIFFERENCES.md).
 

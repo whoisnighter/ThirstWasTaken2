@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 public final class ThirstWasTaken2 {
     public static final String MOD_ID = "thirstwastaken2";
     /** The Minecraft version this jar was built against; substituted per version at build time. */
-    public static final String MINECRAFT = /*$ minecraft*/ "26.3";
+    public static final String MINECRAFT = /*$ minecraft*/"26.3";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     /** System property that forces {@link #DEV} on or off. */
     public static final String DEV_PROPERTY = "thirstwastaken2.dev";

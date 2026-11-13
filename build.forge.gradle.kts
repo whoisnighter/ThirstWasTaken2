@@ -66,11 +66,6 @@ repositories {
 /** See build.neoforge.gradle.kts: the loader this node builds for, by its source directory name. */
 val loader = "forge"
 
-/** This node's copy of `src/client`; see build.neoforge.gradle.kts. */
-val clientSources: File =
-    if (sc.current.isActive) rootProject.file("src/client")
-    else layout.buildDirectory.dir("generated/stonecutter/client").get().asFile
-
 /*
  * The optional integrations this node builds, from the same table build.neoforge.gradle.kts reads: each
  * row's source directories, its optional dependencies appended to the built mods.toml, and its mixin
@@ -92,7 +87,6 @@ extra["thirst.loader"] = loader
 extra["thirst.loaderName"] = "Forge"
 extra["thirst.manifest"] = "META-INF/mods.toml"
 extra["thirst.minecraft"] = sc.current.version
-extra["thirst.clientSources"] = clientSources
 extra["thirst.requiredJava"] = requiredJava.majorVersion
 // 1.20.1 has no --report option, so the harness installs the JUnit reporter itself.
 extra["thirst.gametestReportOption"] = false
@@ -114,9 +108,7 @@ sourceSets.main {
             java.srcDir("$root/java")
             resources.srcDir("$root/resources")
         }
-        integration.clientJava?.let { dir ->
-            java.srcDir(files(clientSources.resolve(dir)).builtBy("stonecutterGenerateClient"))
-        }
+        integration.clientJava?.let { dir -> java.srcDir("src/client/$dir") }
     }
 }
 

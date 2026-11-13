@@ -20,7 +20,6 @@ import net.neoforged.moddevgradle.dsl.ModDevExtension
  * | `thirst.loaderName`                 | its name in task names and messages, `NeoForge` or `Forge`                |
  * | `thirst.manifest`                   | the mods.toml the integrations are appended to                            |
  * | `thirst.minecraft`                  | the node's Minecraft version, Stonecutter's `sc.current.version`          |
- * | `thirst.clientSources`              | where this node's preprocessed `src/client` is                            |
  * | `thirst.gametestReportOption`       | whether the gametest server takes `--report` (1.21.5 on)                  |
  * | `thirst.flightRecorder`             | the JVM arguments `-Pprofile` adds to runBenchmark, from build-logic      |
  * | `thirst.integrationManifest`        | the text the node's integrations append to the manifest, or ""           |
@@ -34,7 +33,6 @@ fun <T> handed(name: String): T = project.extensions.extraProperties.get(name) a
 
 val loader: String = handed("thirst.loader")
 val loaderName: String = handed("thirst.loaderName")
-val clientSources: File = handed("thirst.clientSources")
 val requiredJava: String = handed("thirst.requiredJava")
 val translateJson: (Any?, String) -> Any? = handed("thirst.translateJson")
 val modId = property("mod.id") as String
@@ -57,23 +55,18 @@ val main: SourceSet = sourceSets["main"]
  * and asset JSON that the Fabric node of the same Minecraft version writes. `src/gametest` and `src/dev`
  * are both here, each as a mod of its own, below.
  *
- * `src/client` cannot simply be listed as a directory of `main`. Stonecutter preprocesses `src/<name>`
- * only for a source set called `<name>`, so without a `client` source set nothing writes this node's copy
- * of the client sources, and a `src/client/...` directory on `main` then resolves to nothing and compiles
- * nothing, without an error. The `client` source set below exists only to be preprocessed; it is never
- * compiled or packaged. Its output goes into `main` by path, `thirst.clientSources`: the sources
- * themselves when this is the active node, which Stonecutter leaves in place, and Stonecutter's generated
- * copy otherwise.
+ * `src/client` is listed as directories of `main`. Stonecutter preprocesses every source directory of a
+ * source set that lies inside the project, whatever its name, so `src/client/...` on `main` gets this
+ * node's copy as `src/main/...` does. Before Stonecutter 0.10 it read only `src/<name>` for a source set
+ * named `<name>`, and these scripts kept a `client` source set only to have it preprocessed.
  */
-sourceSets.create("client")
-
 main.apply {
     java.srcDir("src/main/$loader/java")
     resources.srcDir("src/main/$loader/resources")
-    java.srcDir(files(clientSources.resolve("java"), clientSources.resolve("$loader/java"))
-        .builtBy("stonecutterGenerateClient"))
-    resources.srcDir(files(clientSources.resolve("resources"), clientSources.resolve("$loader/resources"))
-        .builtBy("stonecutterGenerateClient"))
+    java.srcDir("src/client/java")
+    java.srcDir("src/client/$loader/java")
+    resources.srcDir("src/client/resources")
+    resources.srcDir("src/client/$loader/resources")
     // Written by the Fabric node's `runDatagen`, keyed by Minecraft version rather than by node so every
     // node of a Minecraft version shares one directory. See src/datagen/java/AGENTS.md.
     resources.srcDir(rootProject.file("src/main/generated/${handed<String>("thirst.minecraft")}"))

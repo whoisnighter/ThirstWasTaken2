@@ -62,15 +62,6 @@ repositories {
 val loader = "neoforge"
 
 /**
- * This node's copy of `src/client`, which gradle/moddev.gradle.kts compiles into `main`: the sources
- * themselves when this is the active node, which Stonecutter leaves in place, and Stonecutter's
- * generated copy otherwise. That script says why it has to be by path.
- */
-val clientSources: File =
-    if (sc.current.isActive) rootProject.file("src/client")
-    else layout.buildDirectory.dir("generated/stonecutter/client").get().asFile
-
-/**
  * NeoForge's two fluid APIs: IFluidHandler on 21.1, the transfer API (ResourceHandler) from 21.9. Code
  * that implements one of them lives in the directory of its generation, here and in an integration whose
  * other mod moved with NeoForge.
@@ -96,7 +87,6 @@ extra["thirst.loader"] = loader
 extra["thirst.loaderName"] = "NeoForge"
 extra["thirst.manifest"] = "META-INF/neoforge.mods.toml"
 extra["thirst.minecraft"] = sc.current.version
-extra["thirst.clientSources"] = clientSources
 extra["thirst.requiredJava"] = requiredJava.majorVersion
 extra["thirst.gametestReportOption"] = sc.current.parsed >= "1.21.5"
 extra["thirst.flightRecorder"] = flightRecorder(rootProject.file("run/${project.name}/benchmark/latest.jfr"))
@@ -116,10 +106,8 @@ sourceSets.main {
             java.srcDir("$root/java")
             resources.srcDir("$root/resources")
         }
-        // From the preprocessed client sources like the rest of them.
-        integration.clientJava?.let { dir ->
-            java.srcDir(files(clientSources.resolve(dir)).builtBy("stonecutterGenerateClient"))
-        }
+        // Into `main`, like the rest of src/client; see gradle/moddev.gradle.kts.
+        integration.clientJava?.let { dir -> java.srcDir("src/client/$dir") }
     }
 }
 

@@ -19,7 +19,7 @@ plugins {
     id("dev.kikugie.stonecutter") version "0.10"
     // 26.1 dropped obfuscation, which changed how Loom consumes mod dependencies. This applies the
     // Loom variant each version needs and keeps `modImplementation` meaning the same thing on both.
-    id("dev.kikugie.loom-back-compat") version "0.4.2"
+    id("dev.kikugie.loom-back-compat") version "0.4.3"
     // NeoForge's build plugin, for the one NeoForge node. Resolved here and applied only by
     // build.neoforge.gradle.kts: applying it to a Fabric node would put a second Minecraft provider
     // on a project Loom already owns.

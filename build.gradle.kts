@@ -165,9 +165,10 @@ loom {
  * enforces it. The NeoForge node has a script of its own, build.neoforge.gradle.kts. See
  * src/main/java/com/thirstwastaken2/platform/AGENTS.md.
  *
- * The directories sit inside `src/main` and `src/client` rather than in a `src/<loader>` of their
- * own because Stonecutter only rewrites versioned comments under `src/<source set>`: anywhere else,
- * every node but the active one would compile an empty directory.
+ * The directories sit inside `src/main` and `src/client`, beside the source set each belongs to.
+ * Stonecutter rewrites the versioned comments of every source directory inside the project, so where
+ * they sit is a convention: before 0.10 it read only `src/<source set>`, and anywhere else every node
+ * but the active one compiled an empty directory.
  */
 val loader = "fabric"
 
