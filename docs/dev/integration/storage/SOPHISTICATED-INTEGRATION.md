@@ -31,7 +31,7 @@ always worked on it.
 | 9 | Changelog and player docs | docs | **Done** |
 | 10 | Cooking upgrades keep a canteen or flask's servings (issue #53) | bug | **Done** on every node that builds Sophisticated; see `src/main/sophisticated/AGENTS.md`, "Cooking upgrades" |
 | 11 | Core 1.5.35 crash at loading, and every mixin failing soft (issue #61) | bug | **Done** on every node that builds Sophisticated; see below |
-| 12 | `26.3.x-neoforge` | port | **Done**: items 1 to 5 on every NeoForge node. The Tank upgrade multiplies the container in its input slot on 26.2 and 26.3 with the newest Cores, still open; see below |
+| 12 | `26.3.x-neoforge` | port | **Done**: items 1 to 5 on every NeoForge node. The Tank upgrade multiplies the container in its input slot on 26.2 and 26.3 with the newest Cores, Core's own bug, reported as P3pp3rF1y/SophisticatedCore#527; see below |
 
 The order is the one agreed on: the bugs first, the Tank before the others because it let any water
 turn Clean, then the cheapest feature, then the rest. All four bugs are fixed, the Drinking upgrade is
@@ -319,7 +319,8 @@ exactly as with the mixins. The grades are all still right.
 
 Not guarded here. It is an item and fluid dupe for every player of those Cores, with or without this
 mod, and the fix belongs in `TankComponentItemHandler.setStackInSlot(…, tx)` (go through the item
-access, or set the slot after the commit as before). A report is drafted for Sophisticated Core; once a
+access, or set the slot after the commit as before). Reported on 2026-11-13 as
+[P3pp3rF1y/SophisticatedCore#527](https://github.com/P3pp3rF1y/SophisticatedCore/issues/527); once a
 fixed Core is out, run the Tank script on the 26.x nodes again and move the pins.
 
 ## Testing, for every item
