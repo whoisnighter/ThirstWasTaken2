@@ -229,6 +229,14 @@ dependencies {
         runClientMod(listOf("kaleidoscope-cookery", "kaleidoscope-cookery-refabricated", "kaleidoscope_cookery"),
             "maven.modrinth:kaleidoscope-cookery:$kaleidoscopeCookery") { isTransitive = false }
     }
+    findProperty("deps.cooking_for_blockheads")?.let { cookingForBlockheads ->
+        // Mixed into, and in SRG names, so remapped. In runClient with the Balm it requires, on by default,
+        // as on the other loaders. See src/main/cookingforblockheads/AGENTS.md.
+        modCompileOnly("maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        val names = listOf("cooking-for-blockheads", "cookingforblockheads", "balm")
+        runClientMod(names, "maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        runClientMod(names, "maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }
+    }
     findProperty("deps.kaleidoscope_tavern")?.let { kaleidoscopeTavern ->
         // Mixed into, and in SRG names, so remapped. See src/main/kaleidoscopetavern/AGENTS.md.
         modCompileOnly("maven.modrinth:kaleidoscopetavern:$kaleidoscopeTavern") { isTransitive = false }

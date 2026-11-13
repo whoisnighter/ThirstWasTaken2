@@ -15,6 +15,10 @@ All notable changes to ThirstWasTaken2 are documented in this file.
   out Clean whatever the tank held.
 - Sophisticated Backpacks and Sophisticated Storage now work on NeoForge 26.3 too, Drinking Upgrade
   included.
+- Cooking for Blockheads, on every version and loader:
+  - The Sink is still an endless tap, but its water is Murky and needs boiling. It used to hand out
+    Clean water for free.
+  - The Sink won't take sea water, which it used to give back fresh.
 
 ### Fixed
 

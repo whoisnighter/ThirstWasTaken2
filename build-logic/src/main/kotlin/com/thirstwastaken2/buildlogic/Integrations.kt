@@ -484,6 +484,16 @@ val integrations: List<Integration> = listOf(
         mixinConfig = "thirstwastaken2.littlelogisticsforge.mixins.json",
         neoForgeDependencies = listOf("littlelogistics"),
     ),
+    // All three loaders: the one mixin is on the Sink, in the mod's common module, and names neither
+    // loader. Every node sets the key, since the mod has a build for every version this mod supports. Its
+    // Sink hands out Murky water and refuses sea water. See src/main/cookingforblockheads/AGENTS.md.
+    Integration(
+        dir = "cookingforblockheads",
+        depsKey = "deps.cooking_for_blockheads",
+        loaders = setOf(Loader.FABRIC, Loader.NEOFORGE, Loader.FORGE),
+        mixinConfig = "thirstwastaken2.cookingforblockheads.mixins.json",
+        neoForgeDependencies = listOf("cookingforblockheads"),
+    ),
 )
 
 /**

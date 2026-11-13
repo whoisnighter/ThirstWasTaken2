@@ -95,6 +95,11 @@ export const INTEGRATIONS: Mod[] = [
     name: 'Little Logistics',
     icon: 'https://cdn.modrinth.com/data/1zZJrh9c/fdee529567ce17536fcc53177731e28304ece5af_96.webp',
     link: '/docs/integrations/little-logistics'
+  },
+  {
+    name: 'Cooking for Blockheads',
+    icon: 'https://cdn.modrinth.com/data/vJnhuDde/811d0c55230d84d9e182df1b0bd631ddebecc0ad_96.webp',
+    link: '/docs/integrations/cooking-for-blockheads'
   }
 ]
 

@@ -76,7 +76,7 @@ shipped jar is the SRG-remapped `reobfJar`); see [docs/dev/VERSION-DIFFERENCES.m
   enforces it; 1.0.9 crashed every NeoForge client without Sophisticated Core for want of it.
 - **Mixins**: in `com.thirstwastaken2.mixin`, package-private, `abstract`, every injected member
   prefixed `thirst$`, listed in `thirstwastaken2.mixins.json` or they silently do nothing. Client,
-  Fabric-client, dev, Farmer's Delight (Fabric), Create (NeoForge and Forge), Create Fly, Sophisticated, Supplementaries, Kaleidoscope Cookery, Kaleidoscope Tavern, Brewin' and Chewin', Cold Sweat (NeoForge and Forge), Cultural Delights, Fruits Delight, Youkais' Feasts, Expanded Delight, Miner's Delight, Farm & Charm, HerbalBrews, Beachparty, Meadow, Spelunkery, Hearth and Harvest (NeoForge and Forge), No Man's Land, Mekanism, Immersive Engineering, Little Logistics, Croptopia and Bountiful Fares mixins
+  Fabric-client, dev, Farmer's Delight (Fabric), Create (NeoForge and Forge), Create Fly, Sophisticated, Supplementaries, Kaleidoscope Cookery, Kaleidoscope Tavern, Brewin' and Chewin', Cold Sweat (NeoForge and Forge), Cultural Delights, Fruits Delight, Youkais' Feasts, Expanded Delight, Miner's Delight, Farm & Charm, HerbalBrews, Beachparty, Meadow, Spelunkery, Hearth and Harvest (NeoForge and Forge), No Man's Land, Mekanism, Immersive Engineering, Little Logistics, Croptopia, Bountiful Fares and Cooking for Blockheads mixins
   have their own configs next to their sources. A new core config goes in both loader manifests; an
   integration's goes in its row of the integration table.
 - **Player state** is the immutable record `ThirstData`. Derive a new one and write through
@@ -226,6 +226,7 @@ water is collected, drunk or looked at with Jade, never on a tick or tooltip pat
 | Little Logistics | `deps.little_logistics`: `1.21.1-neoforge`, and `1.20.1-forge` from its own directory. A bucket on its fluid tanks keeps the grade | [src/main/littlelogistics/AGENTS.md](src/main/littlelogistics/AGENTS.md), [src/main/littlelogisticsforge/AGENTS.md](src/main/littlelogisticsforge/AGENTS.md) |
 | Bountiful Fares | `deps.bountiful_fares`: both 1.21.1 nodes (the 1.20.x lines stopped in 2024). Its cup and water cup are graded by id in `WaterPurity` | [src/main/bountifulfares/AGENTS.md](src/main/bountifulfares/AGENTS.md) |
 | Croptopia | `deps.croptopia`: 26.2, 26.1.x and 1.21.1 on both loaders, `1.20.1` and `1.20.1-forge` (no 26.3 or 1.21.11 build). On CurseForge only, resolved through CurseMaven by file id and bumped by hand. Its drinks are `ThirstConfig` ids | [src/main/croptopia/AGENTS.md](src/main/croptopia/AGENTS.md) |
+| Cooking for Blockheads | `deps.cooking_for_blockheads`: every node, every loader. Its Sink gives Murky water and refuses sea water; Balm, which it requires, is runClient only | [src/main/cookingforblockheads/AGENTS.md](src/main/cookingforblockheads/AGENTS.md) |
 
 ### Adding an integration
 

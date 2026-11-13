@@ -318,6 +318,12 @@ val spelunkery = findProperty("deps.spelunkery") as String?
 val bountifulFares = findProperty("deps.bountiful_fares") as String?
 
 /**
+ * Cooking for Blockheads' Modrinth version id, on every node, and the Balm it requires.
+ * See src/main/cookingforblockheads/AGENTS.md.
+ */
+val cookingForBlockheads = findProperty("deps.cooking_for_blockheads") as String?
+
+/**
  * Serene Seasons' Modrinth version id, on every node. See docs/dev/integration/climate/SERENE-SEASONS-INTEGRATION.md.
  */
 val sereneSeasons = findProperty("deps.serene_seasons") as String?
@@ -570,6 +576,17 @@ dependencies {
         // runClientMod(names, "maven.modrinth:bountiful-fares:$bountifulFares")
         // runClientMod(names, "maven.modrinth:nexuslib:${property("deps.nexuslib")}")
         optionalRunMods.include(names)
+    }
+
+    if (cookingForBlockheads != null) {
+        // Mixed into, so it has to be a remapped mod rather than a plain library, as Bountiful Fares is.
+        "modCompileOnly"("maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        // Test the Sink in runClient, with the Balm it requires. It adds blocks and no world generation, so
+        // it is on by default. The gametests and runServer run without it, which is what proves the mod
+        // is unchanged when it is absent.
+        val names = listOf("cooking-for-blockheads", "cookingforblockheads", "balm")
+        runClientMod(names, "maven.modrinth:cooking-for-blockheads:$cookingForBlockheads")
+        runClientMod(names, "maven.modrinth:balm:${property("deps.balm")}")
     }
 
     // Moonlight Lib, which Supplementaries and Spelunkery both require, once for both. Leaving it out

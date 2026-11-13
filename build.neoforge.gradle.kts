@@ -397,6 +397,15 @@ dependencies {
         optionalRunMods.include(names)
     }
 
+    findProperty("deps.cooking_for_blockheads")?.let { cookingForBlockheads ->
+        // The Sink mixin names the mod's block. In runClient with the Balm it requires, on by default, as on
+        // Fabric; see build.gradle.kts and src/main/cookingforblockheads/AGENTS.md.
+        compileOnly("maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        val names = listOf("cooking-for-blockheads", "cookingforblockheads", "balm")
+        runClientMod(names, "maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        runClientMod(names, "maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }
+    }
+
     // Moonlight Lib, which Supplementaries and Spelunkery both require, once for both. Leaving it out
     // leaves them out. Off by default with them; uncomment along with either.
     if (supplementariesVersion != null || spelunkeryVersion != null) {

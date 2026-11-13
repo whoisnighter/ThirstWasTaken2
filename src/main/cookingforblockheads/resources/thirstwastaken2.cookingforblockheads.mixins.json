@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.thirstwastaken2.cookingforblockheads.mixin",
+  "plugin": "com.thirstwastaken2.cookingforblockheads.CookingForBlockheadsMixinPlugin",
+  "compatibilityLevel": "${java}",
+  "mixins": [
+    "SinkBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

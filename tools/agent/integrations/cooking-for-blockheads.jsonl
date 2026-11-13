@@ -1,0 +1,112 @@
+// Cooking for Blockheads in a real client (src/main/cookingforblockheads/AGENTS.md). What it proves:
+// the Sink refuses a bucket of sea water, which stays in the hand; a glass bottle, a stack of glass
+// bottles and a bucket all draw Murky water from it, and so does a bucket dropped from a full
+// inventory; a Pure bucket poured in leaves an empty bucket and no stamped water behind; the
+// waterskin's result is recorded, not asserted, since only the nodes whose Sink goes through Balm's
+// fluid hooks fill it at all; and the Oven boils a Murky bottle Clean through the mod's smoking recipe
+// while a sea water bottle beside it stays salty. Runs on every node from 1.21.1 (1.20.1 has no item
+// components for these commands). Run it unattended:
+//     ./gradlew ":26.3.x:runClient" -Pagent=tools/agent/integrations/cooking-for-blockheads.jsonl -Pquickplay=CfbAgent
+//     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/cooking-for-blockheads.jsonl -Pquickplay=CfbAgent -PwithoutOptional=cold-sweat
+// CfbAgent is a throwaway world, made fresh for each run by
+//     python tools/agent/new_world.py <node> CfbAgent
+// Then check what it recorded:
+//     python tools/agent/drive.py run/<node>/agent/client tools/agent/integrations/cooking-for-blockheads.jsonl --verify --max-age 15
+//
+// The player stands at 0.5 200 0.5 looking south at pitch 30, at the Sink on 0 200 2. The (white) Oven is on
+// 4 200 4, out of the way, and is filled through its block entity data.
+
+{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
+{"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
+{"id": "forceload", "command": "server.command", "args": {"command": "forceload add -8 -8 8 8"}}
+{"id": "safe", "command": "server.command", "args": {"command": "effect give @p minecraft:resistance 3000 4 true"}}
+{"id": "air", "command": "server.command", "args": {"command": "fill -8 200 -8 8 206 8 minecraft:air"}}
+{"id": "tp0", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 30"}}
+{"id": "chunks", "command": "wait", "args": {"ticks": 40}}
+{"id": "id_sink", "command": "server.command", "args": {"command": "give @p cookingforblockheads:sink"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Gave 1"}]}
+{"id": "id_oven", "command": "server.command", "args": {"command": "give @p cookingforblockheads:white_oven"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Gave 1"}]}
+{"id": "sink", "command": "server.command", "args": {"command": "setblock 0 200 2 cookingforblockheads:sink[facing=north]"}}
+
+// Sea water is refused and stays in the hand.
+{"id": "salt_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "salt_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:water_bucket[thirstwastaken2:water_salty=true]"}}
+{"id": "salt_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "salt_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "salt_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "salt_kept", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:water_bucket[thirstwastaken2:water_salty=true]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// One glass bottle: the bottle in the hand becomes Murky water.
+{"id": "bottle_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "bottle_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
+{"id": "bottle_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "bottle_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "bottle_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "bottle_murky", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:potion[thirstwastaken2:water_purity=1,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "bottle_tooltip", "command": "client.tooltip", "args": {"slot": "mainhand"}}
+
+// A stack of four: the filled one goes to another slot, still Murky, and three empty bottles stay.
+{"id": "stack_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "stack_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle 4"}}
+{"id": "stack_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "stack_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "stack_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "stack_left", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:glass_bottle[count=3]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "stack_murky", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:potion[thirstwastaken2:water_purity=1,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "stack_no_plain", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:potion[!thirstwastaken2:water_purity]"}, "checks": [{"left": "result.messages.0", "op": "not_contains", "value": "Test passed"}]}
+
+// A bucket draws Murky water.
+{"id": "bucket_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "bucket_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:bucket"}}
+{"id": "bucket_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "bucket_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "bucket_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "bucket_murky", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:water_bucket[thirstwastaken2:water_purity=1,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// A full inventory: two buckets in the hand and every other slot full of stone, the offhand too (NeoForge
+// stows the filled bucket there when it is empty), so the filled bucket has nowhere to go and is thrown
+// from the player, a few blocks out. The dropped one is Murky too, not plain. full_dump is recorded only.
+{"id": "full_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "full_kill", "command": "server.command", "args": {"command": "kill @e[type=item]"}}
+{"id": "full_stone", "command": "server.command", "args": {"command": "give @p minecraft:stone 2304"}}
+{"id": "full_offhand", "command": "server.command", "args": {"command": "item replace entity @p weapon.offhand with minecraft:stone 64"}}
+{"id": "full_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:bucket 2"}}
+{"id": "full_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "full_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "full_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "full_left", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:bucket[count=1]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "full_dropped_murky", "command": "server.command", "args": {"command": "execute if items entity @e[type=item,x=0.5,y=200,z=0.5,distance=..12] contents minecraft:water_bucket[thirstwastaken2:water_purity=1,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "full_dropped_plain", "command": "server.command", "args": {"command": "execute if items entity @e[type=item,x=0.5,y=200,z=0.5,distance=..12] contents minecraft:water_bucket[!thirstwastaken2:water_purity]"}, "checks": [{"left": "result.messages.0", "op": "not_contains", "value": "Test passed"}]}
+{"id": "full_dump", "command": "server.command", "args": {"command": "data get entity @e[type=item,limit=1,sort=nearest] Item"}}
+{"id": "full_cleanup", "command": "server.command", "args": {"command": "kill @e[type=item]"}}
+
+// A Pure bucket poured in: the empty bucket comes back, and nothing in the inventory is stamped Murky.
+{"id": "pour_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "pour_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:water_bucket[thirstwastaken2:water_purity=3,thirstwastaken2:water_salty=false]"}}
+{"id": "pour_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "pour_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "pour_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "pour_hand", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:bucket"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "pour_no_murky", "command": "server.command", "args": {"command": "execute if items entity @p container.* *[thirstwastaken2:water_purity=1]"}, "checks": [{"left": "result.messages.0", "op": "not_contains", "value": "Test passed"}]}
+
+// The mod's own waterskin. Recorded only: its tooltip names the grade if the Sink filled it.
+{"id": "skin_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "skin_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with thirstwastaken2:waterskin"}}
+{"id": "skin_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "skin_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "skin_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "skin_tooltip", "command": "client.tooltip", "args": {"slot": "mainhand"}}
+{"id": "skin_clean_none", "command": "server.command", "args": {"command": "execute if items entity @p container.* *[thirstwastaken2:water_purity=2]"}, "checks": [{"left": "result.messages.0", "op": "not_contains", "value": "Test passed"}]}
+{"id": "sinkGone", "command": "server.command", "args": {"command": "setblock 0 200 2 minecraft:air"}}
+
+// The Oven: a Murky bottle put in its first cooking slot (7) boils Clean through the smoking recipe; a
+// sea water bottle in the next slot (8) never cooks, and the Oven passes it to an output slot unchanged.
+// Matched by item and components, not by slot: 1.21.1 saves the slot as an int and 26.3 as a byte.
+{"id": "oven", "command": "server.command", "args": {"command": "setblock 4 200 4 cookingforblockheads:white_oven[facing=north]"}}
+{"id": "oven_fill", "command": "server.command", "args": {"command": "data merge block 4 200 4 {ItemHandler:{Items:[{Slot:3b,id:\"minecraft:coal\",count:8},{Slot:7b,id:\"minecraft:potion\",count:1,components:{\"minecraft:potion_contents\":{potion:\"minecraft:water\"},\"thirstwastaken2:water_purity\":1,\"thirstwastaken2:water_salty\":0b}},{Slot:8b,id:\"minecraft:potion\",count:1,components:{\"minecraft:potion_contents\":{potion:\"minecraft:water\"},\"thirstwastaken2:water_salty\":1b}}]}}"}}
+{"id": "oven_cook", "command": "server.sprint", "args": {"ticks": 600}}
+{"id": "oven_clean", "command": "server.command", "args": {"command": "execute if data block 4 200 4 ItemHandler.Items[{id:\"minecraft:potion\",components:{\"thirstwastaken2:water_purity\":2}}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "oven_salt", "command": "server.command", "args": {"command": "execute if data block 4 200 4 ItemHandler.Items[{id:\"minecraft:potion\",components:{\"thirstwastaken2:water_salty\":1b}}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "oven_no_murky", "command": "server.command", "args": {"command": "execute if data block 4 200 4 ItemHandler.Items[{components:{\"thirstwastaken2:water_purity\":1}}]"}, "checks": [{"left": "result.messages.0", "op": "not_contains", "value": "Test passed"}]}
+{"id": "oven_dump", "command": "server.command", "args": {"command": "data get block 4 200 4 ItemHandler"}}
+{"id": "done", "command": "wait", "args": {"ticks": 10}}

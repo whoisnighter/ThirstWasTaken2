@@ -257,6 +257,10 @@ MODRINTH_DEPS = [
     # version number between their Fabric and NeoForge uploads, so both are pinned by id.
     ModrinthDep("bountiful_fares", "bountiful-fares", by_id=True),
     ModrinthDep("nexuslib", "nexuslib", by_id=True, **NO_PAGE),
+    # Cooking for Blockheads, every node, and the Balm it requires, runClient only. Both share one version
+    # number between their Fabric, NeoForge and Forge uploads, so both are pinned by id.
+    ModrinthDep("cooking_for_blockheads", "cooking-for-blockheads", by_id=True),
+    ModrinthDep("balm", "balm", by_id=True, **NO_PAGE),
     # Not here: `croptopia` and `epherolib`, which are on CurseForge alone and pinned by CurseForge file
     # id, resolved through CurseMaven. Nothing here can read CurseForge, so they are bumped by hand.
 ]
