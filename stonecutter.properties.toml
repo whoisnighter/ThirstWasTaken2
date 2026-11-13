@@ -7,7 +7,7 @@
 mod.id = "thirstwastaken2"
 mod.name = "ThirstWasTaken2"
 mod.group = "com.thirstwastaken2"
-mod.version = "1.10.1"
+mod.version = "1.11.0"
 
 deps.fabric_loader = "0.19.5"
 # The newest stable Fabric Loader. Only .github/scripts/update_mc_deps.py reads it: the build and
@@ -54,7 +54,7 @@ deps.epherolib = "4949797"
 # Cooking for Blockheads, on every node: it has a build for every version this mod supports.
 # Pinned by Modrinth version id, like the others; see src/main/cookingforblockheads/AGENTS.md.
 # Balm, which it requires, is on the runClient classpath only.
-# 16.0.15+fabric-1.20.1.
+# 16.0.15+fabric-1.20.1, the Fabric upload.
 deps.cooking_for_blockheads = "jsA2CgIO"
 # 7.3.44+fabric-1.20.1.
 deps.balm = "R0jLIYXC"
@@ -126,7 +126,7 @@ deps.little_logistics = "TgyyhU8M"
 
 # No shared ["1.21.1"] table: the two loaders claim different releases there.
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 16.0.15+forge-1.20.1.
+# 16.0.15+forge-1.20.1, the Forge upload.
 deps.cooking_for_blockheads = "W87tG8sG"
 # 7.3.44+forge-1.20.1.
 deps.balm = "dDN38ae7"
@@ -238,7 +238,7 @@ deps.serene_seasons = "q34wStJM"
 # 2.1.0.2, the Fabric upload.
 deps.glitchcore = "sux8kYHe"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 21.1.24+fabric-1.21.1.
+# 21.1.24+fabric-1.21.1, the Fabric upload.
 deps.cooking_for_blockheads = "tOG59W8V"
 # 21.0.67+fabric-1.21.1.
 deps.balm = "HY6fKMHC"
@@ -397,7 +397,7 @@ deps.immersive_engineering = "uNRARSH2"
 # 1.21.1.1-beta.2, the NeoForge upload.
 deps.little_logistics = "tqtMdQcW"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 21.1.24+neoforge-1.21.1.
+# 21.1.24+neoforge-1.21.1, the NeoForge upload.
 deps.cooking_for_blockheads = "MQCIy6VF"
 # 21.0.67+neoforge-1.21.1.
 deps.balm = "gMedgtzL"
@@ -432,7 +432,7 @@ deps.serene_seasons = "6GpaVF7N"
 # 21.11.0.4, the Fabric upload.
 deps.glitchcore = "CO7NeLTt"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 21.11.6+fabric-1.21.11.
+# 21.11.6+fabric-1.21.11, the Fabric upload.
 deps.cooking_for_blockheads = "5Ykn1jsb"
 # 21.11.9.1+fabric-1.21.11.
 deps.balm = "5POKgjJn"
@@ -470,7 +470,7 @@ deps.croptopia = "8908639"
 # epherolib-fabric-26.1-1.3.0.
 deps.epherolib = "7937978"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 26.1.2.6+fabric-26.1.2.
+# 26.1.2.6+fabric-26.1.2, the Fabric upload.
 deps.cooking_for_blockheads = "AaH0yQsO"
 # 26.1.2.15+fabric-26.1.2.
 deps.balm = "GsjBKPJs"
@@ -504,7 +504,7 @@ deps.croptopia = "8908643"
 # epherolib-neoforge-26.1-1.3.0.
 deps.epherolib = "7937982"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 26.1.2.6+neoforge-26.1.2.
+# 26.1.2.6+neoforge-26.1.2, the NeoForge upload.
 deps.cooking_for_blockheads = "qR2BKmSz"
 # 26.1.2.15+neoforge-26.1.2.
 deps.balm = "FgDdQRa6"
@@ -549,7 +549,7 @@ deps.croptopia = "8908617"
 # epherolib-fabric-26.2-1.3.0.
 deps.epherolib = "8544496"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 26.2.0.5+fabric-26.2.
+# 26.2.0.5+fabric-26.2, the Fabric upload.
 deps.cooking_for_blockheads = "UIUtcUgS"
 # 26.2.0.9+fabric-26.2.
 deps.balm = "qLWYe5p7"
@@ -586,7 +586,7 @@ deps.croptopia = "8908615"
 # epherolib-neoforge-26.2-1.3.0.
 deps.epherolib = "8544497"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 26.2.0.5+neoforge-26.2.
+# 26.2.0.5+neoforge-26.2, the NeoForge upload.
 deps.cooking_for_blockheads = "lqjaCPJY"
 # 26.2.0.9+neoforge-26.2.
 deps.balm = "5wreNQrF"
@@ -621,7 +621,7 @@ deps.serene_seasons = "V9PxJPuw"
 # 26.3.0.0.5, the Fabric upload.
 deps.glitchcore = "kfFeDnrp"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 26.3.0.2+fabric-26.3.
+# 26.3.0.2+fabric-26.3, the Fabric upload.
 deps.cooking_for_blockheads = "3vl3upGM"
 # 26.3.0.3+fabric-26.3.
 deps.balm = "MYj31XNG"
@@ -652,7 +652,7 @@ deps.serene_seasons = "QnvW5HPm"
 # 26.3.0.0.5, the NeoForge upload.
 deps.glitchcore = "pQgy3bfh"
 # Cooking for Blockheads and Balm, as in the [fabric."1.20.1"] table.
-# 26.3.0.2+neoforge-26.3.
+# 26.3.0.2+neoforge-26.3, the NeoForge upload.
 deps.cooking_for_blockheads = "AyGfTjV5"
 # 26.3.0.3+neoforge-26.3.
 deps.balm = "QcBcRJZb"

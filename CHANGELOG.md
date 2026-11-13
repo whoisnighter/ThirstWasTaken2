@@ -2,7 +2,11 @@
 
 All notable changes to ThirstWasTaken2 are documented in this file.
 
-## [Unreleased]
+## [1.11.0] - 2026-11-13
+
+Cooking for Blockheads' Sink stops handing out Clean water for free, Little Logistics' tanks keep the
+grade of the water, and Sophisticated Backpacks reaches NeoForge 26.3. A crash at launch with newer
+Sophisticated Core and one with newer Candlelight are fixed.
 
 ### Added
 

@@ -118,8 +118,10 @@ throwaway world made by `tools/agent/new_world.py` (see [tools/agent/AGENTS.md](
 ### Not waiting longer than the game needs
 
 A `wait` holds the queue for its whole count at 20 ticks a second, whatever it waits for. Two commands
-take its place wherever the thing waited for is not the client catching up
-([docs/plans/AGENT-CLIENT-SPEED.md](../../../../../../../docs/plans/AGENT-CLIENT-SPEED.md) has the measurements):
+take its place wherever the thing waited for is not the client catching up (`sophisticated-tank` went
+from 89.5 s to 16.1 s, `hanging-pot` from 68 s to 20 s). Not yet run since their waits were converted:
+the Sophisticated `alchemy`, `drinking-craft` and `feeding` scripts. Other scripts' game-time waits are
+still plain `wait`; convert them as each is next run. The two:
 
 - **`wait_until`** answers as soon as a condition holds, with the `ticks` it took, and refuses after
   `maxTicks` (600 by default, at most 4800) with what it last saw. A client script opens with
