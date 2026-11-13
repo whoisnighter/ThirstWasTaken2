@@ -20,7 +20,7 @@
 //   1000 mB of water_purity 3 ("Test passed"), and pump_block_in has to empty a Create tank of purity-0
 //   water into the backpack, whose export then holds water_purity 0.
 // - pump_hand_skin: 1000 mB of purity 3 pumped into an empty waterskin in the off hand: "handSkinFilled"
-//   passes, the skin holding three servings, and 250 mB stays in the tank.
+//   passes, the skin holding four servings (the default waterskinCapacity), and the tank is empty.
 // - pump_hand_in: a purity-0 bucket in the off hand is poured in. "handInEmptied" passes, and the tank
 //   holds 1000 mB with water_purity 0.
 // - pump_hand_out: 1000 mB of purity-3 water is pumped into an empty bucket in the off hand.
@@ -180,7 +180,7 @@
 {"id": "pump_hand_skin_close", "command": "client.screen", "args": {"open": "none"}}
 {"id": "pump_hand_skin_bucket", "command": "server.command", "args": {"command": "item replace entity @p weapon.offhand with thirstwastaken2:waterskin"}}
 {"id": "pump_hand_skin_pumping", "command": "wait", "args": {"ticks": 60}}
-{"id": "handSkinFilled", "command": "server.command", "args": {"command": "execute if items entity @p weapon.offhand thirstwastaken2:waterskin[thirstwastaken2:water_servings=3,thirstwastaken2:water_purity=3]"}}
+{"id": "handSkinFilled", "command": "server.command", "args": {"command": "execute if items entity @p weapon.offhand thirstwastaken2:waterskin[thirstwastaken2:water_servings=4,thirstwastaken2:water_purity=3]"}}
 {"id": "pump_hand_skin_offhand", "command": "server.command", "args": {"command": "data get entity @p Inventory[{Slot:-106b}]"}}
 {"id": "pump_hand_skin_offhand_equipment", "command": "server.command", "args": {"command": "data get entity @p equipment.offhand"}}
 {"id": "pump_hand_skin_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:pump_hand_skin true", "as": "Dev"}}

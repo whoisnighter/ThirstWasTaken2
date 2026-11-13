@@ -12,11 +12,11 @@
 // - drinking_salt, a Tank of sea water and one murky bottle: nothing is drunk, "saltRefused" shows 4.
 // - drinking_advanced, an Advanced upgrade set to Pure only and to drink when the whole drink fits,
 //   with two clean bottles and one pure: "advancedDrunk" shows thirst 10, the two clean bottles left.
-// - drinking_other, a honey bottle, Farmer's Delight apple cider (8), a milk bucket, an awkward potion
-//   and an ominous bottle: "otherDrunk" shows 16, the honey and the cider gone, two glass bottles
-//   back, and the milk, the awkward potion and the ominous bottle untouched.
+// - drinking_other, a honey bottle (2), Farmer's Delight apple cider (6), a milk bucket, an awkward
+//   potion and an ominous bottle: "otherDrunk" shows 12, the honey and the cider gone, two glass
+//   bottles back, and the milk, the awkward potion and the ominous bottle untouched.
 // - drinking_order, a honey bottle before a clean bottle, from thirst 14: water goes first, so
-//   "orderDrunk" shows 20 and the honey is still there. Honey first would stop at 18.
+//   "orderDrunk" shows 20 and the honey is still there. Honey first would have used the honey up.
 // Sophisticated only unpacks a template the first time the backpack is opened, so each is opened with
 // the real right click and closed again.
 //

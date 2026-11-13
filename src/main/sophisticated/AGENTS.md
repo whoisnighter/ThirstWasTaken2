@@ -264,6 +264,15 @@ and again on 1.21.1, and every case matched, except the ones that need a mod onl
 has on its runClient classpath (Create's Fluid Tank, Farmer's Delight's cider) and the refused bottle
 in the Tank's "no mix" case, which stays in the input slot from 1.21.11. 26.1 was not run in a client.
 
+On 2026-11-13 the Tank, Pump, Drinking, Feeding, Alchemy and Cooking scripts were run again on
+`1.21.1-neoforge` with Core 1.5.33 and Backpacks 3.26.21, without Create on the classpath, so all six
+mixins apply there. Every grade came out as before. Three expectations had moved with the mod or Core,
+not with the integration, and the scripts now say so: a waterskin holds four servings
+(`waterskinCapacity`), so the Pump's skin case leaves the tank empty and the Tank's skin case leaves the
+filled skin, not yet full, in its input slot; Core 1.5.33's tank result slot took all four bottles of a
+bucket at once; and honey (2) and apple cider (6) bring the Drinking "other" case to 12, not 16. Feeding
+went from thirst 4 to 18, Alchemy's potion to 10 and its water stayed at 4.
+
 What the scripts and the world need on the newer versions, all already in the files:
 
 - **Templates in both shapes.** Every template carries the 1.21.1 keys (`backpackItemRegistryName`,
@@ -337,7 +346,7 @@ with only the filter mixin left out:
 | 1000 mB of purity 3, pumped into an empty bucket in the off hand | a bucket with `water_purity: 3`, empty tank | the bucket stays empty |
 | 1000 mB of purity 3, pumped into a Create Fluid Tank next to the player | the Create tank holds 1000 mB of `water_purity: 3` | not run |
 | a Create Fluid Tank of purity-0 water next to the player, pumped in | tank `water_purity: 0`, the Create tank empty | not run |
-| 1000 mB of purity 3, pumped into an empty waterskin in the off hand | three servings of `water_purity: 3`, 250 mB left in the tank | not run |
+| 1000 mB of purity 3, pumped into an empty waterskin in the off hand | four servings of `water_purity: 3`, the tank empty (three and 250 mB left before `waterskinCapacity` went to 4) | not run |
 
 The client ignores the facing part of `tp ... facing`; turn the player with an explicit yaw and pitch.
 Holding `use` needs more than four ticks to register as a click.
@@ -359,7 +368,7 @@ drinks:
 | 1000 mB of Pure in a Tank and one Clean bottle | 20 | 250 mB of Pure, the Clean bottle untouched |
 | 1000 mB of sea water in a Tank and one Murky bottle | 4 | everything |
 | two Clean and one Pure bottle, Advanced set to Pure and a whole drink | 10 | the two Clean bottles, one glass bottle |
-| honey, Farmer's Delight apple cider, milk, an awkward potion, an ominous bottle | 16 | milk, the awkward potion, the ominous bottle, two glass bottles |
+| honey, Farmer's Delight apple cider, milk, an awkward potion, an ominous bottle | 12 (16 before honey and cider went to 2 and 6) | milk, the awkward potion, the ominous bottle, two glass bottles |
 | honey before a Clean bottle, from thirst 14 | 20 | the honey: water goes first |
 
 [tools/agent/integrations/sophisticated/sophisticated-drinking-craft.jsonl](../../../tools/agent/integrations/sophisticated/sophisticated-drinking-craft.jsonl)
@@ -397,9 +406,38 @@ cooks a vessel for the recipe's own time, the default fill's, not per serving as
 
 [tools/agent/integrations/sophisticated/sophisticated-cooking.jsonl](../../../tools/agent/integrations/sophisticated/sophisticated-cooking.jsonl) gives each
 upgrade a purity-0 bottle and a piece of coal. Checked on 2026-09-19: both came out with
-`water_purity: 2`, through `purify_water_bottle_0_smoking` and `_smelting`. Its last case smelts an
-iron flask of three purity-0 servings, which has to come out with `water_servings: 3` and
-`water_purity: 2`.
+`water_purity: 2`, through `purify_water_bottle_0_smoking` and `_smelting`. Its later cases smelt
+vessels: the mod has smelting recipes for canteens and flasks but no smoking or blasting ones, so the
+Smoking and Blasting cases are controls that must leave the flask untouched in the input slot.
+
+Checked on 2026-11-13, `1.21.1-neoforge`, Core 1.5.33 (the PR #58 pins), every case as the file says:
+
+| Case | Result |
+|---|---|
+| Smoking, purity-0 bottle | slot 2, `water_purity: 2` (`purify_water_bottle_0_smoking`) |
+| Smelting, purity-0 bottle | slot 2, `water_purity: 2` |
+| Smelting, iron flask, 3 servings of purity 0 | slot 2, `water_servings: 3`, `water_purity: 2` |
+| Smelting, copper canteen, 4 servings of purity 0 | slot 2, `water_servings: 4`, `water_purity: 2` |
+| Auto-Smelting, iron flask, 3 servings of purity 1 | pushed into the backpack, `water_servings: 3`, `water_purity: 2` |
+| Smoking, iron flask (control) | untouched in slot 0, coal unburnt |
+| Blasting, iron flask of purity 1 (control) | untouched in slot 0, coal unburnt |
+
+The smelting flask case alone on 26.x, same day, with the current pins and then with an old Core whose
+`smelt` reads the recipe's `result` field, with and without `CookingLogicMixin` in the config:
+
+| Node | Core (Backpacks) | Mixin | Flask in slot 2 |
+|---|---|---|---|
+| `26.1.x-neoforge` | 1.5.34 (3.26.20) | in | `water_servings: 3`, `water_purity: 2` |
+| `26.1.x-neoforge` | 1.5.19 (3.26.15) | in | `water_servings: 3`, `water_purity: 2` |
+| `26.1.x-neoforge` | 1.5.19 (3.26.15) | out | `water_purity: 2`, no servings: empty, issue #53 |
+| `26.2.x-neoforge` | 1.5.32 (3.26.19) | in | `water_servings: 3`, `water_purity: 2` |
+| `26.2.x-neoforge` | 1.5.18 (3.26.16) | in | `water_servings: 3`, `water_purity: 2` |
+| `26.2.x-neoforge` | 1.5.18 (3.26.16) | out | `water_purity: 2`, no servings: empty, issue #53 |
+
+An old Core needs a Backpacks whose `sophisticatedcore` range accepts it: 26.1.2's 3.26.17 asks for
+1.5.20 or later, 3.26.15 for 1.5.15; 26.2's 3.26.16 asks for 1.5.18. Sophisticated Storage's cooking
+upgrades go through the same `CookingLogic`, but Storage is off the runClient classpath by default and
+was not run.
 
 ### Effects on the test player
 

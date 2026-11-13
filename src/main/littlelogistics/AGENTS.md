@@ -45,3 +45,9 @@ littlelogistics/resources/
 fills a Fluid Tank Car with Murky water by NBT, draws a bucket from it and pours that into an empty car,
 then does the same with Fluid Barges floating on a pool. The car passed on 2026-11-11, the barge on
 2026-11-12. Its header says what each line should read.
+
+The control, with this directory's mixin list emptied, was run on 2026-11-13 on `1.21.1-neoforge` (and
+earlier on Forge, see [littlelogisticsforge](../littlelogisticsforge/AGENTS.md)): all four checks
+said "Test failed". The car and barge still held 10000 and 4000 mB of `water_purity: 1`, but each bucket
+drawn from them was a plain `minecraft:water_bucket`, read as Clean, and the car and barge it was poured
+into held 1000 mB of plain water.

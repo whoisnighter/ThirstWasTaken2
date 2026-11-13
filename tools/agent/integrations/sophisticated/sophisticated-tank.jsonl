@@ -25,6 +25,8 @@
 // A purity-0 bucket is emptied into the tank and bottled: 750 mB with water_purity 0 left in the
 // tank, the empty bucket in slot 2, and one bottle with water_purity 0 in slot 3. Potions do not
 // stack, so the result slot is full after one and the other three glass bottles wait in slot 1.
+// With Core 1.5.33 on 1.21.1 the result slot took more than one potion, so all four bottles were
+// filled: four bottles with water_purity 0 in slot 3 and an empty tank.
 {"id": "dirty_bucket_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "dirty_bucket_give", "command": "server.command", "args": {"command": "sophisticatedbackpacks template give thirsttest:dirty_bucket", "as": "Dev"}}
 {"id": "dirty_bucket_hand", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand from entity @p hotbar.0"}}
@@ -82,8 +84,9 @@
 {"id": "plain_bucket_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:plain_bucket true", "as": "Dev"}}
 {"id": "plain_bucket_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:plain_bucket", "as": "Dev"}}
 
-// A full murky waterskin is poured into the tank and a second, empty waterskin filled from it: the second
-// comes out with three servings of water_purity 1 in slot 3, the first empty in slot 2.
+// A murky waterskin of three servings is poured into the tank and a second, empty waterskin filled from it: the second
+// holds three servings of water_purity 1, the first is empty in slot 2. A waterskin holds four
+// servings now (waterskinCapacity), so the second is not full and stays in its input, slot 1.
 {"id": "tank_skin_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "tank_skin_give", "command": "server.command", "args": {"command": "sophisticatedbackpacks template give thirsttest:tank_skin", "as": "Dev"}}
 {"id": "tank_skin_hand", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand from entity @p hotbar.0"}}
