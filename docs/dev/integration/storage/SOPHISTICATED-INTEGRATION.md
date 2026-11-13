@@ -283,8 +283,44 @@ warning in the log:
   it came with the Cores that moved the container code into `TankContainerHandler` (issue #61), which
   were built but not run in a client on 26.x. With `TankContainerHandlerMixin` left out of the config
   on 26.3, the bucket and bowl still multiply, so that part is Core's own (or Core's with NeoForge's
-  bucket and the mod's bowl handlers); the salt bottle was refused instead, so whether the bottle case
-  is Core's or the wrapper's is not settled. Not fixed here.
+  bucket and the mod's bowl handlers); the salt bottle was refused instead. Settled below: Core's.
+
+**The Tank dupe is Core's.** Read from Core 26.3-1.5.36 (the same `TankContainerHandler` in 26.2-1.5.34
+and 26.1.2-1.5.36, and on the 26.3 branch as of 2026-11-13): `drainStack` and `fillStack` open one root
+transaction, insert the used container into the result slot through `inventory`, then
+`setStackInSlot(INPUT_SLOT, …, tx)`, then commit. `inventory` is an `ItemAccessItemHandler` over
+`ItemAccess.forStack(upgrade)`, NeoForge's `StackItemAccess`, whose journal swaps a copy of the upgrade
+stack in for the transaction and on root commit copies that copy's components back onto the upgrade
+(`VanillaContainerWrapper.SlotWrapper.onRootCommit`, `restorePatch`). `TankComponentItemHandler`'s
+`setStackInSlot(…, tx)` writes `LENIENT_CONTAINER` straight onto the upgrade stack, outside that journal,
+so the commit overwrites it: the result slot gains the container and the input slot keeps it, every
+cooldown, until the tank is full or empty. The output side (`fillStack`) is the same, hence the two salty
+buckets. Up to 26.2-1.5.32 `TankUpgradeWrapper.drainStack` committed first and set the slot after,
+outside the transaction, which worked. 1.21.1's Core has no transactions and is not affected.
+
+Nothing of ours is in that path: the plain-bucket case moves an unstamped bucket through NeoForge's
+bucket handler, and the dupe needs only a container left behind in the result slot. The salt bottle
+refused without the mixin is Core's custom bottle handler matching only a component-free water bottle
+(`isSameItemSameComponents`), which is what the wrapper is there for; with it, the bottle dupes like the
+rest. Run again on 2026-11-13 on `26.3.x-neoforge` (Core 26.3-1.5.36), once as the config stands and
+once with the whole `thirstwastaken2.sophisticated.mixins.json` emptied as a control:
+
+| Case | With the mixins | No Sophisticated mixin at all |
+|---|---|---|
+| unstamped water bucket | bucket still in slot 0, 11 empty buckets in slot 2, four glass bottles still in slot 1, a purity-2 bottle in slot 3 | the same, the bottle plain |
+| purity-0 bucket | the same, bottle purity 0 | the same, bottle plain |
+| dirty bowl, empty bowl | water bowl in 0 and 1, 11 bowls in 2, three water bowls in 3 | the same |
+| murky waterskin, empty skin | the empty skin in 0 and 2, a full purity-1 skin in 1 and 3 | the same |
+| salt bottle, empty bucket | bottle still in 0, salty buckets in 1 and 3, 11 glass bottles in 2 | the bottle refused to slot 2, the bucket left empty, 750 mB of salt water |
+| dirty bottle into a Pure tank | refused to slot 2, 250 mB of Pure kept | the same |
+
+The control's plain bucket is vanilla water through NeoForge's bucket handler and Core alone, and dupes
+exactly as with the mixins. The grades are all still right.
+
+Not guarded here. It is an item and fluid dupe for every player of those Cores, with or without this
+mod, and the fix belongs in `TankComponentItemHandler.setStackInSlot(…, tx)` (go through the item
+access, or set the slot after the commit as before). A report is drafted for Sophisticated Core; once a
+fixed Core is out, run the Tank script on the 26.x nodes again and move the pins.
 
 ## Testing, for every item
 

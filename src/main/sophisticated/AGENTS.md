@@ -156,8 +156,17 @@ it swaps in (a filled bucket, a filled bottle) is stamped with the grade of the 
 The access writes straight through to the tank's own, so rolling the transaction back undoes it, and
 the grade is always read from the real container rather than kept, so nothing stale survives a
 rollback. Core's bottle handler no longer checks its container on the way out, so the pour-in-forever
-bug has no counterpart here. A container the tank refuses stays in the input slot, which is Core's own
-change.
+bug has no counterpart here. A container the tank refuses stayed in the input slot on the Cores before
+`TankContainerHandler`, which is Core's own change; on 26.3-1.5.36 it moves on to the result slot again.
+
+**Core 26.1.2-1.5.36, 26.2-1.5.34 and 26.3-1.5.36 dupe containers in the Tank, with or without this
+mod.** `TankContainerHandler.drainStack`/`fillStack` put the used container in the result slot through
+the tank's `ItemAccessItemHandler` and then clear the input slot with a direct write to the upgrade
+stack, inside one transaction; NeoForge's `StackItemAccess` copies its own copy of the upgrade back over
+it on commit, so the input slot keeps its container and the result slot gains one every cooldown. Not
+ours and not guarded; see item 12 of the plan. A Tank script on those Cores shows it as a full bucket
+left in slot 0 beside a stack of empty ones, whatever the grade, so read the grades and ignore the
+counts until Core is fixed.
 
 ## The Feeding upgrade
 
