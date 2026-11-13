@@ -69,7 +69,7 @@ as the place a thirst mod's grade goes.
 | 5 | Faucet fills and drains the hanging pot | feature | **Done**, both loaders |
 | 6 | The mod's own bowls as containers Moonlight knows | data | **Done**, both loaders |
 | 7 | The grade is visible: tooltip, tint, Jade | feature | **Done**, both loaders |
-| 8 | Upstream: the two components in Moonlight's `water.json` | upstream | **Written**, not yet opened |
+| 8 | Upstream: the two components in Moonlight's `water.json` | upstream | **Merged** (MehVahdJukaar/Moonlight#490), released in 1.21.1-3.8.2; our copies stay |
 | 9 | Changelog and player docs | docs | **Done** |
 
 Order as with Sophisticated: **the bugs first**, item 1 before the others because it is the root cause
@@ -336,7 +336,7 @@ components and a grade only exists on a real stack.
 
 ## Upstream and docs
 
-### 8. Upstream: the two components in Moonlight's `water.json` (written)
+### 8. Upstream: the two components in Moonlight's `water.json` (merged)
 
 A pull request to Moonlight adding `thirstwastaken2:water_purity` and `thirstwastaken2:water_salty` to
 `preserved_components_from_item`, and the terracotta bowl pair to `containers` at a capacity of one
@@ -345,8 +345,10 @@ bottle. The file already carries
 `CodecUtils.lenientHomogeneousList` is what parses both fields, so entries for mods that are not
 installed are skipped rather than failing the load.
 
-Written, on the `1.21` branch of the fork at `../Moonlight`, which is the branch that builds
-`1.21.1-3.6.5`. It is not opened yet. It is one
+Opened as [MehVahdJukaar/Moonlight#490](https://github.com/MehVahdJukaar/Moonlight/pull/490) against
+the `1.21` branch and merged on 2026-11-04. 1.21.1-3.8.2 (2026-11-05) is the first release certain to
+carry it; 3.8.1 went out 25 minutes after the merge and was not checked. 3.8.3, which the build pins,
+has all of it in `water.json`. It is one
 file: the two components added to `preserved_components_from_item` beside `thirst:purity`, and the
 terracotta bowl pair added to `containers` at a capacity of one bottle.
 
