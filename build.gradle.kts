@@ -642,10 +642,13 @@ dependencies {
         // Test the well, the trough, the Cooking Pot and Candlelight's kitchen sinks in runClient. The
         // gametests and runServer run without them, which is what proves the mod is unchanged when they are
         // absent. Both require Architectury API, added below. Leaving Farm & Charm out leaves Candlelight
-        // out too; leaving Candlelight out keeps Farm & Charm. Off by default: its crops and world
-        // generation slow every client start. Uncomment the two lines below only to work on them.
+        // out too; leaving Candlelight out keeps Farm & Charm. Both ask for Foundation, nested in Farm &
+        // Charm's jar, which Loom leaves packed, so it is unpacked onto runClient as Meadow's is; without
+        // it Fabric Loader stops at launch. Off by default: its crops and world generation slow every
+        // client start. Uncomment the runClientMod lines below only to work on them.
         val names = listOf("farm-and-charm", "farm_and_charm", "lets-do-farm-charm") + architecturyNames
         // runClientMod(names, "maven.modrinth:lets-do-farm-charm:$farmAndCharm")
+        // runClientMod(names, files(nestedMods("lets-do-farm-charm", farmAndCharm)))
         // runClientMod(names + listOf("candlelight"),
         //     "maven.modrinth:lets-do-candlelight-farmcharm-compat:${property("deps.candlelight")}")
         // Keeps their `-PwithoutOptional` names known while the lines above are off.
