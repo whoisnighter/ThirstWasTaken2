@@ -19,7 +19,7 @@
 // Then:
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-drinking-tab.jsonl -Pquickplay=SophisticatedAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "reloadTemplates", "command": "server.command", "args": {"command": "reload"}}
 {"id": "reloaded", "command": "wait", "args": {"ticks": 60}}
 {"id": "joined", "command": "client.state"}

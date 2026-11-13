@@ -36,11 +36,30 @@ that this run alone can meet and a deadline.
 Every path is relative to the repository root. Each script's header says which nodes it runs on, the
 world it needs and how to read the result; read it before running one.
 
+## Several scripts in one launch
+
+A launch is the slowest part of most runs. Name several files, comma separated, and one game answers
+them back to back, each into its own `out-<script>.jsonl` in the queue directory:
+
+```bash
+./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-tank.jsonl,tools/agent/integrations/sophisticated/sophisticated-drinking.jsonl -Pquickplay=SophisticatedAgent --offline -q > build/agent-run.log 2>&1; echo "exit=$?"; grep -a "ThirstAgent\] DONE" run/1.21.1-neoforge/logs/latest.log
+```
+
+```bash
+python tools/agent/drive.py run/1.21.1-neoforge/agent/client tools/agent/integrations/sophisticated/sophisticated-tank.jsonl --verify --suite
+```
+
+There is a `DONE` line per script and a last `DONE suite answered` line. A script that stalls is given
+up on and the next one runs. Scripts run in the same world unless one opens its own with `client.world`
+(`{"open": "<copy>", "from": "<world new_world.py made>"}`); scripts that share one must not build over
+each other or leave state behind that the next trips on. The details are in
+[the agent's AGENTS.md](../../src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md#several-scripts-in-one-launch).
+
 ## Layout
 
 | Folder | What is in it |
 |---|---|
-| `drive.py` | Sends a file or standard input to a queue, waits for the answers, and `--verify`s a finished run |
+| `drive.py` | Sends a file or standard input to a queue, waits for the answers, and `--verify`s a finished run (`--suite` for one script of several) |
 | `make_gif.py` | Turns a `client.record` folder into a GIF or WebP, drawing the virtual pointer as a cursor. Options in its docstring |
 | `new_world.py`, `nbt.py` | Makes the throwaway world a script runs in. See [A world for a script](#a-world-for-a-script) |
 | `clean.py` | Deletes the worlds and captures a run left behind and the next run makes again. See [Cleaning up](#cleaning-up) |
@@ -128,6 +147,12 @@ script that uses it calls `new_world.py`, or ask.
   `new_world.py` line that makes it), and what to read afterwards when the file cannot say it with `expect` and `checks`.
 - Reference it from the `AGENTS.md` or `docs/dev` page of the area it checks, by its full
   `tools/agent/<folder>/<name>.jsonl` path, so a move shows up in a search.
+- Open with `{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}`,
+  not a fixed `wait`. Let game time pass with `server.sprint` (a cook, a brew, a tank filling), and keep
+  a short `wait` only where the client has to catch up (a screen opening, an inventory syncing). Where
+  a script waits for something it can name (a slot filling, a block state, a screen), `wait_until`
+  answers the moment it happens. Scripts in `shots/` and `ui/config-showcase.jsonl` keep their fixed
+  opening `wait`: a capture needs the terrain drawn, not only loaded.
 - Prefer a gametest when the check needs no client and no real time. A script is for what
   [src/gametest](../../src/gametest/java/AGENTS.md) cannot reach: rendering, screens, the real right
   click, other mods, and the client's view of synced values.

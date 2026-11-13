@@ -23,7 +23,7 @@
 // Then:
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-cooking.jsonl -Pquickplay=SophisticatedAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "reloadTemplates", "command": "server.command", "args": {"command": "reload"}}
 {"id": "reloaded", "command": "wait", "args": {"ticks": 60}}
 {"id": "joined", "command": "client.state"}
@@ -39,7 +39,7 @@
 {"id": "cook_smoking_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_smoking_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_smoking_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_smoking_cooking", "command": "wait", "args": {"ticks": 300}}
+{"id": "cook_smoking_cooking", "command": "server.sprint", "args": {"ticks": 300}}
 {"id": "cook_smoking_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smoking true", "as": "Dev"}}
 {"id": "cook_smoking_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smoking", "as": "Dev"}}
 
@@ -51,7 +51,7 @@
 {"id": "cook_smelting_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_smelting_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_smelting_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_smelting_cooking", "command": "wait", "args": {"ticks": 300}}
+{"id": "cook_smelting_cooking", "command": "server.sprint", "args": {"ticks": 300}}
 {"id": "cook_smelting_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smelting true", "as": "Dev"}}
 {"id": "cook_smelting_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smelting", "as": "Dev"}}
 
@@ -63,7 +63,7 @@
 {"id": "cook_smelting_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_smelting_flask_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_smelting_flask_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_smelting_flask_cooking", "command": "wait", "args": {"ticks": 500}}
+{"id": "cook_smelting_flask_cooking", "command": "server.sprint", "args": {"ticks": 500}}
 {"id": "cook_smelting_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smelting_flask true", "as": "Dev"}}
 {"id": "cook_smelting_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smelting_flask", "as": "Dev"}}
 
@@ -75,7 +75,7 @@
 {"id": "cook_smelting_canteen_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_smelting_canteen_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_smelting_canteen_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_smelting_canteen_cooking", "command": "wait", "args": {"ticks": 300}}
+{"id": "cook_smelting_canteen_cooking", "command": "server.sprint", "args": {"ticks": 300}}
 {"id": "cook_smelting_canteen_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smelting_canteen true", "as": "Dev"}}
 {"id": "cook_smelting_canteen_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smelting_canteen", "as": "Dev"}}
 
@@ -87,7 +87,7 @@
 {"id": "cook_auto_smelting_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_auto_smelting_flask_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_auto_smelting_flask_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_auto_smelting_flask_cooking", "command": "wait", "args": {"ticks": 600}}
+{"id": "cook_auto_smelting_flask_cooking", "command": "server.sprint", "args": {"ticks": 600}}
 {"id": "cook_auto_smelting_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_auto_smelting_flask true", "as": "Dev"}}
 {"id": "cook_auto_smelting_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_auto_smelting_flask", "as": "Dev"}}
 
@@ -99,7 +99,7 @@
 {"id": "cook_smoking_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_smoking_flask_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_smoking_flask_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_smoking_flask_cooking", "command": "wait", "args": {"ticks": 400}}
+{"id": "cook_smoking_flask_cooking", "command": "server.sprint", "args": {"ticks": 400}}
 {"id": "cook_smoking_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_smoking_flask true", "as": "Dev"}}
 {"id": "cook_smoking_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_smoking_flask", "as": "Dev"}}
 
@@ -111,6 +111,6 @@
 {"id": "cook_blasting_flask_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "cook_blasting_flask_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "cook_blasting_flask_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "cook_blasting_flask_cooking", "command": "wait", "args": {"ticks": 400}}
+{"id": "cook_blasting_flask_cooking", "command": "server.sprint", "args": {"ticks": 400}}
 {"id": "cook_blasting_flask_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:cook_blasting_flask true", "as": "Dev"}}
 {"id": "cook_blasting_flask_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:cook_blasting_flask", "as": "Dev"}}

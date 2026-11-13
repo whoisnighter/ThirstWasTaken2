@@ -8,7 +8,7 @@
 //
 // The rest of the header of kaleidoscope-cookery.jsonl holds here, dripstone included.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "arrived", "command": "client.state"}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}

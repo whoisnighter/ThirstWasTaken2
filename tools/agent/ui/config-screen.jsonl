@@ -17,7 +17,7 @@
 // Cancel and Done are right-aligned, so their offset from the centre follows the window: the numbers
 // below are for a 512 px wide GUI, a maximised 2048 px window at scale 4, which `window` reports.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "window", "command": "client.info"}
 

@@ -3,6 +3,7 @@
     python tools/agent/drive.py run/<node>/agent/server requests.jsonl
     echo '{"command": "probe"}' | python tools/agent/drive.py run/<node>/agent/server -
     python tools/agent/drive.py run/<node>/agent/client requests.jsonl --verify
+    python tools/agent/drive.py run/<node>/agent/client requests.jsonl --verify --suite
 
 The queue itself is two text files, so none of this is required: appending a line to `in.jsonl` and
 reading `out.jsonl` is the whole protocol, and that is what an agent with only file tools does. This
@@ -20,6 +21,10 @@ checked afterwards with ``--verify``, which replays the same lines over the ``ou
     {"command":"client.hud","checks":[
       {"left":"result.bar.bottom","op":"le","right":"result.food.top"}
     ]}
+
+A launch that ran several scripts (``-Pagent=a.jsonl,b.jsonl``) answers each into its own
+``out-<script>.jsonl`` beside ``out.jsonl``. ``--suite`` checks a script against that file, named after
+the request file, and ``--out <file>`` names any other file of the queue directory.
 """
 
 import argparse
@@ -169,9 +174,9 @@ def wait_for_ready(queue, timeout, since):
                      "is the game starting?" % (READY, queue, timeout))
 
 
-def replies(queue, offset):
-    """Every complete line of out.jsonl after `offset`, with the new offset."""
-    out = queue / OUT
+def replies(queue, offset, name=OUT):
+    """Every complete line of out.jsonl, or `name`, after `offset`, with the new offset."""
+    out = queue / name
     if not out.is_file():
         return [], offset
     data = out.read_bytes()
@@ -221,7 +226,7 @@ def drive(queue, requests, timeout):
     return failed
 
 
-def verify(queue, requests, max_age):
+def verify(queue, requests, max_age, out=OUT):
     """Checks a finished run's out.jsonl against the assertions written beside its requests.
 
     `-Pagent` answers a file without an agent at the other end, and nothing in the game reads an
@@ -245,7 +250,10 @@ def verify(queue, requests, max_age):
                               "so it probably crashed. Look in its logs and crash-reports" % (
                                   READY, "missing" if age is None else "%.0f minutes old" % age)}))
             return True
-    recorded, _ = replies(queue, 0)
+    if not (queue / out).is_file():
+        print(json.dumps({"ok": False, "error": "%s has no %s; was this script part of the run?" % (queue, out)}))
+        return True
+    recorded, _ = replies(queue, 0, out)
     answers = {answer.get("id"): answer for answer in recorded}
     failed = False
     for request in requests:
@@ -253,7 +261,7 @@ def verify(queue, requests, max_age):
         if answer is None:
             failed = True
             print(json.dumps({"id": request["id"], "command": request.get("command"), "ok": False,
-                              "error": "not in %s" % OUT}))
+                              "error": "not in %s" % out}))
             continue
         if not answer.get("ok"):
             failed = True
@@ -283,6 +291,11 @@ def main():
     parser.add_argument("--max-age", type=float, default=0.0,
                         help="with --verify: minutes; fail when the run being checked opened its queue longer "
                              "ago than that, which is what a run that crashed on startup leaves behind")
+    parser.add_argument("--suite", action="store_true",
+                        help="with --verify: check out-<request file name>.jsonl, which a launch of several "
+                             "scripts (-Pagent=a.jsonl,b.jsonl) writes for each, instead of out.jsonl")
+    parser.add_argument("--out", default=None,
+                        help="with --verify: the answer file of the queue directory to check, out.jsonl by default")
     arguments = parser.parse_args()
 
     queue = pathlib.Path(arguments.queue)
@@ -290,7 +303,12 @@ def main():
         requests = load(arguments.requests)
         if not requests:
             raise SystemExit("no requests to check")
-        sys.exit(1 if verify(queue, requests, arguments.max_age) else 0)
+        out = arguments.out or OUT
+        if arguments.suite:
+            if arguments.requests == "-":
+                raise SystemExit("--suite names the answer file after the request file; give a file, not -")
+            out = "out-%s.jsonl" % pathlib.Path(arguments.requests).name[:-len(".jsonl")]                 if arguments.requests.endswith(".jsonl") else "out-%s.jsonl" % pathlib.Path(arguments.requests).name
+        sys.exit(1 if verify(queue, requests, arguments.max_age, out) else 0)
     if arguments.ready:
         about = wait_for_ready(queue, arguments.ready, started)
         print(json.dumps({"ready": about}))

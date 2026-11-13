@@ -127,11 +127,34 @@ public final class AgentQueue {
 
     /** Appends one line to {@code out.jsonl}. */
     public void write(String line) {
+        write(OUT, line);
+    }
+
+    /**
+     * Appends one line to {@code name} in this directory: {@code out.jsonl}, or the
+     * {@code out-<script>.jsonl} one script of several answers into.
+     */
+    public void write(String name, String line) {
         try {
-            Files.writeString(file(OUT), line + "\n", StandardCharsets.UTF_8,
+            Files.writeString(file(name), line + "\n", StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
         } catch (IOException e) {
-            log.error("[ThirstAgent] could not write to {}", file(OUT), e);
+            log.error("[ThirstAgent] could not write to {}", file(name), e);
+        }
+    }
+
+    /**
+     * Starts an answer file of its own for one script of several, {@code out-<script>.jsonl}, keeping
+     * what the last run left in it as {@code previous-out-<script>.jsonl}, as {@link #open} does for
+     * {@code out.jsonl}.
+     */
+    public void startOutput(String name) {
+        if (OUT.equals(name)) return;
+        try {
+            rotate(name);
+            Files.writeString(file(name), "", StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            log.error("[ThirstAgent] could not start {}", file(name), e);
         }
     }
 

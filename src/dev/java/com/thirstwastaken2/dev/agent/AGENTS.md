@@ -27,6 +27,7 @@ exchange is still on disk to read afterwards.
         ready.json    written once the game will answer; holds startedAt, pid and the command list
         in.jsonl      the agent appends one request a line
         out.jsonl     the game appends one reply a line
+        out-<script>.jsonl   each script's replies, when one launch ran several (see Several scripts in one launch)
         previous-*    the run before this one, kept rather than overwritten
         screenshots/  what client.capture wrote, and a folder per client.record recording
 
@@ -43,9 +44,9 @@ out, in which case the position in the queue stands in for it. A reply is
 ```
 
 with `error` instead of `result` when `ok` is false. **Requests are answered in order, one at a
-time.** A command that takes ticks to finish — `wait`, `client.hold`, `client.capture`,
-`client.slot`, `client.respawn` — holds the next request up until it has answered, so a file of requests is a
-sequence rather than a batch of things that all happen in one tick.
+time.** A command that takes ticks to finish — `wait`, `wait_until`, `server.sprint`, `client.hold`,
+`client.capture`, `client.slot`, `client.respawn`, `client.world` — holds the next request up until it has
+answered, so a file of requests is a sequence rather than a batch of things that all happen in one tick.
 
 `drive.py` also accepts an `expect` object keyed by dotted reply paths, plus relational `checks`.
 Expectations use exact JSON equality; a mismatch is printed as `assertionErrors` and exits 1. An
@@ -114,6 +115,57 @@ world of `run/<node>/saves` straight from launch; server commands then reach its
 [tools/agent/gameplay/hanging-pot.jsonl](../../../../../../../tools/agent/gameplay/hanging-pot.jsonl) runs that way, in a
 throwaway world made by `tools/agent/new_world.py` (see [tools/agent/AGENTS.md](../../../../../../../tools/agent/AGENTS.md#a-world-for-a-script)).
 
+### Not waiting longer than the game needs
+
+A `wait` holds the queue for its whole count at 20 ticks a second, whatever it waits for. Two commands
+take its place wherever the thing waited for is not the client catching up
+([docs/plans/AGENT-CLIENT-SPEED.md](../../../../../../../docs/plans/AGENT-CLIENT-SPEED.md) has the measurements):
+
+- **`wait_until`** answers as soon as a condition holds, with the `ticks` it took, and refuses after
+  `maxTicks` (600 by default, at most 4800) with what it last saw. A client script opens with
+  `{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}`
+  rather than a 400-tick `wait`: the world is in when a player stands in a level with no screen open,
+  the chunks within `radius` (2) of them are loaded and, in singleplayer, the integrated server has the
+  player. `world_ready` has to hold for 40 looks in a row (`hold`), two seconds, so the first tick of a
+  world is not taken for a settled one; the other conditions answer on the first look that holds.
+- **`server.sprint`** runs game time unthrottled: a 300-tick cook takes a second or two instead of 15.
+  Use it for what only time does on the server (cooking, brewing, fermenting, crops, a tank or a pump
+  filling, an upgrade ticking in the player's inventory), never for the client catching up. A sprint
+  runs the server ahead of a client that still ticks at 20 a second, so a screen opening, an inventory
+  syncing or a key held keeps a short `wait`. `/tick` came in 1.20.3, so on the 1.20.1 nodes the command
+  goes unanswered by the server and `server.sprint` lasts as long as a `wait` of the same ticks would.
+
+### Several scripts in one launch
+
+Every launch costs 30 to 60 seconds before the first request, more on a NeoForge node with several
+mods. `-Pagent` takes several files, comma separated, and answers them one after another in one game:
+
+```bash
+./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-tank.jsonl,tools/agent/integrations/sophisticated/sophisticated-pump.jsonl -Pquickplay=SophisticatedAgent
+```
+
+- **One answer file per script.** Each script answers into `out-<script>.jsonl`, named after the file
+  without `.jsonl` (a second file of the same name gets `-2`), so two scripts may share ids such as
+  `load`. `out.jsonl` keeps whatever is written to `in.jsonl` meanwhile. Check one with
+  `drive.py <queue> <script> --verify --suite`, or name the file with `--out`.
+- **The log.** Each script ends with `[ThirstAgent] DONE script answered (2/4), script=…, out=…` and the
+  run with `[ThirstAgent] DONE suite answered: 4 scripts, 0 stalled or skipped`, so the last `DONE` line
+  is still the run's result. A file that cannot be read is skipped with `DONE skipped (3/4)`. Pass
+  absolute paths as `C:/...` from Git Bash with `MSYS2_ARG_CONV_EXCL='*'`, or MSYS rewrites a
+  comma-separated list of them into nonsense.
+- **A stalled script ends that script, not the suite.** After `stallSeconds` without an answer the
+  request it was stuck on is refused, the rest of it is refused into its own file, `DONE stalled (2/4)`
+  is logged and the next script starts. A refused request does not end a script, alone or in a suite,
+  exactly as before. A frozen game is still halted by the watchdog, which ends the run.
+- **Worlds.** Scripts that run in one world share it, so they must not build over each other or leave
+  state the next one trips on (an inventory, a block entity, a biome). One that needs a world of its own
+  opens one with `client.world`: `{"open": "TankAgent", "from": "SophisticatedAgent"}` leaves the
+  world, copies `saves/SophisticatedAgent` over `saves/TankAgent` and opens the copy, answering once it
+  is `world_ready`. The template, made by `new_world.py` and never opened, stays fresh for the next
+  one. `{"open": "<world>"}` without `from` naming the world already open changes nothing, so a script
+  carrying that line runs on its own under `-Pquickplay=<world>` exactly as before.
+- **`-Pagent=<one file>` is unchanged**: `out.jsonl`, one `DONE` line, and a stall stops the game.
+
 ### One game per queue, and an unattended run always ends
 
 - **A queue belongs to one game.** The game that opens `run/<node>/agent/<name>/` holds an operating
@@ -130,7 +182,9 @@ throwaway world made by `tools/agent/new_world.py` (see [tools/agent/AGENTS.md](
 - **A stalled run stops.** With `-Pagent`, when requests are waiting and none has been answered for 300
   seconds (`-Dthirstwastaken2.agent.stallSeconds`), the rest is refused as stalled, the log says
   `DONE stalled` with the request it was stuck on, and the game closes. The longest request a script
-  can make is a one minute `wait`.
+  can make is a one minute `wait` or a four minute `wait_until`; a long `server.sprint` tells the
+  check it is moving as it goes. In a launch of several scripts a stall ends that script, not the run:
+  see [Several scripts in one launch](#several-scripts-in-one-launch).
 - **A frozen game is halted.** A game thread that stops ticking cannot run that check, so a watchdog
   thread halts the process after 300 seconds without a tick (`-Dthirstwastaken2.agent.frozenSeconds`),
   logging where the game thread was stuck and writing a `watchdog` line to `out.jsonl`. Generating a
@@ -196,6 +250,7 @@ a client answers all three.
 |---|---|---|
 | `probe` | | side, loader, Minecraft version, run directory, queue, whether a server is running, the command list |
 | `wait` | `ticks` | after that many game ticks have run. The way to let the game catch up |
+| `wait_until` | `condition`, `maxTicks`, `hold`, and the condition's own | as soon as the condition has held for `hold` looks in a row, with the `ticks` it took and what it `seen`; refused after `maxTicks`. Both sides: `block_state` (`x`, `y`, `z`, `block`, `properties`; the client's world on a client, the overworld on a dedicated server). Client only: `world_ready` (`radius`, `allowScreen`), `screen_open` (`screen`: a class name, simple or full, `any` or `none`), `slot_not_empty` and `slot_matches` (`slot` or `inventory` as `client.slot` takes them, `item`, `count`) of the open menu, or the player's inventory with none open |
 | `stop` | | after stopping this process: halting a server, closing a client's window. Answered ahead of a running `-Pagent` script |
 | `server.info` | | dedicated, tick count, players, difficulty, levels |
 | `server.players` | | every online player's thirst, position, health, food and flags |
@@ -225,8 +280,9 @@ a client answers all three.
 | `client.language` | `code` | the language now selected, after loading its translations again |
 | `client.textWidth` | `keys`, `texts` | how wide the game's font draws each, in GUI pixels, keys translated in the current language |
 | `client.respawn` | | after pressing the death screen's button through the connection |
-| `client.disconnect` | | after leaving to the title screen |
+| `client.disconnect` | | after leaving to the title screen, as the pause screen's quit button does (the level is disconnected first, so an integrated server saves and stops) |
 | `client.connect` | `address` | after starting a connection; `wait` for it to finish |
+| `client.world` | `open` with `from` and `maxTicks`, or `leave` | `open`: once that world of `saves/` is `world_ready`, after leaving the one open and, with `from`, copying that world over it first; at once with `alreadyOpen` when it is the world open and there is no `from`. `leave`: after leaving to the title screen. See [Several scripts in one launch](#several-scripts-in-one-launch) |
 
 `/thirst agent probe` in game says the same thing `probe` does, for the moment before an agent is
 wired up at all. It needs permission level 4.

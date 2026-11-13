@@ -16,7 +16,7 @@
 // Then:
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-alchemy.jsonl -Pquickplay=SophisticatedAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "reloadTemplates", "command": "server.command", "args": {"command": "reload"}}
 {"id": "reloaded", "command": "wait", "args": {"ticks": 60}}
 {"id": "joined", "command": "client.state"}
@@ -33,7 +33,7 @@
 {"id": "alchemy_potion_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "alchemy_potion_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "alchemy_potion_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "alchemy_potion_drinking", "command": "wait", "args": {"ticks": 100}}
+{"id": "alchemy_potion_drinking", "command": "server.sprint", "args": {"ticks": 100}}
 {"id": "potionDrunk", "command": "server.thirst.get", "args": {"player": "Dev"}}
 {"id": "alchemy_potion_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:alchemy_potion true", "as": "Dev"}}
 {"id": "alchemy_potion_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:alchemy_potion", "as": "Dev"}}
@@ -47,7 +47,7 @@
 {"id": "alchemy_water_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "alchemy_water_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "alchemy_water_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "alchemy_water_drinking", "command": "wait", "args": {"ticks": 100}}
+{"id": "alchemy_water_drinking", "command": "server.sprint", "args": {"ticks": 100}}
 {"id": "waterRefused", "command": "server.thirst.get", "args": {"player": "Dev"}}
 {"id": "alchemy_water_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:alchemy_water true", "as": "Dev"}}
 {"id": "alchemy_water_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:alchemy_water", "as": "Dev"}}

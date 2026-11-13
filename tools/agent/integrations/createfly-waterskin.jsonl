@@ -21,7 +21,7 @@
 // Any world works; Sand Filter Test is the one this was taken from:
 //     ./gradlew ":26.2.x:runClient" -Pagent=tools/agent/integrations/createfly-waterskin.jsonl "-Pquickplay=Sand Filter Test"
 
-{"id": "load", "command": "wait", "args": {"ticks": 300}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "peaceful", "command": "server.command", "args": {"command": "difficulty peaceful"}}
 {"id": "air", "command": "server.command", "args": {"command": "fill -6 148 -4 10 156 9 minecraft:air"}}

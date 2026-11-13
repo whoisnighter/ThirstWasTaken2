@@ -13,7 +13,7 @@
 // The player stands on stone south of each and looks 41 degrees down at its z 0 block. An item check
 // asks for "Test passed" alone: 1.21.1 words the count differently.
 
-{"id": "load", "command": "wait", "args": {"ticks": 300}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "day", "command": "server.command", "args": {"command": "time set noon"}}
 {"id": "platform", "command": "server.command", "args": {"command": "fill -6 200 -6 6 200 6 minecraft:stone"}}

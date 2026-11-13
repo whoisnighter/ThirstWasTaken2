@@ -13,7 +13,7 @@
 // Then:
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-feeding.jsonl -Pquickplay=SophisticatedAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "reloadTemplates", "command": "server.command", "args": {"command": "reload"}}
 {"id": "reloaded", "command": "wait", "args": {"ticks": 60}}
 {"id": "joined", "command": "client.state"}
@@ -27,7 +27,7 @@
 // Hunger 255 for three seconds empties most of the food bar. Its exhaustion drains thirst too, so
 // thirst is set afterwards.
 {"id": "starve", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 3 255 true"}}
-{"id": "starving", "command": "wait", "args": {"ticks": 80}}
+{"id": "starving", "command": "server.sprint", "args": {"ticks": 80}}
 {"id": "fedUp", "command": "server.command", "args": {"command": "effect clear @p minecraft:hunger"}}
 {"id": "thirsty", "command": "server.thirst.set", "args": {"player": "Dev", "thirst": 4, "quenched": 0, "exhaustion": 0}}
 {"id": "hungry", "command": "server.thirst.get", "args": {"player": "Dev"}}
@@ -39,7 +39,7 @@
 {"id": "open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "eating", "command": "wait", "args": {"ticks": 60}}
+{"id": "eating", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "fed", "command": "server.thirst.get", "args": {"player": "Dev"}}
 {"id": "create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:feeding_melon true", "as": "Dev"}}
 {"id": "export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:feeding_melon", "as": "Dev"}}

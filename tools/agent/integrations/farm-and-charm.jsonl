@@ -17,7 +17,7 @@
 // block is the groundwater. The player stands at 0.5 200 0.5 looking south at pitch 30, at the block on
 // 0 200 2. Biomes are set with /fillbiome, which the well's sample reads on the server.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}
@@ -177,7 +177,7 @@
 {"id": "sink_hand_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "sink_hand_used", "command": "wait", "args": {"ticks": 10}}
 {"id": "sink_hand_open", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{Open:1b}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
-{"id": "sink_hand_fill", "command": "wait", "args": {"ticks": 200}}
+{"id": "sink_hand_fill", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "sink_hand_filled", "command": "server.command", "args": {"command": "execute if block 0 200 2 candlelight:cobblestone_kitchen_sink{WaterLevel:3}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sink_hand_close", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "sink_hand_closed_settle", "command": "wait", "args": {"ticks": 10}}
@@ -235,7 +235,7 @@
 {"id": "stove_salty_fuel", "command": "server.command", "args": {"command": "item replace block 2 200 6 container.4 with minecraft:coal 4"}}
 {"id": "stove_salty_dough", "command": "server.command", "args": {"command": "item replace block 2 200 6 container.1 with farm_and_charm:dough"}}
 {"id": "stove_salty_water", "command": "server.command", "args": {"command": "item replace block 2 200 6 container.2 with minecraft:water_bucket[thirstwastaken2:water_salty=true]"}}
-{"id": "cook", "command": "wait", "args": {"ticks": 1000}}
+{"id": "cook", "command": "server.sprint", "args": {"ticks": 1000}}
 {"id": "fac_plain_tea", "command": "server.command", "args": {"command": "execute if items block 0 200 4 container.* farm_and_charm:nettle_tea"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "fac_salty_tea", "command": "server.command", "args": {"command": "execute if items block 2 200 4 container.* farm_and_charm:nettle_tea"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test failed"}]}
 {"id": "fac_salty_kept", "command": "server.command", "args": {"command": "execute if items block 2 200 4 container.* minecraft:water_bucket[thirstwastaken2:water_salty=true]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
@@ -252,7 +252,7 @@
 {"id": "drink_nettle_tea_cup_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_nettle_tea_cup_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_nettle_tea_cup_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_nettle_tea_cup_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_nettle_tea_cup_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_nettle_tea_cup_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_nettle_tea_cup_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with farm_and_charm:nettle_tea_cup"}}
 {"id": "drink_nettle_tea_cup_settle", "command": "wait", "args": {"ticks": 10}}
@@ -263,7 +263,7 @@
 {"id": "drink_strawberry_tea_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_strawberry_tea_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_strawberry_tea_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_strawberry_tea_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_strawberry_tea_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_strawberry_tea_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_strawberry_tea_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with farm_and_charm:strawberry_tea"}}
 {"id": "drink_strawberry_tea_settle", "command": "wait", "args": {"ticks": 10}}
@@ -274,7 +274,7 @@
 {"id": "drink_barley_soup_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_barley_soup_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_barley_soup_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_barley_soup_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_barley_soup_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_barley_soup_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_barley_soup_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with farm_and_charm:barley_soup"}}
 {"id": "drink_barley_soup_settle", "command": "wait", "args": {"ticks": 10}}
@@ -285,7 +285,7 @@
 {"id": "drink_tomato_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_tomato_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_tomato_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_tomato_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_tomato_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_tomato_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_tomato_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with farm_and_charm:tomato"}}
 {"id": "drink_tomato_settle", "command": "wait", "args": {"ticks": 10}}
@@ -296,7 +296,7 @@
 {"id": "drink_tomato_soup_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_tomato_soup_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_tomato_soup_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_tomato_soup_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_tomato_soup_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_tomato_soup_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_tomato_soup_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with candlelight:tomato_soup"}}
 {"id": "drink_tomato_soup_settle", "command": "wait", "args": {"ticks": 10}}
@@ -307,7 +307,7 @@
 {"id": "drink_fresh_garden_salad_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_fresh_garden_salad_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_fresh_garden_salad_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_fresh_garden_salad_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_fresh_garden_salad_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_fresh_garden_salad_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_fresh_garden_salad_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with candlelight:fresh_garden_salad"}}
 {"id": "drink_fresh_garden_salad_settle", "command": "wait", "args": {"ticks": 10}}
@@ -318,7 +318,7 @@
 {"id": "drink_chocolate_mousse_clear", "command": "server.command", "args": {"command": "clear @p"}}
 {"id": "drink_chocolate_mousse_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 -30"}}
 {"id": "drink_chocolate_mousse_hunger", "command": "server.command", "args": {"command": "effect give @p minecraft:hunger 2 255 true"}}
-{"id": "drink_chocolate_mousse_hungry", "command": "wait", "args": {"ticks": 60}}
+{"id": "drink_chocolate_mousse_hungry", "command": "server.sprint", "args": {"ticks": 60}}
 {"id": "drink_chocolate_mousse_set", "command": "server.command", "args": {"command": "thirst set @p 4 0"}}
 {"id": "drink_chocolate_mousse_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with candlelight:chocolate_mousse"}}
 {"id": "drink_chocolate_mousse_settle", "command": "wait", "args": {"ticks": 10}}

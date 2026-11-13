@@ -12,7 +12,7 @@
 // breaking, dropping and joining are gametests (DistillerGameTest); this covers what they cannot, the
 // click and the drawing.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 120 0 true"}}
 {"id": "go", "command": "server.command", "args": {"command": "tp @p 0.5 200 -2.5 0 28"}}

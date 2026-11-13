@@ -17,7 +17,7 @@
 //
 // Everything happens on a stone floor at y 199, biome plains. The player stands at 0.5 200 0.5.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}

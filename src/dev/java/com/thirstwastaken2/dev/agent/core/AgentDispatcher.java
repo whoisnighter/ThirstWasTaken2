@@ -56,7 +56,7 @@ public final class AgentDispatcher {
     private final Map<String, AgentHandler> handlers = new LinkedHashMap<>();
     private final List<Deferred> deferred = new ArrayList<>();
     /** Lines read from the queue that have not been started yet, oldest first. */
-    private final Deque<String> waiting = new ArrayDeque<>();
+    private final Deque<Line> waiting = new ArrayDeque<>();
     private final JsonObject about;
 
     private long sequence;
@@ -70,6 +70,8 @@ public final class AgentDispatcher {
     /** The request started last, for {@link #status}: its id and command. */
     private String currentId;
     private String currentCommand;
+    /** The answer of the request started last, so {@link #abandon} can say why it never came. */
+    private AgentReply currentReply;
 
     /** {@link System#nanoTime} of the last answer written and of the last tick, for the stall checks. */
     private volatile long lastAnswerNanos = System.nanoTime();
@@ -193,6 +195,16 @@ public final class AgentDispatcher {
      * read by a person as well as by the parser.
      */
     public void runScript(Path script, Runnable whenDone) {
+        runScript(script, AgentQueue.OUT, whenDone);
+    }
+
+    /**
+     * The same, answering into {@code out}, a file of the queue's directory: {@code out.jsonl} for a
+     * launch that names one script, {@code out-<script>.jsonl} for each of several, so that every
+     * script's answers can be checked against its own requests even where two scripts share an id.
+     * Requests read from {@code in.jsonl} meanwhile still answer into {@code out.jsonl}.
+     */
+    public void runScript(Path script, String out, Runnable whenDone) {
         if (!started) return;
         List<String> lines;
         try {
@@ -203,10 +215,11 @@ public final class AgentDispatcher {
             return;
         }
         log.info("[ThirstAgent] running the script {} ({} lines)", script.toAbsolutePath(), lines.size());
+        queue.startOutput(out);
         this.onDrained = whenDone;
         for (String line : lines) {
             String trimmed = line.strip();
-            if (!trimmed.isEmpty() && !trimmed.startsWith("//")) waiting.add(trimmed);
+            if (!trimmed.isEmpty() && !trimmed.startsWith("//")) waiting.add(new Line(trimmed, out));
         }
         scriptTotal = waiting.size();
         answered = 0;
@@ -254,9 +267,10 @@ public final class AgentDispatcher {
             // wait for every line of it, which is exactly when an agent wants a game gone: the script is
             // stuck, or no longer wanted. Only then: a file drive.py sends is written in one go, and one
             // that ends in stop means after everything else in it.
-            String stop = null;
-            for (String line : queue.poll()) {
-                if (stop == null && onDrained != null && isStop(line)) stop = line;
+            Line stop = null;
+            for (String text : queue.poll()) {
+                Line line = new Line(text, AgentQueue.OUT);
+                if (stop == null && onDrained != null && isStop(text)) stop = line;
                 else waiting.add(line);
             }
             if (stop != null) {
@@ -290,9 +304,24 @@ public final class AgentDispatcher {
             }
         }
         deferred.clear();
-        for (String line : waiting) refuse(line, reason);
+        for (Line line : waiting) refuse(line, reason);
         waiting.clear();
         started = false;
+    }
+
+    /**
+     * Gives up on the running script without closing the queue, for one of several that stalled: the
+     * request it was stuck on is answered with {@code reason}, its deferrals are dropped rather than run
+     * (one of them is what never finished), everything still waiting is refused with the reason, and
+     * the script's {@code whenDone} is not called. The next script can then start on a clean queue.
+     */
+    public void abandon(String reason) {
+        if (!started) return;
+        onDrained = null;
+        deferred.clear();
+        if (currentReply != null && !currentReply.answered()) currentReply.fail(reason);
+        for (Line line : waiting) refuse(line, reason);
+        waiting.clear();
     }
 
     /**
@@ -322,10 +351,10 @@ public final class AgentDispatcher {
         }
     }
 
-    private void accept(String line) {
+    private void accept(Line line) {
         AgentRequest request;
         try {
-            JsonElement parsed = JsonParser.parseString(line);
+            JsonElement parsed = JsonParser.parseString(line.text);
             if (!parsed.isJsonObject()) throw new AgentException("a request has to be a JSON object");
             JsonObject object = parsed.getAsJsonObject();
             if (!object.has("command")) throw new AgentException("a request needs a 'command'");
@@ -340,7 +369,9 @@ public final class AgentDispatcher {
 
         currentId = request.id();
         currentCommand = request.command();
-        AgentReply reply = new AgentReply(request, envelope -> write(GSON.toJson(envelope)));
+        String out = line.out;
+        AgentReply reply = new AgentReply(request, envelope -> write(out, GSON.toJson(envelope)));
+        currentReply = reply;
         AgentHandler handler = handlers.get(request.command());
         if (handler == null) {
             reply.fail("unknown command; ready.json lists the ones this process answers");
@@ -364,17 +395,18 @@ public final class AgentDispatcher {
         }
     }
 
-    private void refuse(String line, String message) {
+    private void refuse(Line line, String message) {
+        String text = line.text;
         JsonObject envelope = new JsonObject();
         envelope.addProperty("id", String.valueOf(sequence++));
         envelope.addProperty("ok", false);
         envelope.addProperty("error", message);
-        envelope.addProperty("line", line.length() > 200 ? line.substring(0, 200) + "..." : line);
-        write(GSON.toJson(envelope));
+        envelope.addProperty("line", text.length() > 200 ? text.substring(0, 200) + "..." : text);
+        write(line.out, GSON.toJson(envelope));
     }
 
-    private void write(String line) {
-        queue.write(line);
+    private void write(String out, String line) {
+        queue.write(out, line);
         answered++;
         lastAnswerNanos = System.nanoTime();
     }
@@ -402,6 +434,17 @@ public final class AgentDispatcher {
         Runnable done = onDrained;
         onDrained = null;
         done.run();
+    }
+
+    /** One request line not yet started, and the file of this directory its answer goes to. */
+    private static final class Line {
+        private final String text;
+        private final String out;
+
+        private Line(String text, String out) {
+            this.text = text;
+            this.out = out;
+        }
     }
 
     private static final class Deferred {

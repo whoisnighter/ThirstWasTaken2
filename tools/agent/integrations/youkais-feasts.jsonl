@@ -13,7 +13,7 @@
 // A bucket poured in comes back empty in the hand; a refused one stays full. The kettle, tank and iron pot
 // stand at 0 200 1, looked at from 0.5 200 0.5 at pitch 50, onto the top of the kettle's short body; a
 // missed ray would pour the bucket onto the floor and pass for a fill, so each case starts in clean air.
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}

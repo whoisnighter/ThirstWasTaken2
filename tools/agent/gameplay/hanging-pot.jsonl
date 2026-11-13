@@ -8,7 +8,7 @@
 // World edits go through server.command, which runs with the console's permissions, so the world does
 // not need cheats on.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 // Go to the scene first: a world may spawn the player far from it, where nothing is loaded. Slow
 // falling keeps the player alive until the floor is there; a dead player keeps nothing loaded.
@@ -33,9 +33,9 @@
 {"id": "before", "command": "client.capture", "args": {"name": "hanging-pot-before"}}
 {"id": "stillMurky", "command": "server.command", "args": {"command": "execute if block 0 201 0 thirstwastaken2:copper_hanging_pot[purity=2]"}}
 
-// Two servings in the copper pot take about 6 seconds by default. Keep a generous wait so a busy
-// development client cannot make the assertion flaky.
-{"id": "boil", "command": "wait", "args": {"ticks": 700}}
+// Two servings in the copper pot take about 6 seconds by default. Keep a generous count so a busy
+// development client cannot make the assertion flaky; a sprint runs it in about a second.
+{"id": "boil", "command": "server.sprint", "args": {"ticks": 700}}
 {"id": "boiled", "command": "server.command", "args": {"command": "execute if block 0 201 0 thirstwastaken2:copper_hanging_pot[purity=3,level=2]"}}
 {"id": "saltStays", "command": "server.command", "args": {"command": "execute if block 2 200 0 thirstwastaken2:copper_hanging_pot[purity=5,level=3]"}}
 {"id": "after", "command": "client.capture", "args": {"name": "hanging-pot-after"}}

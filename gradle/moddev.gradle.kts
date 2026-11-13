@@ -38,8 +38,13 @@ val translateJson: (Any?, String) -> Any? = handed("thirst.translateJson")
 val modId = property("mod.id") as String
 /** The dev tools' mod id. NeoForge and Forge ids cannot contain a hyphen, so it is not the Fabric `-dev` spelling. */
 val devModId = "thirstwastaken2_dev"
-/** `-Pagent=<file>`: a file of agent requests to answer once, unattended. See src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md. */
-val agentScript: String? = providers.gradleProperty("agent").orNull?.let { rootProject.file(it).absolutePath }
+/**
+ * `-Pagent=<file>`: a file of agent requests to answer once, unattended; several, comma separated, run
+ * back to back in one launch. See src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md.
+ */
+val agentScript: String? = providers.gradleProperty("agent").orNull?.let { scripts ->
+    scripts.split(',').filter { it.isNotBlank() }.joinToString(",") { rootProject.file(it.trim()).absolutePath }
+}
 /** `-Pdriven`: this client is driven by an agent, not played. See src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md. */
 val drivenClient: Boolean = providers.gradleProperty("driven").isPresent
 

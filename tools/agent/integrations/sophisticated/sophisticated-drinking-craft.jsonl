@@ -22,7 +22,7 @@
 // Then:
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-drinking-craft.jsonl -Pquickplay=SophisticatedAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}
@@ -114,7 +114,7 @@
 {"id": "storageMoved", "command": "client.slot", "args": {"inventory": 9, "action": "quick_move"}}
 {"id": "storage_close", "command": "client.screen", "args": {"open": "none"}}
 {"id": "storage_thirsty", "command": "server.thirst.set", "args": {"player": "Dev", "thirst": 4, "quenched": 0, "exhaustion": 0}}
-{"id": "storage_drinking", "command": "wait", "args": {"ticks": 140}}
+{"id": "storage_drinking", "command": "server.sprint", "args": {"ticks": 140}}
 {"id": "storageDrunk", "command": "server.thirst.get", "args": {"player": "Dev"}}
 {"id": "storage_reopen", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "storage_reopened", "command": "wait", "args": {"ticks": 10}}

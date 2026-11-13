@@ -1,7 +1,8 @@
 # Agent client: faster scripted runs
 
-Status: planned, not started. Noted 2026-11-13 while running the Sophisticated scripts on
-`26.3.x-neoforge`.
+Status: done, 2026-11-13. All three changes are in; see [What was done](#what-was-done) at the end for
+the decisions taken where this plan left a choice, the timings, and what is left. Noted 2026-11-13 while
+running the Sophisticated scripts on `26.3.x-neoforge`.
 
 The `-Pagent` client (`src/dev/java/com/thirstwastaken2/dev/agent/`, scripts in `tools/agent/`) spends
 most of a run either waiting a fixed number of ticks or starting and stopping the game. Three changes
@@ -91,3 +92,74 @@ about 8 to 9 minutes of waiting; after all three changes, one launch and about a
   compiles this source set.
 - Prove it with the Sophisticated and Farm & Charm scripts on one Fabric and one NeoForge node, and keep
   a before/after time for one script in the commit message.
+
+## What was done
+
+All three parts, in the plan's order. The commands are documented in
+[the agent's AGENTS.md](../../src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md#not-waiting-longer-than-the-game-needs)
+and [tools/agent/AGENTS.md](../../tools/agent/AGENTS.md#several-scripts-in-one-launch).
+
+### Decisions where the plan left a choice
+
+- **`server.sprint` was already there**, so part 1 is script changes only. Converted: every
+  `_cooking`, `_tick`, `_pumping`, `_drinking`, `starving` and `eating` wait in
+  `integrations/sophisticated/`, Farm & Charm's `cook`, `sink_hand_fill` and `_hungry` waits, and the
+  hanging pot's `boil`. Screen, slot and key waits stay `wait`. Other scripts' game-time waits were
+  left for whoever next runs each one, per "check each converted script before converting the next".
+  On the 1.20.1 nodes `/tick` does not exist, so a sprint there lasts as long as a `wait`.
+- **`wait_until`** answers on the first look that holds, except `world_ready`, which must hold 40
+  looks in a row (two seconds) so a world that is in for one tick is not taken as settled; `hold`
+  overrides either. `maxTicks` defaults to 600 and is capped at 4800 (four minutes at 20 a second),
+  under the 300 s stall guard. `slot_matches` takes `count` as an exact count. `block_state` reads the
+  client's own world on a client and the overworld on a dedicated server. `world_ready` also asks
+  for no screen open (`allowScreen` lifts that) and, in singleplayer, the integrated server to have
+  the player.
+- **The opening `load`** became `wait_until world_ready` (`maxTicks` 2400) in every client script
+  except `shots/` and `ui/config-showcase.jsonl`, which keep the fixed wait because a capture needs the
+  terrain drawn, not only loaded. This one line is generic, so it was changed everywhere at once
+  rather than script by script.
+- **Several scripts**: `-Pagent=a.jsonl,b.jsonl`. With one file nothing changes (`out.jsonl`, one
+  `DONE` line, a stall stops the game). With several, each answers into `out-<script>.jsonl`, the log
+  has a `DONE` line per script and a last `DONE suite answered` line, and `drive.py --verify --suite`
+  (or `--out <file>`) checks one. "A refused or stalled request ends that script" was taken as: a
+  stall ends that script (its waiting requests are refused into its own file) and the next one
+  starts; a refused request still does not end a script, alone or in a suite, as before. A file that
+  cannot be read is skipped with `DONE skipped`.
+- **Worlds**: `client.world` with `open`/`from`/`leave`. `from` copies a `new_world.py` world over the
+  named one and opens the copy, so one template serves every script of a suite; `open` naming the
+  world already open is a no-op, so the same line works under `-Pquickplay`. No per-script header.
+  Leaving a world now disconnects the level first, as the pause screen does: `Minecraft.disconnect`
+  alone (which `client.disconnect` used before) waits forever for an integrated server that was never
+  told to stop, rendering without ticking until the watchdog halts the game.
+
+### Timings
+
+"Script" is from the queue opening to the last answer, from the game's log; "wall" is the whole
+Gradle task, launch included, on a machine where other builds were running.
+
+| Node | Run | Script | Wall |
+|---|---|---|---|
+| `1.21.1-neoforge` | `sophisticated-tank.jsonl`, before (fixed `load` and `_tick` waits) | 89.5 s | 171 s |
+| `1.21.1-neoforge` | `sophisticated-tank.jsonl`, after | 16.1 s | 94 s |
+| `1.21.1-neoforge` | tank, cooking, drinking and pump in one launch, after | 67.0 s for all four | 136 s |
+| `1.21.1` (Fabric) | `gameplay/hanging-pot.jsonl`, before | 68 s | 137 s |
+| `1.21.1` (Fabric) | `gameplay/hanging-pot.jsonl`, after | 20 s | 56 s |
+
+The four core Sophisticated scripts were about 8 to 9 minutes of waiting plus four launches before;
+they are now one launch of 136 s. The tank's exported backpacks were byte for byte the same before and
+after, and the four scripts' results in one launch were the ones each header expects (drinking
+16/20/4/10/12/20, every cooking export as described, every pump check passed). `client.world` with
+`from`, and the `wait_until` conditions, were checked in a suite on `1.21.1` and `26.3.x` (a copy
+opened in about 7 s).
+
+### Not done
+
+- **Farm & Charm was not run.** Its two `runClientMod` lines are off by default, and turned on for
+  Fabric 1.21.1 the client did not start: Farm & Charm 1.1.29 and Candlelight 2.1.15 require
+  `foundation` (>=1.0.7), which is only nested in Farm & Charm's jar and is not put on the dev
+  classpath. Foundation is on runClient since `292e790` (uncomment Farm & Charm's three
+  `runClientMod` lines to run it); its waits are converted but unverified. The hanging pot stood in
+  as the Fabric proof, and passed again on `1.21.1` after the merge onto `main`.
+- The Sophisticated `alchemy`, `drinking-craft` and `feeding` scripts' sprints were converted but not
+  run; `drinking-tab` has only client waits.
+- Game-time waits in other scripts are still `wait`.

@@ -11,7 +11,7 @@
 // evaluated under -Pagent, so read run/<node>/agent/client/out.jsonl: every "execute if" line has to
 // say "Test passed", or run the same file through drive.py against a client that stays open.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 120 0 true"}}
 {"id": "view", "command": "server.command", "args": {"command": "tp @p 0.5 200 -3.5 0 15"}}

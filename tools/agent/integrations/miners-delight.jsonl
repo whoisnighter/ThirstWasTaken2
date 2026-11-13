@@ -14,7 +14,7 @@
 //
 // Create's Spout and Item Drain on a copper cup are in miners-delight-create-1.20.1.jsonl.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}

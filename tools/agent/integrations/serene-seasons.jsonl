@@ -19,7 +19,7 @@
 // Serene Seasons' tropical calendar runs two sub-seasons behind: late summer is the middle of the dry
 // season, late winter the middle of the wet one.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "arrived", "command": "client.state"}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}

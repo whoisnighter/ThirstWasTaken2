@@ -14,7 +14,7 @@
 // run/<node>/agent/client/screenshots/ shows the dry-tongue icon at the top right of the HUD, and
 // parched-inventory.png shows the same effect named in the inventory's effect list.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 120 0 true"}}
 {"id": "view", "command": "server.command", "args": {"command": "tp @p 0.5 200 -3.5 0 15"}}

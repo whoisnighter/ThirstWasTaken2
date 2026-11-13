@@ -13,7 +13,7 @@
 // loaded, and read back with "data get". Beer takes 200 ticks at no particular temperature; the stone
 // floor is neither hot nor cold.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "arrived", "command": "client.state"}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 

@@ -196,6 +196,49 @@ final class AgentClientVanilla {
         *///?}
     }
 
+    /**
+     * Leaves the world or server this client is in for the title screen, as the pause screen's
+     * "Save and Quit to Title" does. With an integrated server the call returns once that server has
+     * saved and stopped, so its world can be copied or opened again straight after.
+     *
+     * <p>The level has to be disconnected first: that is what tells an integrated server its owner left,
+     * and it halts on that. {@code Minecraft.disconnect} alone waits for a server that was never asked to
+     * stop, rendering frames forever without a tick. 1.21.11 made the pair one call.
+     */
+    static void leaveWorld(Minecraft minecraft) {
+        //? if >=1.21.11 {
+        minecraft.disconnectFromWorld(Component.translatable("multiplayer.status.quitting"));
+        //?} else {
+        /*minecraft.level.disconnect();
+        clearLevel(minecraft);
+        *///?}
+    }
+
+    /** What is left of leaving once the level is disconnected, before 1.21.11. 1.20.5 renamed the call. */
+    private static void clearLevel(Minecraft minecraft) {
+        //? if >=1.20.5 {
+        minecraft.disconnect(new net.minecraft.client.gui.screens.TitleScreen(), false);
+        //?} else {
+        /*minecraft.clearLevel(new net.minecraft.client.gui.screens.TitleScreen());
+        *///?}
+    }
+
+    /**
+     * Opens the singleplayer world in {@code saves/<folder>}, as the world list's Play button does,
+     * landing on the title screen if the game refuses it. The world may still be loading when this
+     * returns. 1.20.5 renamed {@code loadLevel} to {@code openWorld} and turned the screen to go back to
+     * into a callback.
+     */
+    static void openWorld(Minecraft minecraft, String folder) {
+        //? if >=1.20.5 {
+        minecraft.createWorldOpenFlows().openWorld(folder,
+                () -> com.thirstwastaken2.client.platform.ClientVanilla.setScreen(minecraft,
+                        new net.minecraft.client.gui.screens.TitleScreen()));
+        //?} else {
+        /*minecraft.createWorldOpenFlows().loadLevel(new net.minecraft.client.gui.screens.TitleScreen(), folder);
+        *///?}
+    }
+
     /** The target the world and the GUI are drawn into. 26.2 moved it from the client onto its game renderer. */
     private static RenderTarget mainTarget(Minecraft minecraft) {
         //? if >=26.2 {

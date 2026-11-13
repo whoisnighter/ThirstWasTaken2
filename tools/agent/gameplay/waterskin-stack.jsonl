@@ -18,7 +18,7 @@
 // never spends the bottle at all. The slot clicks go through the player's own inventory menu, which
 // is the open menu whenever no screen is.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 600 0 true"}}
 {"id": "up", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 15"}}

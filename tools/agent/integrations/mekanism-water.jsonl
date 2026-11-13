@@ -14,7 +14,7 @@
 //     python tools/agent/new_world.py 1.21.1-neoforge MekanismAgent
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/mekanism-water.jsonl -Pquickplay=MekanismAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:resistance 600 4 true"}}
 // The ground first, then the player on top of it: filling stone around a standing player suffocates them.

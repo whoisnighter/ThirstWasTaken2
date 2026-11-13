@@ -24,7 +24,7 @@
 // A grade is stored on the block as one int, thirstwastaken2:water_quality: 1 to 4 for Dirty, Murky,
 // Clean and Pure, 5 for sea water, as a cauldron stores it.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "arrived", "command": "client.state"}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}

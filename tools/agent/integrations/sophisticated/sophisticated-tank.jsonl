@@ -13,7 +13,7 @@
 // Then:
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/sophisticated/sophisticated-tank.jsonl -Pquickplay=SophisticatedAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "reloadTemplates", "command": "server.command", "args": {"command": "reload"}}
 {"id": "reloaded", "command": "wait", "args": {"ticks": 60}}
 {"id": "joined", "command": "client.state"}
@@ -34,7 +34,7 @@
 {"id": "dirty_bucket_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "dirty_bucket_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "dirty_bucket_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "dirty_bucket_tick", "command": "wait", "args": {"ticks": 200}}
+{"id": "dirty_bucket_tick", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "dirty_bucket_held", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand sophisticatedbackpacks:backpack"}}
 {"id": "dirty_bucket_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:dirty_bucket true", "as": "Dev"}}
 {"id": "dirty_bucket_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:dirty_bucket", "as": "Dev"}}
@@ -50,7 +50,7 @@
 {"id": "salt_bottles_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "salt_bottles_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "salt_bottles_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "salt_bottles_tick", "command": "wait", "args": {"ticks": 200}}
+{"id": "salt_bottles_tick", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "salt_bottles_held", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand sophisticatedbackpacks:backpack"}}
 {"id": "salt_bottles_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:salt_bottles true", "as": "Dev"}}
 {"id": "salt_bottles_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:salt_bottles", "as": "Dev"}}
@@ -65,7 +65,7 @@
 {"id": "no_mix_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "no_mix_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "no_mix_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "no_mix_tick", "command": "wait", "args": {"ticks": 200}}
+{"id": "no_mix_tick", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "no_mix_held", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand sophisticatedbackpacks:backpack"}}
 {"id": "no_mix_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:no_mix true", "as": "Dev"}}
 {"id": "no_mix_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:no_mix", "as": "Dev"}}
@@ -79,7 +79,7 @@
 {"id": "plain_bucket_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "plain_bucket_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "plain_bucket_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "plain_bucket_tick", "command": "wait", "args": {"ticks": 200}}
+{"id": "plain_bucket_tick", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "plain_bucket_held", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand sophisticatedbackpacks:backpack"}}
 {"id": "plain_bucket_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:plain_bucket true", "as": "Dev"}}
 {"id": "plain_bucket_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:plain_bucket", "as": "Dev"}}
@@ -94,7 +94,7 @@
 {"id": "tank_skin_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "tank_skin_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "tank_skin_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "tank_skin_tick", "command": "wait", "args": {"ticks": 200}}
+{"id": "tank_skin_tick", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "tank_skin_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:tank_skin true", "as": "Dev"}}
 {"id": "tank_skin_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:tank_skin", "as": "Dev"}}
 
@@ -107,7 +107,7 @@
 {"id": "tank_bowl_open", "command": "client.hold", "args": {"keys": ["use"], "ticks": 5}}
 {"id": "tank_bowl_opened", "command": "wait", "args": {"ticks": 10}}
 {"id": "tank_bowl_close", "command": "client.screen", "args": {"open": "none"}}
-{"id": "tank_bowl_tick", "command": "wait", "args": {"ticks": 200}}
+{"id": "tank_bowl_tick", "command": "server.sprint", "args": {"ticks": 200}}
 {"id": "tank_bowl_create", "command": "server.command", "args": {"command": "sophisticatedbackpacks template create thirstout:tank_bowl true", "as": "Dev"}}
 {"id": "tank_bowl_export", "command": "server.command", "args": {"command": "sophisticatedbackpacks template export thirstout:tank_bowl", "as": "Dev"}}
 

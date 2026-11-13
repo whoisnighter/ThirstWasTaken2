@@ -15,7 +15,7 @@
 // 30, at the block on 0 200 2. A bottle or bucket used on a block comes back in the hand when it is the
 // only one held.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}

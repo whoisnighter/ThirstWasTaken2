@@ -505,12 +505,7 @@ final class ClientProbes {
             Minecraft minecraft = client();
             if (minecraft.level == null) throw new AgentException("client.disconnect: no world is loaded");
             reply.ok();
-            //? if >=1.20.5 {
-            minecraft.disconnect(new TitleScreen(), false);
-            //?} else {
-            /*minecraft.level.disconnect();
-            minecraft.clearLevel(new TitleScreen());
-            *///?}
+            AgentClientVanilla.leaveWorld(minecraft);
         });
 
         dispatcher.register("client.connect", (request, reply) -> {

@@ -16,7 +16,7 @@
 // The player stands at 0.5 200 0.5 looking south at pitch 30, at the Sink on 0 200 2. The (white) Oven is on
 // 4 200 4, out of the way, and is filled through its block entity data.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "forceload", "command": "server.command", "args": {"command": "forceload add -8 -8 8 8"}}

@@ -12,7 +12,7 @@
 //     ./gradlew ":1.20.1-forge:runClient" -Pagent=tools/agent/integrations/miners-delight-create-1.20.1.jsonl -Pquickplay=MinersAgent
 //     python tools/agent/drive.py run/1.20.1-forge/agent/client tools/agent/integrations/miners-delight-create-1.20.1.jsonl --verify --max-age 15
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "forceload", "command": "server.command", "args": {"command": "forceload add -8 -8 8 8"}}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 600 0 true"}}

@@ -26,7 +26,7 @@
 // Beer takes 9600 ticks, so the fermenting cases run them with server.sprint, which answers as soon
 // as the server has: the whole script takes a minute or two on top of the game's start.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "arrived", "command": "client.state"}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}

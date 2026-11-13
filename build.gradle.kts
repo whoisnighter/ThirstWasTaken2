@@ -122,9 +122,11 @@ loom {
     runConfigs.all {
         // `-Pagent=<file>` answers that file of agent requests once the game is up and then stops it,
         // which is what an unattended run is. Without it the agent is still there, waiting on
-        // run/<node>/agent/<side>/in.jsonl. See src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md.
-        providers.gradleProperty("agent").orNull?.let { script ->
-            systemProperties.put("thirstwastaken2.agent.script", rootProject.file(script).absolutePath)
+        // run/<node>/agent/<side>/in.jsonl. Several files, comma separated, run back to back in one
+        // launch. See src/dev/java/com/thirstwastaken2/dev/agent/AGENTS.md.
+        providers.gradleProperty("agent").orNull?.let { scripts ->
+            systemProperties.put("thirstwastaken2.agent.script", scripts.split(',').filter { it.isNotBlank() }
+                .joinToString(",") { rootProject.file(it.trim()).absolutePath })
             systemProperties.put("thirstwastaken2.agent.script.exit", "true")
         }
 

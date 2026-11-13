@@ -10,7 +10,7 @@
 // Asparagus Soup is a water bucket, asparagus and a leafy green. A Cooking Pot holds its six
 // ingredients in slots 0 to 5 and shows the finished meal in slot 6 until a bowl takes it.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 120 0 true"}}
 {"id": "view", "command": "server.command", "args": {"command": "tp @p 0.5 200 -3.5 0 25"}}

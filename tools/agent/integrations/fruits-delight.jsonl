@@ -14,7 +14,7 @@
 // Create 6 tests a basin's fluid with NeoForge's SizedFluidIngredient on the fluid alone, so every grade
 // and sea water mix into juice there, which the code already says.
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
 {"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
 {"id": "difficulty", "command": "server.command", "args": {"command": "difficulty normal"}}

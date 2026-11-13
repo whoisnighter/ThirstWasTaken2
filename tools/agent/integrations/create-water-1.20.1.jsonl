@@ -12,7 +12,7 @@
 //     python tools/agent/new_world.py 1.20.1-forge CreateAgent
 //     ./gradlew ":1.20.1-forge:runClient" -Pagent=tools/agent/integrations/create-water-1.20.1.jsonl -Pquickplay=CreateAgent
 
-{"id": "load", "command": "wait", "args": {"ticks": 400}}
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
 {"id": "joined", "command": "client.state"}
 {"id": "effects", "command": "server.command", "args": {"command": "effect clear @p"}}
 {"id": "float", "command": "server.command", "args": {"command": "effect give @p minecraft:slow_falling 600 0 true"}}
