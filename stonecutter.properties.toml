@@ -147,8 +147,8 @@ deps.farmersdelight = "1.21.1-3.3.6"
 # version. Moonlight is named separately because Supplementaries' jar does not contain it and every
 # class the integration touches is Moonlight's. Both are pinned by Modrinth version id, since their
 # Fabric and NeoForge uploads share a version number. See src/main/supplementaries/AGENTS.md.
-# 1.21.1-4.0.2, the Fabric upload.
-deps.supplementaries = "CjTooKpp"
+# 1.21.1-4.1.1, the Fabric upload.
+deps.supplementaries = "3QNMpqj6"
 # 1.21.1-3.8.3, the Fabric upload.
 deps.moonlight = "uANIaPO7"
 # Kaleidoscope Cookery Refabricated, the unofficial Fabric port with the official team's permission:
@@ -226,8 +226,8 @@ deps.bountiful_fares = "7SStqCZU"
 # 1.2.0, the Fabric upload.
 deps.nexuslib = "15AB8yjE"
 # Architectury API, which every Let's Do mod requires, only on the runClient classpath.
-# 13.0.11+fabric, the Fabric upload.
-deps.architectury = "Pzc2FP5K"
+# 13.0.12+fabric, the Fabric upload.
+deps.architectury = "WklfM1A0"
 # Serene Seasons, whose calendar speeds the thirst drain up in summer and slows it in winter. Every
 # node builds it, on both loaders. Pinned by Modrinth version id, since its uploads for different
 # loaders and Minecraft versions share version numbers. See src/main/sereneseasons/AGENTS.md.
@@ -273,8 +273,8 @@ deps.sophisticated_backpacks = "tJnK2DE1"
 # 1.21.1-1.6.18.2229, only on the runClient classpath, to check the Drinking upgrade in a placed storage.
 deps.sophisticated_storage = "ZviRSUKL"
 # Supplementaries and Moonlight Lib, the same integration the Fabric table builds; see there.
-# 1.21.1-4.0.2, the NeoForge upload.
-deps.supplementaries = "rWq0ko29"
+# 1.21.1-4.1.1, the NeoForge upload.
+deps.supplementaries = "ry2Njtnv"
 # 1.21.1-3.8.3, the NeoForge upload.
 deps.moonlight = "yBea1yLM"
 # Kaleidoscope Cookery, the official NeoForge build, which the Fabric tables' Refabricated is a port of.
@@ -326,8 +326,8 @@ deps.spelunkery = "rFDQXIT4"
 deps.bountiful_fares = "w8uM2PS4"
 # 1.2.0, the NeoForge upload.
 deps.nexuslib = "KZh9Z9Sd"
-# 13.0.11+neoforge, the NeoForge upload.
-deps.architectury = "1IiqEQGl"
+# 13.0.12+neoforge, the NeoForge upload.
+deps.architectury = "xGfBrBzj"
 # Cold Sweat, whose temperature drives the thirst drain and whose waterskin carries a grade. NeoForge
 # only, and nothing past 1.21.1, so no other table sets it. See src/main/coldsweat/AGENTS.md.
 # 2.4.5, the NeoForge upload.
@@ -370,8 +370,8 @@ deps.hearth_and_harvest = "hOEbGYD8"
 # Extra Delight, whose jars, kegs, vat and mixing bowl keep a water's grade, whose tap and sink stop
 # making Clean water from nothing, and whose recipes take no sea water. NeoForge 1.21.1 is its only
 # official build. See src/main/extradelight/AGENTS.md.
-# 2.7, the NeoForge upload.
-deps.extra_delight = "zUBFUbzl"
+# 2.7.1, the NeoForge upload.
+deps.extra_delight = "qoAnW1in"
 # Serene Seasons and GlitchCore, the same integration the Fabric table builds; see there.
 # 10.1.0.9, the NeoForge upload.
 deps.serene_seasons = "pHEgQQUE"
@@ -633,7 +633,7 @@ mod.mc_compat = "[26.3,26.4)"
 # NeoForge has published only betas for 26.3. The lower bound players need, like every deps.neoforge.
 deps.neoforge = "26.3.0.83"
 # The newest build, for the deps pull request only; see deps.fabric_loader_latest.
-deps.neoforge_latest = "26.3.0.102"
+deps.neoforge_latest = "26.3.0.103"
 # 3.0.10+mc26.3, the NeoForge upload. Pinned by Modrinth version id for the reason the 26.2 table gives.
 deps.appleskin = "6vok7cLb"
 deps.jade = "26.3.5+neoforge"
