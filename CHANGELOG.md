@@ -2,11 +2,11 @@
 
 All notable changes to ThirstWasTaken2 are documented in this file.
 
-## [Unreleased]
+## [1.11.1] - 2026-11-16
 
 ### Fixed
 
-- Kaleidoscope Cookery Refabricated 1.6.0.9 no longer crashes the game at launch on Fabric. A teapot
+- Kaleidoscope Cookery Refabricated 1.6.0.9 no longer crashes the game at launch on Fabric. Its Teapot
   picked up with water in it still keeps the grade of that water.
 
 ## [1.11.0] - 2026-11-13
