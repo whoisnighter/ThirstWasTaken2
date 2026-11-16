@@ -19,8 +19,8 @@ more, and there is no build newer than 1.21.1.
 
 | Node | Build | Modrinth id | Requires on `runClient` |
 |---|---|---|---|
-| `1.21.1` | `1.21.1-0.4.4` Fabric | `V5n3AoVN` | Moonlight Lib, already pinned for Supplementaries |
-| `1.21.1-neoforge` | `1.21.1-0.4.4` NeoForge | `rFDQXIT4` | Moonlight Lib, already pinned |
+| `1.21.1` | `1.21.1-0.4.5` Fabric | `EoItgBRY` | Moonlight Lib, already pinned for Supplementaries |
+| `1.21.1-neoforge` | `1.21.1-0.4.5` NeoForge | `A9ac6DN7` | Moonlight Lib, already pinned |
 | every other node | none | — | — |
 
 ## What Spelunkery already does for thirst

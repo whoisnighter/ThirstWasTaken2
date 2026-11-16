@@ -20,8 +20,8 @@ newer than 1.21.1.
 
 | Node | Build | Modrinth id | Requires on `runClient` |
 |---|---|---|---|
-| `1.21.1` | `1.1.26` Fabric | `isj5qmqa` | Architectury API (built against `13.0.8`; newest `13.0.11+fabric`, `Pzc2FP5K`), Cloth Config (we already pin `15.0.140+fabric`) |
-| `1.21.1-neoforge` | `1.1.26` NeoForge | `Y8Uh3mlO` | Architectury API (`13.0.11+neoforge`, `1IiqEQGl`) |
+| `1.21.1` | `1.1.26` Fabric | `isj5qmqa` | Architectury API (built against `13.0.8`; newest `13.0.12+fabric`, `WklfM1A0`), Cloth Config (we already pin `15.0.140+fabric`) |
+| `1.21.1-neoforge` | `1.1.26` NeoForge | `Y8Uh3mlO` | Architectury API (`13.0.12+neoforge`, `xGfBrBzj`) |
 | every other node | none | — | — |
 
 The mod is written once in Architectury's `common` module, so the classes the integration touches
