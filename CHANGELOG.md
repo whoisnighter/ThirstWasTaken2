@@ -2,6 +2,13 @@
 
 All notable changes to ThirstWasTaken2 are documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Kaleidoscope Cookery Refabricated 1.6.0.9 no longer crashes the game at launch on Fabric. A teapot
+  picked up with water in it still keeps the grade of that water.
+
 ## [1.11.0] - 2026-11-13
 
 Cooking for Blockheads' Sink stops handing out Clean water for free, Little Logistics' tanks keep the

@@ -180,7 +180,11 @@ Vanilla's own differences go through `Vanilla`: the item's block entity data (`p
   failing, as they must there. On 2026-10-09 `1.21.11` also failed `freshBrews` and `seaKeepsBag`, with
   1.3.0.9 and 1.3.0.10 alike, so not from the bump: neither teapot set up from block data on magma
   brews or keeps its bag there. Not yet looked into. Run again on the four Fabric nodes after the pins moved to
-  Refabricated 1.5.1, with the same result. Make its world with `tools/agent/new_world.py`, which
+  Refabricated 1.5.1, with the same result. Refabricated 1.6.0.9 moved `getDrops` into a private
+  `getDrops(boolean)`, which crashed 1.11.0 at launch until the selector took every overload, and
+  swapped the empty-hand uses: a sneaking one takes the teapot, so the script tries both. On
+  2026-11-16 it passed whole on `1.21.1` and `1.21.1-neoforge`, and on `26.3.x` but for the two
+  dripstone lines. Make its world with `tools/agent/new_world.py`, which
   also copies the `data/minecraft` files 26.x keeps its world generation settings in.
 - [tools/agent/integrations/kaleidoscope-cookery-1.20.1.jsonl](../../../tools/agent/integrations/kaleidoscope-cookery-1.20.1.jsonl)
   is the same script in 1.20.1's NBT. Every one of its 26 checks passed on `1.20.1` (Refabricated

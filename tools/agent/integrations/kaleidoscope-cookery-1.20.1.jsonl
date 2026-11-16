@@ -118,6 +118,10 @@
 {"id": "pouredE", "command": "wait", "args": {"ticks": 10}}
 {"id": "teapotCGraded", "command": "server.command", "args": {"command": "execute if data block 8 200 0 {TeaFluidId:\"minecraft:water\",\"thirstwastaken2:water_quality\":2}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "emptyHandE", "command": "server.command", "args": {"command": "clear @p"}}
+// Picked up with an empty hand, sneaking first, then not: Refabricated 1.6.0.9 takes the teapot on a
+// sneaking use, the Forge build and older Refabricated on a plain one. See kaleidoscope-cookery.jsonl.
+{"id": "takeSneakE", "command": "client.hold", "args": {"keys": ["sneak", "use"], "ticks": 8}}
+{"id": "betweenE", "command": "wait", "args": {"ticks": 10}}
 {"id": "takeE", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "takenE", "command": "wait", "args": {"ticks": 20}}
 {"id": "teapotGone", "command": "server.command", "args": {"command": "execute if block 8 200 0 minecraft:air"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}

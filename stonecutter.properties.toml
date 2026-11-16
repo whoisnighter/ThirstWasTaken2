@@ -35,8 +35,8 @@ deps.serene_seasons = "GICZwCsE"
 # 0.0.1.1, the Fabric upload.
 deps.glitchcore = "25HLOiOl"
 # Kaleidoscope Cookery Refabricated; see [fabric."1.21.1"].
-# 1.6.0.8-fabric+mc1.20.1, the Fabric upload.
-deps.kaleidoscope_cookery = "V20zzvcs"
+# 1.6.0.9-fabric+mc1.20.1, the Fabric upload.
+deps.kaleidoscope_cookery = "ReRZM8PP"
 # Forge Config API Port, which it requires here, only on the runClient classpath.
 # v8.0.3-1.20.1-Fabric, the Fabric upload.
 deps.forge_config_api_port = "HvR3IdRE"
@@ -156,8 +156,8 @@ deps.moonlight = "uANIaPO7"
 # original, so one integration serves both. Pinned by Modrinth version id, since the Fabric uploads of
 # different Minecraft versions share one version number. See
 # docs/dev/integration/cooking/KALEIDOSCOPE-COOKERY-INTEGRATION.md.
-# 1.6.0.8-fabric+mc1.21.1, the Fabric upload.
-deps.kaleidoscope_cookery = "AQoKaczp"
+# 1.6.0.9-fabric+mc1.21.1, the Fabric upload.
+deps.kaleidoscope_cookery = "JHI49bug"
 # Forge Config API Port, which Kaleidoscope Cookery requires here, only on the runClient classpath.
 # v21.1.6-1.21.1-Fabric, the Fabric upload.
 deps.forge_config_api_port = "N5qzq0XV"
@@ -453,8 +453,8 @@ deps.farmersdelight = "26.1-3.6.30"
 deps.create_fly = "26.1.2-6.0.9-4"
 # Kaleidoscope Cookery Refabricated, as in the 1.21.1 table. Forge Config API Port is optional from
 # 26.1 on, so it is not named here.
-# 1.6.0.8-fabric+mc26.1.2, the Fabric upload.
-deps.kaleidoscope_cookery = "ay4H3A23"
+# 1.6.0.9-fabric+mc26.1.2, the Fabric upload.
+deps.kaleidoscope_cookery = "jrnadXkk"
 # Kaleidoscope Tavern Refabricated, as in the 1.21.1 table. It needs no Forge Config API Port from
 # 26.1 on.
 # 1.2.0.14-fabric+mc26.1.2, the Fabric upload.
@@ -533,8 +533,8 @@ deps.farmersdelight = "26.2-3.6.30"
 # src/main/createfly/AGENTS.md. Its version numbers carry the Minecraft version as a prefix too.
 deps.create_fly = "26.2-rc-2-6.0.9-1"
 # Kaleidoscope Cookery Refabricated, as in the 26.1.x table.
-# 1.6.0.8-fabric+mc26.2, the Fabric upload.
-deps.kaleidoscope_cookery = "qDGUWEp4"
+# 1.6.0.9-fabric+mc26.2, the Fabric upload.
+deps.kaleidoscope_cookery = "4wHT06v6"
 # Kaleidoscope Tavern Refabricated, as in the 26.1.x table.
 # 1.2.0.14-fabric+mc26.2, the Fabric upload.
 deps.kaleidoscope_tavern = "awGIBfHe"
@@ -610,8 +610,8 @@ deps.farmersdelight = "26.3-3.6.30"
 # No `deps.create_fly`: Create Fly has no 26.3 port yet, so this node does not compile the Sand
 # Filter. See src/main/createfly/AGENTS.md.
 # Kaleidoscope Cookery Refabricated, as in the 26.1.x table.
-# 1.6.0.8-fabric+mc26.3, the Fabric upload.
-deps.kaleidoscope_cookery = "t4YYs2U3"
+# 1.6.0.9-fabric+mc26.3, the Fabric upload.
+deps.kaleidoscope_cookery = "9DVxyClE"
 # Kaleidoscope Tavern Refabricated, as in the 26.1.x table.
 # 1.2.0.14-fabric+mc26.3, the Fabric upload.
 deps.kaleidoscope_tavern = "faSdmcyk"

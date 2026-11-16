@@ -134,11 +134,22 @@
 {"id": "pouredE", "command": "wait", "args": {"ticks": 10}}
 {"id": "teapotCGraded", "command": "server.command", "args": {"command": "execute if data block 8 200 0 {TeaFluidId:\"minecraft:water\",\"thirstwastaken2:water_quality\":2}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "emptyHandE", "command": "server.command", "args": {"command": "clear @p"}}
+// Picked up with an empty hand. Refabricated 1.6.0.9 swapped the two empty-hand uses: sneaking now
+// takes the teapot and a plain use takes the ingredients out; the official NeoForge build and the
+// older Refabricated ones do it the other way round. So both are tried, sneaking first: on an old
+// build it finds no ingredient to take and the plain use then takes the teapot; on a new build it
+// takes the teapot and the plain use, a teapot in hand looking at stone, scoops nothing. The other
+// order would place the teapot back on an old build, since a teapot places while sneaking. Sneak is
+// held long enough that use repeats after the server knows, as in the placing below.
+{"id": "takeSneakE", "command": "client.hold", "args": {"keys": ["sneak", "use"], "ticks": 8}}
+{"id": "betweenE", "command": "wait", "args": {"ticks": 10}}
 {"id": "takeE", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "takenE", "command": "wait", "args": {"ticks": 20}}
 {"id": "teapotGone", "command": "server.command", "args": {"command": "execute if block 8 200 0 minecraft:air"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "teapotItem", "command": "server.command", "args": {"command": "data get entity @p SelectedItem"}}
-{"id": "itemKeepsGrade", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand kaleidoscope_cookery:teapot[minecraft:block_entity_data={id:\"kaleidoscope_cookery:teapot\",TeaFluidId:\"minecraft:water\",\"thirstwastaken2:water_quality\":2}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+// Matched in part: Refabricated 1.6.0.9 also writes CurrentTick into the item, which an items
+// predicate on the whole component would refuse.
+{"id": "itemKeepsGrade", "command": "server.command", "args": {"command": "execute if data entity @p SelectedItem{id:\"kaleidoscope_cookery:teapot\",components:{\"minecraft:block_entity_data\":{TeaFluidId:\"minecraft:water\",\"thirstwastaken2:water_quality\":2}}}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 // Placed from one block north, looking down at the floor just south of the player's feet. The teapot
 // only places while sneaking. Sneak and use are held together for long enough that use repeats, four
 // ticks on, after the server has been told the player sneaks: the first use of the hold reaches it

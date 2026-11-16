@@ -92,16 +92,19 @@ abstract class TeapotBlockEntityMixin implements BrewedWater {
      * The teapot picked up with water in it: {@code getDrops} builds the item's tag from nothing, holding
      * only the fluid id. A finished teapot writes a tag too, but holds no water, so nothing is added there.
      * The call is Minecraft's, so its target is remapped; from 1.21.11 it is handed a {@code TagValueOutput}.
+     * Refabricated 1.6.0.9 moved the body into a private {@code getDrops(boolean)} that the public one
+     * calls, so the selector takes every overload: a name alone takes only the first, found nothing to
+     * change there, and failed the game at load. Both drops calls are in whichever overload holds the body.
      */
     //? if >1.21.1 {
-    @ModifyArg(method = "getDrops", at = @At(value = "INVOKE", remap = true,
+    @ModifyArg(method = "getDrops*", at = @At(value = "INVOKE", remap = true,
             target = "Lnet/minecraft/world/item/BlockItem;setBlockEntityData(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/storage/TagValueOutput;)V"),
             index = 2)
     private net.minecraft.world.level.storage.TagValueOutput thirst$keepGradeInItem(net.minecraft.world.level.storage.TagValueOutput output) {
         return BrewedWaterQuality.saved(output, output::putInt, thirst$heldWater());
     }
     //?} else {
-    /*@ModifyArg(method = "getDrops", at = @At(value = "INVOKE", remap = true,
+    /*@ModifyArg(method = "getDrops*", at = @At(value = "INVOKE", remap = true,
             target = "Lnet/minecraft/world/item/BlockItem;setBlockEntityData(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/nbt/CompoundTag;)V"),
             index = 2)
     private net.minecraft.nbt.CompoundTag thirst$keepGradeInItem(net.minecraft.nbt.CompoundTag tag) {
