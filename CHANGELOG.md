@@ -2,6 +2,18 @@
 
 All notable changes to ThirstWasTaken2 are documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Hexalia, on Fabric and NeoForge 1.21.1, Fabric and Forge 1.20.1: its brews restore thirst, the same
+  as a cup of tea.
+
+### Fixed
+
+- Hexalia 1.3.8.1 or older no longer crashes the game at launch on 1.20.1. The Brew of Bloodlust still
+  stops natural healing.
+
 ## [1.11.1] - 2026-11-16
 
 ### Fixed

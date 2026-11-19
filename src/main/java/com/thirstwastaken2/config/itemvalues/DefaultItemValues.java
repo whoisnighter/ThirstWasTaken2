@@ -69,6 +69,7 @@ public final class DefaultItemValues {
         OtherModItemValues.bountifulFaresDrinks(values);
         LetsDoItemValues.meadowDrinks(values);
         FarmersDelightAddonItemValues.youkaisFeastsDrinks(values);
+        OtherModItemValues.hexaliaDrinks(values);
         return values;
     }
 
@@ -197,6 +198,8 @@ public final class DefaultItemValues {
         // And for Youkais' Feasts, added after that.
         FarmersDelightAddonItemValues.youkaisFeastsDrinks(drinks);
         FarmersDelightAddonItemValues.youkaisFeastsFoods(foods);
+        // And for Hexalia, added after that.
+        OtherModItemValues.hexaliaDrinks(drinks);
     }
 
     static void put(Map<String, int[]> values, int thirst, int quenched, String... ids) {

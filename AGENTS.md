@@ -290,6 +290,7 @@ water is collected, drunk or looked at with Jade, never on a tick or tooltip pat
 | Immersive Engineering: the plan, its decisions and what was found in game (1.21.1 NeoForge, 1.20.1 Forge) | [docs/dev/integration/storage/IMMERSIVE-ENGINEERING-INTEGRATION.md](docs/dev/integration/storage/IMMERSIVE-ENGINEERING-INTEGRATION.md) |
 | Bountiful Fares: the plan, its decisions and what was found in game (both 1.21.1 nodes) | [docs/dev/integration/cooking/BOUNTIFUL-FARES-INTEGRATION.md](docs/dev/integration/cooking/BOUNTIFUL-FARES-INTEGRATION.md) |
 | Croptopia: the plan, its decisions and what was found in game (every node it builds for) | [docs/dev/integration/cooking/CROPTOPIA-INTEGRATION.md](docs/dev/integration/cooking/CROPTOPIA-INTEGRATION.md) |
+| Hexalia: the Bloodlust crash (issue #66), its brews, and the Small Cauldron still open (both 1.21.1, both 1.20.1) | [docs/dev/integration/magic/HEXALIA-INTEGRATION.md](docs/dev/integration/magic/HEXALIA-INTEGRATION.md) |
 | Bad-water sickness rework: the design | [docs/dev/mechanics/WATER-SICKNESS.md](docs/dev/mechanics/WATER-SICKNESS.md) |
 | Bad-water sickness rework: where the code goes, step by step | [docs/dev/mechanics/WATER-SICKNESS-IMPLEMENTATION.md](docs/dev/mechanics/WATER-SICKNESS-IMPLEMENTATION.md) |
 | Releasing | [tools/release/publish.py](tools/release/publish.py) and [publish_curseforge.py](tools/release/publish_curseforge.py) docstrings |

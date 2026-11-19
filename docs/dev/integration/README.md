@@ -11,6 +11,7 @@ record. Small integrations with only thirst values in `ThirstConfig` have no pla
 | [`storage/`](storage/) | Mods that move water in tanks, jars and upgrades |
 | [`climate/`](climate/) | Mods that change the drain: temperature and seasons |
 | [`world/`](world/) | Overworld overhauls: new biomes whose water we grade, and what they add to drink |
+| [`magic/`](magic/) | Magic mods: brews, and effects that reach into healing |
 
 | Mod | Plan | Code | Nodes | State |
 |---|---|---|---|---|
@@ -39,6 +40,7 @@ record. Small integrations with only thirst values in `ThirstConfig` have no pla
 | Serene Seasons | [climate/SERENE-SEASONS](climate/SERENE-SEASONS-INTEGRATION.md) | `src/main/sereneseasons` | every node | see plan |
 | Spelunkery | [world/SPELUNKERY](world/SPELUNKERY-INTEGRATION.md) | `src/main/spelunkery` | both 1.21.1 | see plan |
 | No Man's Land | [world/NO-MANS-LAND](world/NO-MANS-LAND-INTEGRATION.md) | `src/main/nomansland` | `1.21.1-neoforge` | built |
+| Hexalia | [magic/HEXALIA](magic/HEXALIA-INTEGRATION.md) | `mixin/FoodDataMixin`, `config/itemvalues/OtherModItemValues` | both 1.21.1, both 1.20.1 | built; Small Cauldron open |
 
 On 1.20.1, Sophisticated, Supplementaries and Brewin' and Chewin' have Forge builds but are not
 integrated there: they wait for someone to ask.

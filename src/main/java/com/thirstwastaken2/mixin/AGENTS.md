@@ -62,9 +62,12 @@ The two cauldron fill hooks inject at `RETURN`, not `TAIL`: vanilla returns earl
 fails, and only `RETURN` covers every exit. Both call into `WaterInteractions`, which decides from
 the before and after blockstates whether any water was actually added.
 
-`FoodDataMixin` uses `@Redirect` with `ordinal = 0` (saturation-driven regen) and `ordinal = 1`
-(hunger-driven regen). Redirecting means vanilla's `heal` is *not* called unless the mixin calls it, so
-every branch must either heal or refund exhaustion — dropping both would let hunger drain for free.
+`FoodDataMixin` uses `@WrapOperation` with `ordinal = 0` (saturation-driven regen) and `ordinal = 1`
+(hunger-driven regen). Wrapping means vanilla's `heal` is *not* called unless the mixin calls the
+`Operation`, so every branch must either heal or refund exhaustion — dropping both would let hunger
+drain for free. It was a `@Redirect` until issue #66: Hexalia before 1.3.8.2 redirected the same call
+for its Bloodlust, and two redirects of one call crash at load. A wrap chains with another mod's wrap
+or redirect, so never turn it back into one.
 
 `@Unique` fields on an item mixin live on the shared item singleton, not per stack. `FillCapture`
 therefore uses `ThreadLocal`: integrated-client prediction and the server may call the same item

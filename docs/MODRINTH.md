@@ -420,6 +420,12 @@ Also works with:
     <td>yes</td>
   </tr>
   <tr>
+    <td><img alt="Hexalia icon" src="https://cdn.modrinth.com/data/bkz5C0dQ/74babb7a89589b71c8ebd07fa126b929481087ac_96.webp" width="20" height="20" align="absmiddle"> <a href="https://modrinth.com/mod/hexalia">Hexalia</a></td>
+    <td>1.20.1, 1.21.1</td>
+    <td>1.21.1</td>
+    <td>yes</td>
+  </tr>
+  <tr>
     <td><img alt="Rustic Delight icon" src="https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2Ffoa4fGIH%2Feecc99e281522f2291081c48176f0faa84c107bc.png&amp;trim=1&amp;w=96&amp;h=96&amp;fit=contain&amp;cbg=00000000&amp;output=png" width="24" height="24" align="absmiddle"> <a href="https://whoisnighter.github.io/ThirstWasTaken2/docs/integrations/farmers-delight/rustic-delight">Rustic Delight</a></td>
     <td>1.21.1 and newer</td>
     <td>1.21.1</td>

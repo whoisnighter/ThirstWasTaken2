@@ -5,8 +5,8 @@ import java.util.Map;
 import static com.thirstwastaken2.config.itemvalues.DefaultItemValues.putMissing;
 
 /**
- * What the drinks and foods of the mods of no family here: Cold Sweat, Hearth and Harvest, No Man's Land, Croptopia and
- * Bountiful Fares. restore by default. Every entry goes in with
+ * What the drinks and foods of the mods of no family here: Cold Sweat, Hearth and Harvest, No Man's Land, Croptopia,
+ * Bountiful Fares and Hexalia restore by default. Every entry goes in with
  * {@code putIfAbsent}, so one call fills a fresh config and brings an older file up to date without
  * overwriting a player's edit. {@link DefaultItemValues} calls them, in the order that keeps a new
  * file's entries where they always were.
@@ -140,6 +140,20 @@ final class OtherModItemValues {
         putMissing(drinks, 5, 2, mod + "mead_bottle", "nomansland:maple_mead_bottle");
         putMissing(drinks, 3, 1, mod + "elderberry_wine_bottle", mod + "lapisberry_wine_bottle");
         putMissing(drinks, 4, 0, mod + "coconut_milk_bottle");
+    }
+
+    /**
+     * Hexalia's brews, by id alone: one mod id on 1.20.1 and 1.21.1, both loaders; Gravebloom is 1.21.1's
+     * only. Herbs steeped and drunk from a rustic bottle, so a tea's worth, whatever the brew does.
+     * Nothing else of the mod is touched: its salt is in {@code c:salt}, which the distiller already
+     * reads, and its Bloodlust stop on natural healing wraps the same {@code heal} call as
+     * {@code FoodDataMixin} (issue #66).
+     */
+    static void hexaliaDrinks(Map<String, int[]> drinks) {
+        String mod = "hexalia:";
+        for (String brew : new String[]{"homestead", "bloodlust", "slimewalker", "spikeskin", "siphon", "daybloom", "gravebloom", "arachnid_grace", "hollow_silence"}) {
+            putMissing(drinks, 6, 4, mod + "brew_of_" + brew);
+        }
     }
 
     /**
