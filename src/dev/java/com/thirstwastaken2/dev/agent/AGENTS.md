@@ -136,6 +136,10 @@ still plain `wait`; convert them as each is next run. The two:
   runs the server ahead of a client that still ticks at 20 a second, so a screen opening, an inventory
   syncing or a key held keeps a short `wait`. `/tick` came in 1.20.3, so on the 1.20.1 nodes the command
   goes unanswered by the server and `server.sprint` lasts as long as a `wait` of the same ticks would.
+- **`server.fluid.fill`** pours water of a grade (`purity` 0 to 3, or `salty`) into the block at `x y z`
+  through the loader's block fluid capability, committed, the way a pipe does (`DevLoader.fillFluid`),
+  and answers how much went in, -1 when the block takes no fluid. For another mod's tank that only a
+  pipe mod would otherwise reach. On Fabric `amount` is in mB and sent as droplets.
 
 ### Several scripts in one launch
 

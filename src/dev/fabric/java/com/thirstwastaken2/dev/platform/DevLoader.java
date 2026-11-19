@@ -44,6 +44,23 @@ public final class DevLoader {
         ServerLifecycleEvents.SERVER_STARTED.register(handler::accept);
     }
 
+    /**
+     * Pours {@code amount} mB of water of {@code quality} into the block at {@code pos} through this
+     * loader's block fluid capability, from above, committed: the way a pipe fills a tank. Returns how much
+     * went in, in mB, or -1 when the block offers no such capability. Server thread only.
+     */
+    public static int fillFluid(net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos,
+                                com.thirstwastaken2.purity.WaterQuality quality, int amount) {
+        var storage = net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage.SIDED.find(level, pos, net.minecraft.core.Direction.UP);
+        if (storage == null) return -1;
+        long droplets = net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET / 1000;
+        try (var transaction = net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()) {
+            long filled = storage.insert(com.thirstwastaken2.platform.FabricTransfer.water(quality), amount * droplets, transaction);
+            transaction.commit();
+            return (int) (filled / droplets);
+        }
+    }
+
     /** Runs as the server shuts down, while the world is still there. */
     public static void onServerStopping(Consumer<MinecraftServer> handler) {
         ServerLifecycleEvents.SERVER_STOPPING.register(handler::accept);

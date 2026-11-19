@@ -17,7 +17,10 @@ import java.util.Set;
 
 /**
  * Applies {@code thirstwastaken2.cookingforblockheads.mixins.json} only where Cooking for Blockheads is
- * installed and its Sink still declares the method the mixin hooks.
+ * installed, and each mixin only to the targets that exist: the Sink's block, block entity and tank, and
+ * whichever of Balm's fluid wrappers this version of Balm has. The click mixin also needs the Sink to still
+ * declare the method it hooks. Balm is installed without Cooking for Blockheads by other mods, and its
+ * wrappers are left alone then.
  *
  * <p>Names no class of the mod, no Minecraft class and no loader: the target is looked up as a resource
  * and its methods read off the class file, neither of which loads a class, so this can be asked before
@@ -41,10 +44,16 @@ public final class CookingForBlockheadsMixinPlugin implements IMixinConfigPlugin
         return null;
     }
 
+    /** The Sink's block, present wherever Cooking for Blockheads is, on every version. */
+    private static final String SINK_BLOCK = "net/blay09/mods/cookingforblockheads/block/SinkBlock.class";
+
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        ClassLoader loader = CookingForBlockheadsMixinPlugin.class.getClassLoader();
+        if (loader.getResource(SINK_BLOCK) == null) return false;
         String resource = targetClassName.replace('.', '/') + ".class";
-        try (InputStream in = CookingForBlockheadsMixinPlugin.class.getClassLoader().getResourceAsStream(resource)) {
+        if (!mixinClassName.endsWith(".SinkBlockMixin")) return loader.getResource(resource) != null;
+        try (InputStream in = loader.getResourceAsStream(resource)) {
             if (in == null) return false;
             boolean[] found = {false};
             new ClassReader(in).accept(new ClassVisitor(Opcodes.ASM9) {

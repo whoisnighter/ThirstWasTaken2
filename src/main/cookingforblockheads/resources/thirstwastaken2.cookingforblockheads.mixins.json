@@ -4,7 +4,12 @@
   "plugin": "com.thirstwastaken2.cookingforblockheads.CookingForBlockheadsMixinPlugin",
   "compatibilityLevel": "${java}",
   "mixins": [
-    "SinkBlockMixin"
+    "BalmFluidHandlerMixin",
+    "BalmFluidStorageMixin",
+    "BalmResourceHandlerMixin",
+    "SinkBlockEntityMixin",
+    "SinkBlockMixin",
+    "SinkTankMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -93,6 +93,26 @@ public final class Loader {
         return ModList.get().isLoaded(modId);
     }
 
+    /**
+     * The water a fluid of this loader's fluid API carries: {@code defaultQuality} when it records no
+     * grade, {@code null} for anything but water, or for an object that is not such a fluid. Here a
+     * {@code FluidStack}, or from 1.21.2 the transfer API's {@code FluidResource}. For integration mixins
+     * on another mod's fluid wrapper, which hold it as {@code Object} so that a class both loaders
+     * compile names neither.
+     */
+    public static com.thirstwastaken2.purity.WaterQuality waterIn(Object fluid) {
+        if (fluid instanceof net.neoforged.neoforge.fluids.FluidStack stack) {
+            return com.thirstwastaken2.neoforge.WaterFluids.isWater(stack) ? com.thirstwastaken2.neoforge.WaterFluids.quality(stack) : null;
+        }
+        //? if >=1.21.2 {
+        if (fluid instanceof net.neoforged.neoforge.transfer.fluid.FluidResource resource) {
+            return com.thirstwastaken2.neoforge.WaterFluidResources.isWater(resource)
+                    ? com.thirstwastaken2.neoforge.WaterFluidResources.quality(resource) : null;
+        }
+        //?}
+        return null;
+    }
+
     /** The name a mod gives itself, or {@code modId} when no mod has that id. */
     public static String modName(String modId) {
         return ModList.get().getModContainerById(modId).map(mod -> mod.getModInfo().getDisplayName()).orElse(modId);

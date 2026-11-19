@@ -401,6 +401,8 @@ dependencies {
         // The Sink mixin names the mod's block. In runClient with the Balm it requires, on by default, as on
         // Fabric; see build.gradle.kts and src/main/cookingforblockheads/AGENTS.md.
         compileOnly("maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        // Its Sink's block entity extends Balm's on 1.21.1, and the tank mixin names that block entity.
+        compileOnly("maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }
         val names = listOf("cooking-for-blockheads", "cookingforblockheads", "balm")
         runClientMod(names, "maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
         runClientMod(names, "maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }

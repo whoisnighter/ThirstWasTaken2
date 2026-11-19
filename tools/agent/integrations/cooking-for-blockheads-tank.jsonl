@@ -1,0 +1,103 @@
+// Cooking for Blockheads' Sink as a tank, sinkRequiresWater = true (src/main/cookingforblockheads/AGENTS.md).
+// What it proves: water piped in keeps its grade, so Pure water piped in comes out Pure in a bottle and a
+// bucket; piped sea water is refused; Dirty water piped into Pure water leaves the tank Dirty; a Pure bucket
+// poured by hand into an empty Sink makes it Pure; and the grade is saved with the Sink and loaded back.
+// "Piped" is server.fluid.fill, which pours through the loader's block fluid capability, the way a pipe
+// does, so it goes through Balm's wrapper. Runs on every node from 1.21.1 (1.20.1 has no item components
+// for these commands). The run's config must have the tank: in run/<node>/config/cookingforblockheads-common.toml
+// (cookingforblockheads-local.toml on NeoForge 26.x) set sinkRequiresWater = true before the run, and put it
+// back after, since cooking-for-blockheads.jsonl tests the endless tap. Run it unattended:
+//     ./gradlew ":26.3.x:runClient" -Pagent=tools/agent/integrations/cooking-for-blockheads-tank.jsonl -Pquickplay=CfbAgent
+// CfbAgent is a throwaway world, made fresh for each run by
+//     python tools/agent/new_world.py <node> CfbAgent
+// Then check what it recorded:
+//     python tools/agent/drive.py run/<node>/agent/client tools/agent/integrations/cooking-for-blockheads-tank.jsonl --verify --max-age 15
+//
+// The player stands at 0.5 200 0.5 looking south at pitch 30, at the Sink on 0 200 2. The amounts piped are
+// only checked to be more than none: Balm on Fabric counts its tank in the loader's droplets, so its "16
+// buckets" hold about a fifth of a bucket there, and a pipe fills that much.
+
+{"id": "load", "command": "wait_until", "args": {"condition": "world_ready", "maxTicks": 2400}}
+{"id": "alive", "command": "client.state", "expect": {"result.alive": true}}
+{"id": "survival", "command": "server.command", "args": {"command": "gamemode survival @p"}}
+{"id": "forceload", "command": "server.command", "args": {"command": "forceload add -8 -8 8 8"}}
+{"id": "safe", "command": "server.command", "args": {"command": "effect give @p minecraft:resistance 3000 4 true"}}
+{"id": "air", "command": "server.command", "args": {"command": "fill -8 200 -8 8 206 8 minecraft:air"}}
+{"id": "tp0", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 30"}}
+{"id": "chunks", "command": "wait", "args": {"ticks": 40}}
+{"id": "sink", "command": "server.command", "args": {"command": "setblock 0 200 2 cookingforblockheads:sink[facing=north]"}}
+
+// The tank starts empty: a bottle draws nothing, so this is the tank and not the endless tap.
+{"id": "empty_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "empty_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
+{"id": "empty_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "empty_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "empty_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "empty_kept", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:glass_bottle"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// Pure water piped in: two buckets' worth, and the grade is recorded on the Sink.
+{"id": "pure_pipe", "command": "server.fluid.fill", "args": {"x": 0, "y": 200, "z": 2, "purity": 3, "amount": 2000}, "checks": [{"left": "result.filled", "op": "gt", "value": 0}]}
+{"id": "pure_saved", "command": "server.command", "args": {"command": "execute if data block 0 200 2 {thirstwastaken2_grade:3}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "pure_dump", "command": "server.command", "args": {"command": "data get block 0 200 2"}}
+
+// A bottle and a bucket drawn from it are Pure.
+{"id": "pure_bottle_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
+{"id": "pure_bottle_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "pure_bottle_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "pure_bottle_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "pure_bottle", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:potion[thirstwastaken2:water_purity=3,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "pure_bucket_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "pure_bucket_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:bucket"}}
+{"id": "pure_bucket_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "pure_bucket_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "pure_bucket_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "pure_bucket", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:water_bucket[thirstwastaken2:water_purity=3,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// Piped sea water is refused, and leaves the grade alone.
+{"id": "salt_pipe", "command": "server.fluid.fill", "args": {"x": 0, "y": 200, "z": 2, "salty": true, "amount": 1000}, "checks": [{"left": "result.filled", "op": "eq", "value": 0}]}
+{"id": "salt_saved", "command": "server.command", "args": {"command": "execute if data block 0 200 2 {thirstwastaken2_grade:3}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// Dirty water piped into the Pure water left: the tank is Dirty now, and so is what comes out.
+{"id": "dirty_pipe", "command": "server.fluid.fill", "args": {"x": 0, "y": 200, "z": 2, "purity": 0, "amount": 250}, "checks": [{"left": "result.filled", "op": "gt", "value": 0}]}
+{"id": "dirty_saved", "command": "server.command", "args": {"command": "execute if data block 0 200 2 {thirstwastaken2_grade:0}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "dirty_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "dirty_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
+{"id": "dirty_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "dirty_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "dirty_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "dirty_bottle", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:potion[thirstwastaken2:water_purity=0,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// The grade is loaded back with the Sink: data merge goes through its load, as a chunk loading does.
+{"id": "load_merge", "command": "server.command", "args": {"command": "data merge block 0 200 2 {thirstwastaken2_grade:2}"}}
+{"id": "load_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "load_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
+{"id": "load_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "load_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "load_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "load_bottle", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:potion[thirstwastaken2:water_purity=2,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// A fresh, empty Sink, and a Pure bucket poured in by hand: the Sink is Pure, and a bottle drawn is Pure.
+{"id": "hand_reset", "command": "server.command", "args": {"command": "setblock 0 200 2 minecraft:air"}}
+{"id": "hand_sink", "command": "server.command", "args": {"command": "setblock 0 200 2 cookingforblockheads:sink[facing=north]"}}
+{"id": "hand_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "hand_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:water_bucket[thirstwastaken2:water_purity=3,thirstwastaken2:water_salty=false]"}}
+{"id": "hand_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "hand_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "hand_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "hand_emptied", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:bucket"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "hand_saved", "command": "server.command", "args": {"command": "execute if data block 0 200 2 {thirstwastaken2_grade:3}"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "hand_bottle_clear", "command": "server.command", "args": {"command": "clear @p"}}
+{"id": "hand_bottle_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
+{"id": "hand_bottle_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "hand_bottle_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "hand_bottle_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "hand_bottle", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:potion[thirstwastaken2:water_purity=3,thirstwastaken2:water_salty=false]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+
+// A hand-poured sea water bucket is refused here too, and stays in the hand.
+{"id": "hand_salt_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:water_bucket[thirstwastaken2:water_salty=true]"}}
+{"id": "hand_salt_settle", "command": "wait", "args": {"ticks": 10}}
+{"id": "hand_salt_use", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
+{"id": "hand_salt_used", "command": "wait", "args": {"ticks": 10}}
+{"id": "hand_salt_kept", "command": "server.command", "args": {"command": "execute if items entity @p weapon.mainhand minecraft:water_bucket[thirstwastaken2:water_salty=true]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "sinkGone", "command": "server.command", "args": {"command": "setblock 0 200 2 minecraft:air"}}
+{"id": "done", "command": "wait", "args": {"ticks": 10}}

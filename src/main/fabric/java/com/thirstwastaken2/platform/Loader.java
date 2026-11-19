@@ -56,6 +56,17 @@ public final class Loader {
         return FabricLoader.getInstance().isModLoaded(modId);
     }
 
+    /**
+     * The water a fluid of this loader's fluid API carries: {@code defaultQuality} when it records no
+     * grade, {@code null} for anything but water, or for an object that is not such a fluid. Here a
+     * {@code FluidVariant}. For integration mixins on another mod's fluid wrapper, which hold it as
+     * {@code Object} so that a class both loaders compile names neither.
+     */
+    public static com.thirstwastaken2.purity.WaterQuality waterIn(Object fluid) {
+        return fluid instanceof net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant variant
+                ? com.thirstwastaken2.fabric.WaterContainerStorage.quality(variant) : null;
+    }
+
     /** The name a mod gives itself, or {@code modId} when no mod has that id. */
     public static String modName(String modId) {
         return FabricLoader.getInstance().getModContainer(modId).map(mod -> mod.getMetadata().getName()).orElse(modId);

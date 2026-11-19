@@ -233,6 +233,8 @@ dependencies {
         // Mixed into, and in SRG names, so remapped. In runClient with the Balm it requires, on by default,
         // as on the other loaders. See src/main/cookingforblockheads/AGENTS.md.
         modCompileOnly("maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        // Its Sink's block entity extends Balm's, and the tank mixin names that block entity.
+        modCompileOnly("maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }
         val names = listOf("cooking-for-blockheads", "cookingforblockheads", "balm")
         runClientMod(names, "maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
         runClientMod(names, "maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }

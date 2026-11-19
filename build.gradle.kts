@@ -583,6 +583,8 @@ dependencies {
     if (cookingForBlockheads != null) {
         // Mixed into, so it has to be a remapped mod rather than a plain library, as Bountiful Fares is.
         "modCompileOnly"("maven.modrinth:cooking-for-blockheads:$cookingForBlockheads") { isTransitive = false }
+        // Its Sink's block entity extends Balm's up to 1.21.1, and the tank mixin names that block entity.
+        "modCompileOnly"("maven.modrinth:balm:${property("deps.balm")}") { isTransitive = false }
         // Test the Sink in runClient, with the Balm it requires. It adds blocks and no world generation, so
         // it is on by default. The gametests and runServer run without it, which is what proves the mod
         // is unchanged when it is absent.

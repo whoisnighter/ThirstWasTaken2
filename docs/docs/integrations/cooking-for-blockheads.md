@@ -15,11 +15,20 @@ Bottles and buckets filled at the Sink come out Murky. Up to Minecraft 26.2 the 
 waterskin, canteen or flask, and the water it adds is Murky too, mixed with what was already in it. That
 is the same water other mods' kitchen sinks give.
 
-The Sink won't take sea water. A bucket of sea water stays in your hand.
+The Sink won't take sea water, by hand or by pipe. A bucket of sea water stays in your hand.
 
-This is the same whether the Sink makes its own water, as it does by default, or has to be filled with
-pipes (Cooking for Blockheads' `sinkRequiresWater` setting). Whatever water goes in, Murky water comes
-out.
+### Sink as a tank
+
+With Cooking for Blockheads' `sinkRequiresWater` setting on, the Sink no longer makes its own water. It
+holds what is piped or poured into it, and keeps its grade. Pipe Pure water in from a
+[Copper Distiller](/docs/features/water-purity#copper-distiller) and the Sink becomes a refill station
+for bottles, buckets and canteens.
+
+Water of two grades mixed in the Sink takes the worse one, so a little Dirty water spoils a tank of Pure
+water. Once the Sink is empty, the next water in sets its grade again. A Sink filled before this update
+gives Murky water until it runs dry.
+
+Water piped back out of the Sink loses its grade. Fill containers at the Sink by hand.
 
 ## Oven
 

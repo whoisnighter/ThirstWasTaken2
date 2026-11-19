@@ -42,6 +42,24 @@ public final class DevLoader {
         MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> handler.accept(event.getServer()));
     }
 
+    /**
+     * Pours {@code amount} mB of water of {@code quality} into the block at {@code pos} through this
+     * loader's block fluid capability, from above, committed: the way a pipe fills a tank. Returns how much
+     * went in, or -1 when the block offers no such capability. Server thread only.
+     */
+    public static int fillFluid(net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos,
+                                com.thirstwastaken2.purity.WaterQuality quality, int amount) {
+        net.minecraft.world.level.block.entity.BlockEntity entity = level.getBlockEntity(pos);
+        if (entity == null) return -1;
+        net.minecraftforge.fluids.capability.IFluidHandler handler = entity
+                .getCapability(net.minecraftforge.common.capabilities.ForgeCapabilities.FLUID_HANDLER, net.minecraft.core.Direction.UP)
+                .orElse(null);
+        if (handler == null) return -1;
+        net.minecraftforge.fluids.FluidStack water = com.thirstwastaken2.forge.WaterFluids.stamp(
+                new net.minecraftforge.fluids.FluidStack(net.minecraft.world.level.material.Fluids.WATER, amount), quality);
+        return handler.fill(water, net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+    }
+
     /** Runs as the server shuts down, while the world is still there. */
     public static void onServerStopping(Consumer<MinecraftServer> handler) {
         MinecraftForge.EVENT_BUS.addListener((ServerStoppingEvent event) -> handler.accept(event.getServer()));

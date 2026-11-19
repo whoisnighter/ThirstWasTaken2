@@ -33,6 +33,7 @@ final class ServerProbes {
     private ServerProbes() { }
 
     static void register(AgentDispatcher dispatcher) {
+        registerFluid(dispatcher);
         dispatcher.register("server.info", (request, reply) -> {
             MinecraftServer server = server();
             JsonObject result = new JsonObject();
@@ -156,6 +157,30 @@ final class ServerProbes {
                     reply.ok(result);
                 }
             });
+        });
+    }
+
+    /**
+     * Pours water into a block the way a pipe does, through the loader's block fluid capability on the
+     * server's thread: {@code x}, {@code y}, {@code z} in the overworld, {@code purity} 0 to 3 or
+     * {@code salty} true, and {@code amount} in mB (a bucket by default). Answers how much went in, -1
+     * when the block takes no fluid. For tanks of other mods that only a pipe mod would otherwise reach.
+     */
+    static void registerFluid(AgentDispatcher dispatcher) {
+        dispatcher.register("server.fluid.fill", (request, reply) -> {
+            MinecraftServer server = server();
+            net.minecraft.core.BlockPos pos = new net.minecraft.core.BlockPos(request.integer("x", -30_000_000, 30_000_000),
+                    request.integer("y", -2048, 2048), request.integer("z", -30_000_000, 30_000_000));
+            com.thirstwastaken2.purity.WaterQuality quality = request.flag("salty", false)
+                    ? com.thirstwastaken2.purity.WaterQuality.SALT
+                    : com.thirstwastaken2.purity.WaterQuality.fresh(request.integer("purity", 0, 3));
+            int amount = request.has("amount") ? request.integer("amount", 1, 1_000_000) : 1000;
+            int[] filled = new int[1];
+            onServer(server, "server.fluid.fill", () ->
+                    filled[0] = com.thirstwastaken2.dev.platform.DevLoader.fillFluid(server.overworld(), pos, quality, amount));
+            JsonObject result = new JsonObject();
+            result.addProperty("filled", filled[0]);
+            reply.ok(result);
         });
     }
 

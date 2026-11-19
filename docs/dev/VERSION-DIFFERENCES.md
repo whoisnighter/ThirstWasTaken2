@@ -140,6 +140,7 @@ the `recipe_unlocked` criterion out and unlock on the item alone.
 | Advancement trigger classes moved into `triggers` | replacement |
 | `StatePropertiesPredicate` moved into `predicates` (it was in `criterion`, `critereon` before 1.21.11) | `ThirstBlockLootProvider.boilerHalf`, one branch per package, since only datagen names it |
 | Serene Seasons' API says whether a dimension has seasons (`SeasonHelper.hasSeasons`); its builds for older versions keep that only in their internal config, whose class extends GlitchCore's and Night Config's, so the loader scripts compile against those two as well | `SeasonsPlatform.hasSeasons` in Serene Seasons' `platform/` |
+| Cooking for Blockheads' Sink tank gained a slot index on `fill` and `getAmount` (with Balm's multi-slot tanks) | `SinkTankMixin` |
 
 ### 26.1 (affects 1.21.11, 1.21.1)
 
@@ -198,7 +199,7 @@ already has by default. The stack the furnace hands out is the same; see
 
 | Difference | Code |
 |---|---|
-| A block entity saves and loads through `ValueOutput` / `ValueInput` | `StockpotBlockEntityMixin`, `TeapotBlockEntityMixin` (Kaleidoscope Cookery) |
+| A block entity saves and loads through `ValueOutput` / `ValueInput` | `StockpotBlockEntityMixin`, `TeapotBlockEntityMixin` (Kaleidoscope Cookery), `SinkBlockEntityMixin` (Cooking for Blockheads) |
 | Fabric API gained the HUD element and status bar height registries | `ClientLoader.addRightStatusBar`; on 1.21.1 `GuiMixin` draws the bar after the food bar and moves the air bubbles up |
 | Fabric's block render layer map moved into its rendering module and takes a chunk section layer | Fabric `ClientLoader.renderCutout` |
 | A tooltip is queued for the end of the frame (`setComponentTooltipForNextFrame`) where it was drawn on the spot | `ClientVanilla.tooltip` |
@@ -276,6 +277,7 @@ between 1.20.1 and 1.21.1. Gametests, datagen and the dev tools fork in place.
 | Block methods such as `getShape` and `tick` are public, and `isPathfindable` takes a level and position; no block codec | `HangingPotBlock` overrides them as public on every version; `SupportedBlock` |
 | A container screen does not dim the world behind itself; `renderBackground` is asked to | `client/platform/MachineScreen` |
 | `BucketPickup#pickupBlock` takes no entity (1.20.2 added the player) | `Vanilla.pickupFluid`; the constant `PICKUP_BLOCK` in `BucketItemMixin` |
+| A block entity loads through `load(CompoundTag)` and saves with no registry provider; Cooking for Blockheads keeps its block entities in a `tile` package | `SinkBlockEntityMixin`, `SinkTankMixin` (Cooking for Blockheads) |
 | `playerWillDestroy` returns nothing (from 1.20.2 it returns the state) | `SupportedBlock.beforePlayerBreaks`, which `DistillerBlock` uses |
 | A block entity saves to a tag alone and loads through `load`, and its update tag takes no registries | `platform/SavedBlockEntity`; `MachineSeamsGameTest` saves and loads one the way the chunk does |
 | Saved data is made by a loader function handed to `computeIfAbsent` and saved to a tag alone; from 1.20.5 a `SavedData.Factory` and a save that takes registries | `platform/SavedPositions` |

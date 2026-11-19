@@ -11,6 +11,10 @@ All notable changes to ThirstWasTaken2 are documented in this file.
 - The Copper Distiller works with other mods' pipes, pumps and tanks, such as Pipez: water piped in
   fills the boiler, and Pure water can be piped out of the basin. On Forge 1.20.1 only the boiler
   half takes a pipe.
+- Cooking for Blockheads, on every version and loader: with its `sinkRequiresWater` setting on, the
+  Sink keeps the grade of the water piped or poured into it, so Pure water piped in comes back out
+  Pure. Mixed water takes the worse grade, and piped sea water is refused. The endless tap still gives
+  Murky water.
 
 ### Fixed
 
