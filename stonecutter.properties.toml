@@ -7,7 +7,7 @@
 mod.id = "thirstwastaken2"
 mod.name = "ThirstWasTaken2"
 mod.group = "com.thirstwastaken2"
-mod.version = "1.11.1"
+mod.version = "1.12.0"
 
 deps.fabric_loader = "0.19.5"
 # The newest stable Fabric Loader. Only .github/scripts/update_mc_deps.py reads it: the build and

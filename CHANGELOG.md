@@ -2,7 +2,11 @@
 
 All notable changes to ThirstWasTaken2 are documented in this file.
 
-## [Unreleased]
+## [1.12.0] - 2026-11-19
+
+Water moves through pipes now: the Copper Distiller and Cooking for Blockheads' Sink both work with
+other mods' pipes and keep the grade of what flows through them. Hexalia's brews restore thirst, and
+its Bloodlust brew no longer crashes 1.20.1. Spelunkery's Spring Water is salty from now on.
 
 ### Added
 
