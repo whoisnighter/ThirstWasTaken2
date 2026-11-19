@@ -18,7 +18,7 @@ Written on 2026-10-06 from:
 
 | Node | Build | Modrinth version id | Requires on `runClient` |
 |---|---|---|---|
-| `1.21.1-neoforge` | `2.7.1` (2026-11-15; written against `2.6.6`, `1SSgrmDa`, checked against `2.7` and `2.7.1`) | `qoAnW1in` | Farmer's Delight, which the node already runs |
+| `1.21.1-neoforge` | `2.7.2` (2026-11-19; written against `2.6.6`, `1SSgrmDa`, checked against `2.7`, `2.7.1` and `2.7.2`) | `QQ4o8Xu6` | Farmer's Delight, which the node already runs |
 | every other node | none | none | none |
 
 The official mod is **NeoForge 1.21.1 only**, and still updated. The Forge 1.20.1 build is an unofficial

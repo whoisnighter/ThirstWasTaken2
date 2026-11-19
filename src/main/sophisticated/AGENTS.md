@@ -159,14 +159,15 @@ rollback. Core's bottle handler no longer checks its container on the way out, s
 bug has no counterpart here. A container the tank refuses stayed in the input slot on the Cores before
 `TankContainerHandler`, which is Core's own change; on 26.3-1.5.36 it moves on to the result slot again.
 
-**Core 26.1.2-1.5.36, 26.2-1.5.34 and 26.3-1.5.36 dupe containers in the Tank, with or without this
-mod.** `TankContainerHandler.drainStack`/`fillStack` put the used container in the result slot through
+**Core 26.1.2-1.5.36, 26.2-1.5.34 and 26.3-1.5.36 duped containers in the Tank, with or without this
+mod; fixed upstream from 26.1.2-1.5.38, 26.2-1.5.36 and 26.3-1.5.38, and the pins are past it.** The
+counts in a Tank script are meaningful again (checked on 26.3-1.5.39, 2026-11-19). What the bug was:
+`TankContainerHandler.drainStack`/`fillStack` put the used container in the result slot through
 the tank's `ItemAccessItemHandler` and then clear the input slot with a direct write to the upgrade
 stack, inside one transaction; NeoForge's `StackItemAccess` copies its own copy of the upgrade back over
 it on commit, so the input slot keeps its container and the result slot gains one every cooldown. Not
-ours and not guarded; see item 12 of the plan. A Tank script on those Cores shows it as a full bucket
-left in slot 0 beside a stack of empty ones, whatever the grade, so read the grades and ignore the
-counts until Core is fixed.
+ours and never guarded; see item 12 of the plan. A Tank script on those Cores shows it as a full bucket
+left in slot 0 beside a stack of empty ones, whatever the grade.
 
 ## The Feeding upgrade
 

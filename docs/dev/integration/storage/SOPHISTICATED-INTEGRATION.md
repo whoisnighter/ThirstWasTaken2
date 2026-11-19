@@ -31,7 +31,7 @@ always worked on it.
 | 9 | Changelog and player docs | docs | **Done** |
 | 10 | Cooking upgrades keep a canteen or flask's servings (issue #53) | bug | **Done** on every node that builds Sophisticated; see `src/main/sophisticated/AGENTS.md`, "Cooking upgrades" |
 | 11 | Core 1.5.35 crash at loading, and every mixin failing soft (issue #61) | bug | **Done** on every node that builds Sophisticated; see below |
-| 12 | `26.3.x-neoforge` | port | **Done**: items 1 to 5 on every NeoForge node. The Tank upgrade multiplies the container in its input slot on 26.2 and 26.3 with the newest Cores, Core's own bug, reported as P3pp3rF1y/SophisticatedCore#527; see below |
+| 12 | `26.3.x-neoforge` | port | **Done**: items 1 to 5 on every NeoForge node. The Tank upgrade multiplied the container in its input slot on the 26.x Cores of 2026-11-12, Core's own bug (P3pp3rF1y/SophisticatedCore#527), fixed in 26.1.2-1.5.39, 26.2-1.5.37 and 26.3-1.5.39; see below |
 
 The order is the one agreed on: the bugs first, the Tank before the others because it let any water
 turn Clean, then the cheapest feature, then the rest. All four bugs are fixed, the Drinking upgrade is
@@ -322,6 +322,15 @@ mod, and the fix belongs in `TankComponentItemHandler.setStackInSlot(…, tx)` (
 access, or set the slot after the commit as before). Reported on 2026-11-13 as
 [P3pp3rF1y/SophisticatedCore#527](https://github.com/P3pp3rF1y/SophisticatedCore/issues/527); once a
 fixed Core is out, run the Tank script on the 26.x nodes again and move the pins.
+
+**Fixed upstream.** Core 26.1.2-1.5.38.2479, 26.2-1.5.36.2481 and 26.3-1.5.38.2480 ("Fixed Tank Upgrades
+duplicating fluid containers and contents"): `TankUpgradeWrapper`'s snapshot journal now writes
+`LENIENT_CONTAINER` onto the upgrade on commit, through `TankComponentItemHandler.setComponentContents`,
+instead of over the journal. `TankContainerHandler` is unchanged. Pinned at 26.1.2-1.5.39, 26.2-1.5.37 and
+26.3-1.5.39 (PR #64). Run again on 2026-11-19 on `26.3.x-neoforge` (Core 26.3-1.5.39): every case gives
+the result the Tank script's comments expect, one container per move and nothing left behind in slot 0
+(the purity-0 bucket: 750 mB of purity 0, three glass bottles in slot 1, the bucket in 2, one purity-0
+bottle in 3; the salt bottle: a glass bottle in 2, a salty bucket in 3). The grades are as before.
 
 ## Testing, for every item
 
