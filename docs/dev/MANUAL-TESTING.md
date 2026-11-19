@@ -235,7 +235,7 @@ In a world with the mod, on one node per loader:
         `1.20.1-forge`. Run on 2026-09-28 on `1.20.1`, `1.20.1-forge`, `1.21.1` and `26.3.x`, with
         `create` and `all` on `1.20.1-forge` and `all` on `1.20.1`: every one came up and stayed up
       - `kaleidoscope_cookery` on `1.21.1-neoforge` and every Fabric node
-      - `kaleidoscope_tavern` on `1.21.1-neoforge`, `1.20.1-forge` and every Fabric node but `1.21.11`
+      - `kaleidoscope_tavern` on `1.21.1-neoforge`, `1.20.1-forge` and every Fabric node
 - [ ] The same with `-PwithoutOptional=all`, on one node per loader.
 - [ ] A world **opens** with an integration's mod and without a mod its data names, for every
       integration that ships data about another mod. Reaching the title screen is not enough: a broken

@@ -88,6 +88,7 @@ All optional except Fabric API. Versions are listed in the order 26.3, 26.2, 26.
 | ![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2FhIu9KJTT%2Ff7c591a80046859d3d45c04ecbbc54d264483d5e.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Brewin' and Chewin'](https://modrinth.com/mod/brewin-and-chewin) | v4.5.0+1.21.1-fabric | Thirst from its [brews and soups](/docs/integrations/farmers-delight/brewin-and-chewin), and water that keeps its grade in the Keg. 1.21.1 only. |
 | ![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2FDGiq4ZSW%2F949ba66d6fffb5a984fbb70e3ef4a51f15be3191.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Ocean's Delight](https://modrinth.com/mod/oceans-delight) | 1.0.3+fabric.1.21.1 | Thirst from its [Guardian Soup and bowls](/docs/integrations/farmers-delight/oceans-delight). 1.21.1 only. |
 | ![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2Ffoa4fGIH%2Feecc99e281522f2291081c48176f0faa84c107bc.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Rustic Delight](https://modrinth.com/mod/rustic-delight) | 1.7.0 (26.3, 26.2, 26.1), 1.7.2 (1.21.11), 1.7.1 (1.21.1) | Thirst from its [coffees, soups and bell peppers](/docs/integrations/farmers-delight/rustic-delight). |
+| ![](https://cdn.modrinth.com/data/bkz5C0dQ/74babb7a89589b71c8ebd07fa126b929481087ac_96.webp){.mod-icon} [Hexalia](https://modrinth.com/mod/hexalia) | 1.3.8.2-1.21.1, 1.3.8.2-1.20.1 | Thirst from its brews, the same as a cup of tea. 1.21.1 and 1.20.1 only. |
 
 ### NeoForge
 
@@ -134,6 +135,7 @@ The settings screen opens from the Config button in NeoForge's Mods list, with n
 | ![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2FDGiq4ZSW%2F949ba66d6fffb5a984fbb70e3ef4a51f15be3191.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Ocean's Delight](https://modrinth.com/mod/oceans-delight) | 1.0.4 | The same as on Fabric. 1.21.1 only. |
 | ![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2Fe9V6wFcR%2F4cbbace573b20628290929948a77c74d95ed7a70.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Expanded Delight](https://modrinth.com/mod/expanded-delight) | 0.1.4 | Thirst from its [juices, soups and salads](/docs/integrations/farmers-delight/expanded-delight), and a Cooking Pot that cooks nothing from sea water. 1.21.1 only. |
 | ![](https://wsrv.nl/?url=https%3A%2F%2Fcdn.modrinth.com%2Fdata%2Ffoa4fGIH%2Feecc99e281522f2291081c48176f0faa84c107bc.png&trim=1&w=96&h=96&fit=contain&cbg=00000000&output=png){.mod-icon .mod-icon-lg} [Rustic Delight](https://modrinth.com/mod/rustic-delight) | 1.7.1 | The same as on Fabric. 1.21.1 only. |
+| ![](https://cdn.modrinth.com/data/bkz5C0dQ/74babb7a89589b71c8ebd07fa126b929481087ac_96.webp){.mod-icon} [Hexalia](https://modrinth.com/mod/hexalia) | 1.3.8.2-1.21.1 | The same as on Fabric. 1.21.1 only. |
 
 ### Forge
 
@@ -161,6 +163,7 @@ On Minecraft 1.20.1 only. The settings screen opens from the Config button in Fo
 | ![](https://cdn.modrinth.com/data/uXhSmPjd/bf55420556c30d44d2f5cf7b8915705b9214b4ef.png){.mod-icon} [Cold Sweat](https://modrinth.com/mod/cold-sweat) | 2.4.5 | The same as on NeoForge. |
 | ![](https://media.forgecdn.net/avatars/thumbnails/308/636/64/64/637392485303151332.png){.mod-icon} [Croptopia](https://www.curseforge.com/minecraft/mc-mods/croptopia) | 1.20.1-4.0.1 | The same as on Fabric. |
 | ![](https://cdn.modrinth.com/data/vJnhuDde/811d0c55230d84d9e182df1b0bd631ddebecc0ad_96.webp){.mod-icon} [Cooking for Blockheads](https://modrinth.com/mod/cooking-for-blockheads) | 16.0.16+forge-1.20.1 | The same as on Fabric. |
+| ![](https://cdn.modrinth.com/data/bkz5C0dQ/74babb7a89589b71c8ebd07fa126b929481087ac_96.webp){.mod-icon} [Hexalia](https://modrinth.com/mod/hexalia) | 1.3.8.2-1.20.1 | The same as on Fabric. |
 | ![](https://cdn.modrinth.com/data/iRmWy6ga/be55098fe4886146924fd873e88169c10bf47051.png){.mod-icon} [Pipez](https://www.curseforge.com/minecraft/mc-mods/pipez) | any version | The same as on NeoForge, but only the boiler half takes a pipe. |
 
 Other food mods usually work as they are. Drinks their mod marks as drinks restore thirst, and any
