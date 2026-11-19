@@ -268,6 +268,8 @@ nothing condenses, and the arrow in the distiller's screen turns red.
 - The boiler and the basin each hold 9 servings, three buckets.
 - Hoppers feed water in from above, one container at a time, and fuel or empty containers from the
   sides, and take filled containers and salt out from below.
+- Other mods' pipes and pumps, such as Pipez, fill the boiler with water of any grade and draw Pure
+  water out of the basin, through either half. On Forge 1.20.1 only the boiler half takes a pipe.
 - Breaking it drops the distiller and whatever its slots held. The water in its tanks is lost.
 
 With Jade installed, looking at it shows what each tank holds and its grade.

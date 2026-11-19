@@ -21,6 +21,7 @@ public final class ThirstWasTaken2Forge {
     public ThirstWasTaken2Forge() {
         ThirstWasTaken2.initialize();
         WaterContainerCapabilities.register();
+        DistillerFluidHandler.register();
         if (FMLEnvironment.dist == Dist.CLIENT) ThirstWasTaken2ForgeClient.initialize();
         runIntegrationEntrypoints();
     }

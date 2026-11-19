@@ -21,6 +21,7 @@
       "com.thirstwastaken2.gametest.CauldronGameTest",
       "com.thirstwastaken2.gametest.HangingPotGameTest",
       "com.thirstwastaken2.gametest.DistillerGameTest",
+      "com.thirstwastaken2.gametest.DistillerFluidGameTest",
       "com.thirstwastaken2.gametest.MachineSeamsGameTest",
       "com.thirstwastaken2.gametest.DistillerMachineGameTest",
       "com.thirstwastaken2.gametest.PurificationGameTest",

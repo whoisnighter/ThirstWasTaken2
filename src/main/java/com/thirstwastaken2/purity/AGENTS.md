@@ -68,6 +68,25 @@ water. The grade rides on the `FluidVariant` as one component, as on Create's fl
 What both loaders share, counted in servings, is `item/WaterContainers`. `ContainerFluidGameTest`
 checks all three implementations against one set of assertions, in millibuckets.
 
+## The copper distiller as a fluid block
+
+The distiller answers each loader's block fluid capability, so another mod's pipes and pumps (Pipez,
+issue #65) fill its boiler and empty its basin. Tank 0 is the boiler: water of any grade in, mixed to
+the worse as a pour mixes, nothing out. Tank 1 is the basin: Pure water out, stamped Pure, nothing in.
+Unlike the carried containers, **any amount moves**, since Pipez's slowest pipe moves 50 mB a tick: the
+machine counts millibuckets (`boilerMb`, `basinMb`, 250 to a serving) and boils only whole servings.
+
+| Loader | Handler | Halves |
+|---|---|---|
+| NeoForge 21.1 | `neoforge-fluidhandler/.../DistillerFluidHandler` | both |
+| NeoForge 26.x | `neoforge-transfer/.../DistillerResourceHandler`, one per machine for its journal | both |
+| Forge 47 | `forge-fluidhandler/.../DistillerFluidHandler`, on the block entity | boiler only |
+| Fabric | `fabric/.../DistillerStorage`, one per machine for its snapshot | both |
+
+`fillBoiler` and `drainBasin` neither save nor sync; each handler calls `fluidsChanged` once a move is
+final, so a simulated or rolled-back move leaves nothing behind. `DistillerFluidGameTest` checks all
+four. The plan is `docs/dev/integration/storage/PIPEZ-INTEGRATION.md`.
+
 ## Rules the code keeps
 
 - **Salt water carries no grade.** `setQuality`, through `ItemWaterData.setSalty`, removes `water_purity` from a salty stack. That is

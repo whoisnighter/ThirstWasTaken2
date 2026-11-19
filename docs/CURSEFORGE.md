@@ -396,6 +396,12 @@ Also works with:
     <td>–</td>
   </tr>
   <tr>
+    <td><img alt="Pipez icon" src="https://cdn.modrinth.com/data/iRmWy6ga/be55098fe4886146924fd873e88169c10bf47051.png" width="20" height="20" align="absmiddle"> <a href="https://www.curseforge.com/minecraft/mc-mods/pipez">Pipez</a></td>
+    <td>–</td>
+    <td>every version</td>
+    <td>yes</td>
+  </tr>
+  <tr>
     <td><img alt="Kaleidoscope Cookery icon" src="https://media.forgecdn.net/avatars/thumbnails/1361/462/64/64/638884307253099520.png" width="20" height="20" align="absmiddle"> <a href="https://whoisnighter.github.io/ThirstWasTaken2/docs/integrations/kaleidoscope-cookery/">Kaleidoscope Cookery</a></td>
     <td>every version (Refabricated)</td>
     <td>1.21.1</td>

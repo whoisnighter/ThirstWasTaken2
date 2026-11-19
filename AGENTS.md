@@ -199,6 +199,7 @@ water is collected, drunk or looked at with Jade, never on a tick or tooltip pat
 | AppleSkin, Jade, Mod Menu, Farmer's Delight, loot | all | [compat/AGENTS.md](src/main/java/com/thirstwastaken2/compat/AGENTS.md) |
 | Drinks from other mods | all | their own data pack files (`data/<ns>/thirstwastaken2/drinks/`), the `c:drinks` tag, and registry ids in `config/itemvalues`; no class references. See [docs/docs/developers/data-packs.md](docs/docs/developers/data-packs.md) |
 | Terralith | all | two optional entries in the `stagnant_water` biome tag, from `ThirstBiomeTagProvider` in `src/datagen`; no class references, no deps key
+| Pipez, and any other mod's pipes and pumps | all (Pipez itself: NeoForge and Forge) | the copper distiller answers each loader's own block fluid capability, so no Pipez class, deps key or table row. Water in to the boiler, Pure water out of the basin, any amount. See [the plan](docs/dev/integration/storage/PIPEZ-INTEGRATION.md) |
 | Create Fly | `deps.create_fly`: Fabric 26.1.x, 26.2.x (no 26.3 build) | [src/main/createfly/AGENTS.md](src/main/createfly/AGENTS.md) |
 | Farmer's Delight Refabricated's Cooking Pot | `deps.farmersdelight`, Fabric nodes | [src/main/farmersdelight/AGENTS.md](src/main/farmersdelight/AGENTS.md) |
 | Create, and the Create Pipes n Physics addon with no deps key of its own | `deps.create`: `1.21.1-neoforge`, and `1.20.1-forge` from its own directory (the addon: `1.21.1-neoforge` only) | [src/main/create/AGENTS.md](src/main/create/AGENTS.md), [src/main/createforge/AGENTS.md](src/main/createforge/AGENTS.md) |
@@ -290,6 +291,7 @@ water is collected, drunk or looked at with Jade, never on a tick or tooltip pat
 | Immersive Engineering: the plan, its decisions and what was found in game (1.21.1 NeoForge, 1.20.1 Forge) | [docs/dev/integration/storage/IMMERSIVE-ENGINEERING-INTEGRATION.md](docs/dev/integration/storage/IMMERSIVE-ENGINEERING-INTEGRATION.md) |
 | Bountiful Fares: the plan, its decisions and what was found in game (both 1.21.1 nodes) | [docs/dev/integration/cooking/BOUNTIFUL-FARES-INTEGRATION.md](docs/dev/integration/cooking/BOUNTIFUL-FARES-INTEGRATION.md) |
 | Croptopia: the plan, its decisions and what was found in game (every node it builds for) | [docs/dev/integration/cooking/CROPTOPIA-INTEGRATION.md](docs/dev/integration/cooking/CROPTOPIA-INTEGRATION.md) |
+| Pipez (issue #65): the copper distiller as a fluid block, on every node | [docs/dev/integration/storage/PIPEZ-INTEGRATION.md](docs/dev/integration/storage/PIPEZ-INTEGRATION.md) |
 | Hexalia: the Bloodlust crash (issue #66), its brews, and the Small Cauldron still open (both 1.21.1, both 1.20.1) | [docs/dev/integration/magic/HEXALIA-INTEGRATION.md](docs/dev/integration/magic/HEXALIA-INTEGRATION.md) |
 | Bad-water sickness rework: the design | [docs/dev/mechanics/WATER-SICKNESS.md](docs/dev/mechanics/WATER-SICKNESS.md) |
 | Bad-water sickness rework: where the code goes, step by step | [docs/dev/mechanics/WATER-SICKNESS-IMPLEMENTATION.md](docs/dev/mechanics/WATER-SICKNESS-IMPLEMENTATION.md) |

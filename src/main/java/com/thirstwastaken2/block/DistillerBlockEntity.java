@@ -47,6 +47,12 @@ import net.minecraft.world.level.block.state.BlockState;
  * <p>It is also the menu a player opens on either half, {@link DistillerMenu}, whose gauges read
  * {@link #data}.
  *
+ * <p>Pipes reach its tanks through each loader's fluid capability, in millibuckets: water in to the
+ * boiler through {@link #fillBoiler}, Pure water out of the basin through {@link #drainBasin}. So the
+ * tanks count millibuckets underneath, {@link #SERVING_MB} to a serving, and a pipe's 50 mB a tick
+ * fills a part serving, which boils once it is whole. The containers still move whole servings.
+ * See {@code docs/dev/integration/storage/PIPEZ-INTEGRATION.md}.
+ *
  * <p>The client is told what it saves, for Jade's overlay, but only when the tanks or the salt count
  * change, a few times a serving at most: the fire and the progress tick every tick, and only the menu
  * shows those.
@@ -60,17 +66,19 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
     public static final int SLOTS = 5;
     /** Salty servings that leave one salt behind: a bucket of sea water. */
     public static final int SALT_SERVINGS = 3;
+    /** Millibuckets in a serving, as every fluid integration counts one. */
+    public static final int SERVING_MB = 250;
 
     private static final int[] TOP = { WATER_IN };
     private static final int[] SIDES = { FUEL, EMPTY_IN };
     private static final int[] BOTTOM = { FILLED_OUT, SALT_OUT, WATER_IN, FUEL };
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
-    /** Servings waiting in the boiler, and their one quality as {@code WaterPurity.storedValue} keeps it, 0 for none. */
-    private int boilerServings;
+    /** Millibuckets waiting in the boiler, and their one quality as {@code WaterPurity.storedValue} keeps it, 0 for none. */
+    private int boilerMb;
     private int boilerQuality;
-    /** Servings of Pure water in the basin. */
-    private int basinServings;
+    /** Millibuckets of Pure water in the basin. */
+    private int basinMb;
     /** Ticks of fire left, and how long the fuel burning now lasts in all. */
     private int burnLeft;
     private int burnTotal;
@@ -97,11 +105,11 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
                 case DistillerMenu.TANK:
                     return tank();
                 case DistillerMenu.BOILER:
-                    return boilerServings;
+                    return boilerServings();
                 case DistillerMenu.BOILER_QUALITY:
-                    return boilerServings == 0 ? 0 : boilerQuality;
+                    return boilerMb == 0 ? 0 : boilerQuality;
                 case DistillerMenu.BASIN:
-                    return basinServings;
+                    return basinServings();
                 case DistillerMenu.COOLED:
                     return tubCooled() ? 1 : 0;
                 case DistillerMenu.SALT:
@@ -137,20 +145,40 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
         return ThirstConfig.get().distillerServingSeconds * 20;
     }
 
-    /** Servings waiting in the boiler. */
+    /** Each tank's size in millibuckets. */
+    public static int tankMb() {
+        return tank() * SERVING_MB;
+    }
+
+    /** Whole servings waiting in the boiler. */
     public int boilerServings() {
-        return boilerServings;
+        return boilerMb / SERVING_MB;
+    }
+
+    /** Whole servings the boiler has room for. */
+    public int boilerRoom() {
+        return Math.max(0, tankMb() - boilerMb) / SERVING_MB;
+    }
+
+    /** Millibuckets waiting in the boiler, a part serving included. */
+    public int boilerMb() {
+        return boilerMb;
     }
 
     /** What the boiler holds, or {@code null} when it is empty. */
     public WaterQuality boilerQuality() {
-        if (boilerServings == 0 || boilerQuality == 0) return null;
+        if (boilerMb == 0 || boilerQuality == 0) return null;
         return boilerQuality == WaterPurity.BLOCK_SALT ? WaterQuality.SALT : WaterQuality.fresh(boilerQuality - 1);
     }
 
-    /** Servings of Pure water in the basin. */
+    /** Whole servings of Pure water in the basin. */
     public int basinServings() {
-        return basinServings;
+        return basinMb / SERVING_MB;
+    }
+
+    /** Millibuckets of Pure water in the basin, a part serving included. */
+    public int basinMb() {
+        return basinMb;
     }
 
     /** Ticks of fire left. */
@@ -190,9 +218,12 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
         super.changed();
     }
 
-    /** The tanks, the boiler's quality and the salt count, packed into one number to compare. */
+    /**
+     * The tanks, the boiler's quality and the salt count, packed into one number to compare. A tank holds
+     * at most 64 servings, 16000 mB, so each fits its 16 bits.
+     */
     private long synced() {
-        return (long) boilerServings | (long) boilerQuality << 16 | (long) basinServings << 24 | (long) saltServings << 40;
+        return tanks() | (long) saltServings << 40;
     }
 
     /**
@@ -200,22 +231,59 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
      * salt stays salt, fresh water keeps the worse grade. Returns how many went in.
      */
     public int pour(int servings, WaterQuality quality) {
-        int poured = Math.min(servings, tank() - boilerServings);
+        int poured = Math.min(servings, boilerRoom());
         if (poured <= 0) return 0;
-        WaterQuality held = boilerQuality();
-        boilerQuality = WaterPurity.storedValue(held == null ? quality : WaterQuality.worse(held, quality));
-        boilerServings += poured;
+        fillBoiler(poured * SERVING_MB, quality);
         changed();
         return poured;
     }
 
     /** Takes up to {@code servings} of Pure water out of the basin. Returns how many came out. */
     public int draw(int servings) {
-        int drawn = Math.min(servings, basinServings);
+        int drawn = Math.min(servings, basinServings());
         if (drawn <= 0) return 0;
-        basinServings -= drawn;
+        basinMb -= drawn * SERVING_MB;
         changed();
         return drawn;
+    }
+
+    /**
+     * Pours up to {@code mb} millibuckets of {@code quality} into the boiler, mixed as {@link #pour} mixes,
+     * and returns how many went in. It neither saves nor tells the client: a pipe's move may still be
+     * rolled back, so the loader's handler calls {@link #fluidsChanged} once it is final.
+     */
+    public int fillBoiler(int mb, WaterQuality quality) {
+        int filled = Math.min(mb, tankMb() - boilerMb);
+        if (filled <= 0) return 0;
+        WaterQuality held = boilerQuality();
+        boilerQuality = WaterPurity.storedValue(held == null ? quality : WaterQuality.worse(held, quality));
+        boilerMb += filled;
+        return filled;
+    }
+
+    /** Takes up to {@code mb} millibuckets of Pure water out of the basin, as {@link #fillBoiler} does. */
+    public int drainBasin(int mb) {
+        int drained = Math.min(mb, basinMb);
+        if (drained <= 0) return 0;
+        basinMb -= drained;
+        return drained;
+    }
+
+    /** Both tanks and the boiler's quality in one number, for a transaction to put back. */
+    public long tanks() {
+        return (long) boilerMb | (long) boilerQuality << 16 | (long) basinMb << 24;
+    }
+
+    /** Puts back what {@link #tanks} gave. */
+    public void restoreTanks(long tanks) {
+        boilerMb = (int) (tanks & 0xFFFF);
+        boilerQuality = (int) (tanks >>> 16 & 0xFF);
+        basinMb = (int) (tanks >>> 24 & 0xFFFF);
+    }
+
+    /** Saves the tanks and tells the client, once a pipe's move is final. */
+    public void fluidsChanged() {
+        changed();
     }
 
     /** One tick of the machine, on the server. */
@@ -232,7 +300,7 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
                 if (++progress >= servingTicks()) distilOne();
                 changed = true;
             }
-        } else if (boilerServings == 0 && progress > 0) {
+        } else if (boilerMb < SERVING_MB && progress > 0) {
             progress = 0;
             changed = true;
         }
@@ -245,7 +313,7 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
      * for salt water, room for the salt it leaves.
      */
     private boolean canDistil() {
-        return boilerServings > 0 && basinServings < tank() && tubCooled()
+        return boilerMb >= SERVING_MB && basinMb + SERVING_MB <= tankMb() && tubCooled()
                 && !(saltServings >= SALT_SERVINGS && WaterQuality.SALT.equals(boilerQuality()) && DistillerSalt.item() != null);
     }
 
@@ -290,7 +358,7 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
     private boolean takeWater() {
         ItemStack stack = items.get(WATER_IN);
         int held = DistillerWater.held(stack);
-        int room = Math.max(0, tank() - boilerServings);
+        int room = boilerRoom();
         if (held == 0 || room == 0 || stack.getCount() != 1 || DistillerWater.whole(stack) && held > room) {
             return false;
         }
@@ -317,17 +385,18 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
             items.set(EMPTY_IN, ItemStack.EMPTY);
             return true;
         }
-        if (room == 0 || basinServings == 0) return false;
+        int basin = basinServings();
+        if (room == 0 || basin == 0) return false;
         if (DistillerWater.whole(stack)) {
-            if (basinServings < room || !items.get(FILLED_OUT).isEmpty()) return false;
+            if (basin < room || !items.get(FILLED_OUT).isEmpty()) return false;
             items.set(FILLED_OUT, DistillerWater.filled(stack, room));
             stack.shrink(1);
-            basinServings -= room;
+            basinMb -= room * SERVING_MB;
             return true;
         }
-        int drawn = Math.min(room, basinServings);
+        int drawn = Math.min(room, basin);
         ItemStack skin = DistillerWater.filled(stack, drawn);
-        basinServings -= drawn;
+        basinMb -= drawn * SERVING_MB;
         boolean full = DistillerWater.room(skin) == 0;
         if (full && items.get(FILLED_OUT).isEmpty()) {
             items.set(FILLED_OUT, skin);
@@ -355,16 +424,19 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
     private void distilOne() {
         progress = 0;
         if (WaterQuality.SALT.equals(boilerQuality())) saltServings = Math.min(saltServings + 1, SALT_SERVINGS);
-        boilerServings--;
-        if (boilerServings == 0) boilerQuality = 0;
-        basinServings++;
+        boilerMb -= SERVING_MB;
+        if (boilerMb == 0) boilerQuality = 0;
+        basinMb += SERVING_MB;
     }
 
     @Override
     protected void save(Output output) {
-        output.putInt("boiler", boilerServings);
+        // Whole servings under the keys saves have always had, and beside them the part serving a pipe left.
+        output.putInt("boiler", boilerMb / SERVING_MB);
+        output.putInt("boiler_partial", boilerMb % SERVING_MB);
         output.putInt("boiler_quality", boilerQuality);
-        output.putInt("basin", basinServings);
+        output.putInt("basin", basinMb / SERVING_MB);
+        output.putInt("basin_partial", basinMb % SERVING_MB);
         output.putInt("burn_left", burnLeft);
         output.putInt("burn_total", burnTotal);
         output.putInt("progress", progress);
@@ -374,9 +446,9 @@ public final class DistillerBlockEntity extends SavedBlockEntity implements Worl
 
     @Override
     protected void load(Input input) {
-        boilerServings = input.getInt("boiler", 0);
+        boilerMb = input.getInt("boiler", 0) * SERVING_MB + input.getInt("boiler_partial", 0);
         boilerQuality = input.getInt("boiler_quality", 0);
-        basinServings = input.getInt("basin", 0);
+        basinMb = input.getInt("basin", 0) * SERVING_MB + input.getInt("basin_partial", 0);
         burnLeft = input.getInt("burn_left", 0);
         burnTotal = input.getInt("burn_total", 0);
         progress = input.getInt("progress", 0);

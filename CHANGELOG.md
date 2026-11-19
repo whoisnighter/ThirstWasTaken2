@@ -8,6 +8,9 @@ All notable changes to ThirstWasTaken2 are documented in this file.
 
 - Hexalia, on Fabric and NeoForge 1.21.1, Fabric and Forge 1.20.1: its brews restore thirst, the same
   as a cup of tea.
+- The Copper Distiller works with other mods' pipes, pumps and tanks, such as Pipez: water piped in
+  fills the boiler, and Pure water can be piped out of the basin. On Forge 1.20.1 only the boiler
+  half takes a pipe.
 
 ### Fixed
 
