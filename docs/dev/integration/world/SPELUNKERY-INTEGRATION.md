@@ -46,7 +46,7 @@ not the only way to get it.
 | # | Item | Kind | Nodes | Status |
 |---|---|---|---|---|
 | 1 | The mod on the `runClient` classpath | build | both 1.21.1 | **Done** (2026-10-03) |
-| 2 | Spring Water's grade | decision, then data and core | every node (the tag) | **Decided** (2026-10-03): (a), and **done** |
+| 2 | Spring Water's grade | decision, then data and core | every node (the tag) | **Decided** (2026-10-03): (a), and done. **Changed** (2026-11-19) to salty, and **done** |
 | 3 | Boiling water into salt | decision, then code | both 1.21.1 | **Decided** (2026-10-03): (a), and **done** |
 | 4 | What happens, per path, in game | investigation | both 1.21.1 | **Done** (2026-10-03), every case as expected |
 | 5 | Nothing crashes without the mod | test | both 1.21.1 | **Done** (2026-10-03) |
@@ -71,6 +71,16 @@ Moonlight's `runClientMod` lines move out of Supplementaries' block, so either m
   another mod's fluid. Recommended.
 - (b) Always Clean: the same tag, one grade lower.
 - (c) Nothing: graded by biome like other mountain water.
+
+**Changed on 2026-11-19: salty.** A player pointed out that Spelunkery's own data reads as hot mineral
+water, not a mountain stream: a sluice over Spring Water drops rock salt (weight 20 of 50), saltpeter
+and sulfur, and its pools are rimmed with smooth basalt. And Pure was a hole in the balance: the fluid
+cannot make new sources (`setCanConvertToSource(false)`), but a bottle does not use a source up, so one
+`spring_water_bucket` poured at home gave Pure bottles forever. The two fluids moved to a new fluid tag,
+`thirstwastaken2:salt_water`, which `sampleAt` grades `Salt` after `pure_water` and before the biome,
+only while `enableSeaWater` is on; with it off they are scored like any other water, as the sea is.
+`pure_water` stays, shipped empty, for data packs. Clean or Murky was the alternative, set aside: it
+fixes the balance but not the reading.
 
 The tag is data with optional entries, so it ships on every node, like Terralith's entries in
 `stagnant_water`. It does nothing where Spelunkery is absent.
@@ -99,7 +109,7 @@ A script `tools/agent/integrations/spelunkery.jsonl`, written for the finished b
 | Case | Expected |
 |---|---|
 | `spring_water_bucket`, `salt_bucket`, `salt` exist | all exist |
-| A bottle filled from a Spring Water source placed in a plains biome | Pure |
+| A bottle filled from a Spring Water source placed in a plains biome | Pure (salty since 2026-11-19) |
 | A Dirty, a Murky and a Clean fresh bucket in a furnace | each one grade up, never a salt bucket |
 | A Pure fresh bucket in a furnace | stays in the input slot |
 | A sea water bucket in a furnace | a salt bucket |
@@ -107,6 +117,11 @@ A script `tools/agent/integrations/spelunkery.jsonl`, written for the finished b
 Run on both nodes on 2026-10-03, every case as expected: the Spring Water bottle came out Pure in
 plains; Dirty went to Clean, Murky and Clean to Pure, the Pure bucket stayed in its input slot with no
 output, and only the sea water bucket became a salt bucket.
+
+Run again on both nodes on 2026-11-19, after Spring Water moved to salty: the bottle now comes out salty.
+The furnace cases had gone stale with the purification rework (heat stops at Clean, and our recipes cook
+for 480 ticks), so the script now expects Dirty and Murky to become Clean and a Clean bucket to stay,
+like a Pure one.
 
 ## 5. Optional seam
 

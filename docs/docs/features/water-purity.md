@@ -34,8 +34,9 @@ and how likely Dirty and Murky water are to make the player ill is under
   doesn't renew it, so it needs boiling like any other risky water.
 
 Modpacks can add biomes to the `thirstwastaken2:stagnant_water` tag, coastal biomes whose water is
-salty to the `thirstwastaken2:sea_water` tag, and fluids that are always Pure to the
-`thirstwastaken2:pure_water` fluid tag. Water with no grade of its own
+salty to the `thirstwastaken2:sea_water` tag, fluids that are always Pure to the
+`thirstwastaken2:pure_water` fluid tag, and fluids that are always salty to the
+`thirstwastaken2:salt_water` fluid tag. Water with no grade of its own
 uses [defaultQuality](/docs/configuration#defaultquality).
 
 ## Checking water with Jade

@@ -119,7 +119,8 @@ four. The plan is `docs/dev/integration/storage/PIPEZ-INTEGRATION.md`.
   (`client/compat/JadeIntegration`) samples the single block under the crosshair on the client, at
   most every 10 ticks per block. It shows the same grade the server would stamp because `sampleAt`
   reads nothing the client lacks: blockstates, the biome, fluid tags and biome tags. A fluid in
-  `thirstwastaken2:pure_water` (Spelunkery's Spring Water) is Pure before any of that. **Keep it that way** - a new
+  `thirstwastaken2:pure_water` (empty as shipped) is Pure, and one in `thirstwastaken2:salt_water`
+  (Spelunkery's Spring Water) salty while `enableSeaWater` is on, before any of that. **Keep it that way** - a new
   input that only the server knows would make the overlay lie. A Create Fly pump or Hose Pulley
   collects water on a tick, so it reuses one sample per pump for 100 ticks
   (`src/main/createfly/.../SampledWater`), and so do Create on NeoForge and Sophisticated's Pump

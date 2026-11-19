@@ -343,7 +343,7 @@ Also works with:
   </tr>
   <tr>
     <td width="45%"><a href="https://whoisnighter.github.io/ThirstWasTaken2/docs/integrations/spelunkery"><img alt="Spelunkery" src="https://cdn-raw.modrinth.com/data/krskFMfA/images/3334d4f848d7b094895130da48ed04b15862fb52.png" width="200"></a><br><i>1.21.1 Fabric and NeoForge</i></td>
-    <td width="55%">Its Spring Water is always Pure, and only sea water boils down to salt in a furnace.</td>
+    <td width="55%">Its Spring Water is salty, and only sea water boils down to salt in a furnace.</td>
   </tr>
 </table>
 

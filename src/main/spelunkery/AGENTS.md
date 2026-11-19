@@ -14,9 +14,9 @@ salt bucket. The plan and its decisions are
   into salt, and a Pure one stays in the furnace. A sea water bucket, which nothing of ours cooks,
   boils into salt.
 
-Spring Water is not here. It is in the fluid tag `thirstwastaken2:pure_water`, written by
-`ThirstFluidTagProvider` in `src/datagen` as optional entries, which `WaterPurity.sampleAt` grades Pure
-before the sea check. That is data and core code naming no class of the mod, and it ships on every node.
+Spring Water is not here. It is in the fluid tag `thirstwastaken2:salt_water`, written by
+`ThirstFluidTagProvider` in `src/datagen` as optional entries, which `WaterPurity.sampleAt` grades salty
+before the biome, while `enableSeaWater` is on. It was Pure until 2026-11-19; see the plan's decision 2. That is data and core code naming no class of the mod, and it ships on every node.
 
 ```
 spelunkery/java/com/thirstwastaken2/spelunkery/

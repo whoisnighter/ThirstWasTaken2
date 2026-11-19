@@ -67,8 +67,10 @@ It is sampled only when water is collected, drunk or looked at with Jade.
 | Mountain (`#is_mountain`) | 28 |
 | Ocean, Beach, and `thirstwastaken2:sea_water` (No Man's Land's Mud Beach) | sea water, not scored (`enableSeaWater`) |
 
-A fluid in `thirstwastaken2:pure_water` is Pure wherever it lies, before the sea check and the score:
-Spelunkery's Spring Water, as optional entries. See [src/main/spelunkery/AGENTS.md](../../../src/main/spelunkery/AGENTS.md).
+A fluid in `thirstwastaken2:pure_water` is Pure wherever it lies, before the sea check and the score; the
+tag ships empty, for data packs. A fluid in `thirstwastaken2:salt_water` is sea water wherever it lies,
+while `enableSeaWater` is on, and scored like any other water when it is off: Spelunkery's Spring Water,
+as optional entries. See [src/main/spelunkery/AGENTS.md](../../../src/main/spelunkery/AGENTS.md).
 
 | Modifier | Score |
 |---|---|
@@ -196,7 +198,7 @@ Mixing in a cauldron or a hanging pot keeps the worse grade; a carried vessel av
 ### Where Pure water comes from
 
 The Copper Distiller, the Sand Filter, cold mountain water above y 100 open to the sky, a dripstone
-cauldron, Spelunkery's Spring Water, and underground and Nether loot.
+cauldron, and underground and Nether loot.
 
 ## Drinking bad water
 

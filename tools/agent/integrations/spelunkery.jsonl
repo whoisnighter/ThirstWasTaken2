@@ -1,7 +1,7 @@
 // Spelunkery in a real client: the check of its integration plan
 // (docs/dev/integration/world/SPELUNKERY-INTEGRATION.md). What it proves: the ids exist; a bottle drawn from
-// Spring Water is Pure even in a plains biome; a fresh water bucket in a furnace is purified, never boiled
-// into salt, and a Pure one stays put; and a sea water bucket boils into a salt bucket.
+// Spring Water is salty even in a plains biome; a fresh water bucket in a furnace is purified, never boiled
+// into salt, and a Clean or Pure one stays put; and a sea water bucket boils into a salt bucket.
 // Runs on both 1.21.1 nodes. Run it unattended:
 //     ./gradlew ":1.21.1:runClient" -Pagent=tools/agent/integrations/spelunkery.jsonl -Pquickplay=SpelunkeryAgent
 //     ./gradlew ":1.21.1-neoforge:runClient" -Pagent=tools/agent/integrations/spelunkery.jsonl -Pquickplay=SpelunkeryAgent -PwithoutOptional=cold-sweat
@@ -32,19 +32,20 @@
 {"id": "clearIds", "command": "server.command", "args": {"command": "clear @p"}}
 
 // A Spring Water source sunk into the floor, in plains, where ordinary water would grade by the biome.
-// A glass bottle drawn from it is Pure.
+// A glass bottle drawn from it is salty: Spring Water is mineral water, graded like the sea.
 {"id": "spring_place", "command": "server.command", "args": {"command": "setblock 0 199 2 spelunkery:spring_water"}}
 {"id": "spring_give", "command": "server.command", "args": {"command": "item replace entity @p weapon.mainhand with minecraft:glass_bottle"}}
 {"id": "spring_stand", "command": "server.command", "args": {"command": "tp @p 0.5 200 0.5 0 40"}}
 {"id": "spring_settle", "command": "wait", "args": {"ticks": 10}}
 {"id": "spring_use0", "command": "client.hold", "args": {"keys": ["use"], "ticks": 3}}
 {"id": "spring_used0", "command": "wait", "args": {"ticks": 10}}
-{"id": "spring_pure", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:potion[thirstwastaken2:water_purity=3]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "spring_salty", "command": "server.command", "args": {"command": "execute if items entity @p container.* minecraft:potion[thirstwastaken2:water_salty=true]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "spring_remove", "command": "server.command", "args": {"command": "setblock 0 199 2 minecraft:stone"}}
 {"id": "spring_clear", "command": "server.command", "args": {"command": "clear @p"}}
 
 // Five furnaces side by side. Spelunkery would boil any of these buckets into salt; only the sea water
-// may. Dirty becomes Clean, Murky and Clean become Pure, and a Pure bucket matches nothing and stays.
+// may. Dirty and Murky become Clean, where heat stops, and a Clean or Pure bucket matches nothing and stays.
+// Our purification cooks for 480 ticks.
 {"id": "dirty_furnace", "command": "server.command", "args": {"command": "setblock 0 200 4 minecraft:furnace[facing=north,lit=false]"}}
 {"id": "dirty_bucket", "command": "server.command", "args": {"command": "item replace block 0 200 4 container.0 with minecraft:water_bucket[thirstwastaken2:water_purity=0,thirstwastaken2:water_salty=false] 1"}}
 {"id": "dirty_fuel", "command": "server.command", "args": {"command": "item replace block 0 200 4 container.1 with minecraft:coal 8"}}
@@ -60,10 +61,11 @@
 {"id": "sea_furnace", "command": "server.command", "args": {"command": "setblock -2 200 4 minecraft:furnace[facing=north,lit=false]"}}
 {"id": "sea_bucket", "command": "server.command", "args": {"command": "item replace block -2 200 4 container.0 with minecraft:water_bucket[thirstwastaken2:water_salty=true] 1"}}
 {"id": "sea_fuel", "command": "server.command", "args": {"command": "item replace block -2 200 4 container.1 with minecraft:coal 8"}}
-{"id": "smelting", "command": "wait", "args": {"ticks": 280}}
+{"id": "smelting", "command": "wait", "args": {"ticks": 540}}
 {"id": "dirty_purified", "command": "server.command", "args": {"command": "execute if data block 0 200 4 Items[{Slot:2b,id:\"minecraft:water_bucket\",components:{\"thirstwastaken2:water_purity\":2}}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
-{"id": "murky_purified", "command": "server.command", "args": {"command": "execute if data block 2 200 4 Items[{Slot:2b,id:\"minecraft:water_bucket\",components:{\"thirstwastaken2:water_purity\":3}}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
-{"id": "clean_purified", "command": "server.command", "args": {"command": "execute if data block 4 200 4 Items[{Slot:2b,id:\"minecraft:water_bucket\",components:{\"thirstwastaken2:water_purity\":3}}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "murky_purified", "command": "server.command", "args": {"command": "execute if data block 2 200 4 Items[{Slot:2b,id:\"minecraft:water_bucket\",components:{\"thirstwastaken2:water_purity\":2}}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "clean_left", "command": "server.command", "args": {"command": "execute if data block 4 200 4 Items[{Slot:0b,id:\"minecraft:water_bucket\"}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
+{"id": "clean_no_output", "command": "server.command", "args": {"command": "execute unless data block 4 200 4 Items[{Slot:2b}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "pure_left", "command": "server.command", "args": {"command": "execute if data block 6 200 4 Items[{Slot:0b,id:\"minecraft:water_bucket\"}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "pure_no_output", "command": "server.command", "args": {"command": "execute unless data block 6 200 4 Items[{Slot:2b}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}
 {"id": "sea_salt", "command": "server.command", "args": {"command": "execute if data block -2 200 4 Items[{Slot:2b,id:\"spelunkery:salt_bucket\"}]"}, "checks": [{"left": "result.messages.0", "op": "contains", "value": "Test passed"}]}

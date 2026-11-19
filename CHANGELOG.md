@@ -16,6 +16,12 @@ All notable changes to ThirstWasTaken2 are documented in this file.
   Pure. Mixed water takes the worse grade, and piped sea water is refused. The endless tap still gives
   Murky water.
 
+### Changed
+
+- Spelunkery, on Fabric and NeoForge 1.21.1: Spring Water is now salty, like sea water, instead of
+  Pure. It's mineral water full of salt and sulfur, not a mountain stream, and one bucket of it no
+  longer means Pure water for the rest of the game.
+
 ### Fixed
 
 - Hexalia 1.3.8.1 or older no longer crashes the game at launch on 1.20.1. The Brew of Bloodlust still

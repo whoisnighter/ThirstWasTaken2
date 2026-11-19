@@ -13,15 +13,20 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Water that {@code WaterPurity.sampleAt} grades Pure wherever it lies, ahead of the biome and the sea.
+ * Fluids whose water {@code WaterPurity.sampleAt} grades the same wherever they lie, ahead of the biome:
+ * {@code pure_water} always Pure, {@code salt_water} salty like the sea.
  *
- * <p>Spelunkery's Spring Water joins it as optional entries, so the tag loads without Spelunkery: it
- * pools deep in mountains and heals whoever bathes in it, which reads as mineral spring water. See
- * docs/dev/integration/world/SPELUNKERY-INTEGRATION.md.
+ * <p>{@code pure_water} ships empty, for data packs. Spelunkery's Spring Water is in {@code salt_water} as
+ * optional entries, so the tag loads without Spelunkery: a sluice sifts rock salt, saltpeter and sulfur
+ * out of it and its pools are rimmed with basalt, so it reads as hot mineral water, not a mountain
+ * stream. It was Pure until a player pointed that out, and one placed bucket was endless Pure bottles.
+ * See docs/dev/integration/world/SPELUNKERY-INTEGRATION.md.
  */
 public final class ThirstFluidTagProvider extends FabricTagsProvider<Fluid> {
     private static final TagKey<Fluid> PURE_WATER =
             TagKey.create(Registries.FLUID, ThirstWasTaken2.id("pure_water"));
+    private static final TagKey<Fluid> SALT_WATER =
+            TagKey.create(Registries.FLUID, ThirstWasTaken2.id("salt_water"));
 
     public ThirstFluidTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, Registries.FLUID, registries);
@@ -31,9 +36,12 @@ public final class ThirstFluidTagProvider extends FabricTagsProvider<Fluid> {
     protected void addTags(HolderLookup.Provider registries) {
         // Fabric API's tag builder was called getOrCreateTagBuilder on 1.21.1.
         //? if >1.21.1 {
-        builder(PURE_WATER)
-        //?} else
-        //getOrCreateTagBuilder(PURE_WATER)
+        builder(PURE_WATER);
+        builder(SALT_WATER)
+        //?} else {
+        /*getOrCreateTagBuilder(PURE_WATER);
+        getOrCreateTagBuilder(SALT_WATER)
+        *///?}
                 .addOptional(spelunkery("spring_water"))
                 .addOptional(spelunkery("flowing_spring_water"));
     }

@@ -4,8 +4,8 @@ title: "Spelunkery"
 
 ![Spelunkery](https://cdn-raw.modrinth.com/data/krskFMfA/images/3334d4f848d7b094895130da48ed04b15862fb52.png){.mod-banner}
 
-With Spelunkery installed, its Spring Water is always Pure, and only sea water boils down to salt in a
-furnace.
+With Spelunkery installed, its Spring Water is salty, like sea water, and only sea water boils down to
+salt in a furnace.
 
 ::: warning Supported versions
 Fabric and NeoForge, Minecraft 1.21.1, with ![](https://cdn.modrinth.com/data/krskFMfA/465cfcd453c22ee5a09884ede98a0442e97658c5.png){.mod-icon} [Spelunkery](https://modrinth.com/mod/spelunkery)
@@ -16,8 +16,12 @@ Fabric and NeoForge, Minecraft 1.21.1, with ![](https://cdn.modrinth.com/data/kr
 
 ![A Spelunkery hot spring of glowing Spring Water in a cave](https://cdn.modrinth.com/data/krskFMfA/images/0cfdcf05b11746e5fa7e2e91856396b82f174ef3.png)
 
-Spring Water pools in caves under mountains, glowing faintly. A bottle, bowl or waterskin filled from
-it, or a sip straight from it, is always Pure, wherever the spring is. There is no need to boil it.
+Spring Water pools in caves under mountains, glowing faintly. It's mineral water: a sluice sifts rock
+salt and sulfur out of it. A bottle, bowl or waterskin filled from it, or a sip straight from it, is
+salty, wherever the spring is. Like sea water, it needs a [Copper Distiller](/docs/features/water-purity#copper-distiller) before it is safe to drink.
+
+With [enableSeaWater](/docs/configuration#enableseawater) turned off, Spring Water is graded like any
+other water in its place.
 
 A bucket of Spring Water is Spelunkery's own fluid. It can be poured out again, but it is not a drink.
 

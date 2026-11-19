@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "spelunkery:spring_water",
+      "required": false
+    },
+    {
+      "id": "spelunkery:flowing_spring_water",
+      "required": false
+    }
+  ]
+}

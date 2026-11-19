@@ -69,12 +69,16 @@ public final class WaterPurity {
      */
     private static final TagKey<Biome> SEA_WATER = TagKey.create(
             Registries.BIOME, ThirstWasTaken2.id("sea_water"));
-    /**
-     * Water that is Pure wherever it lies, such as Spelunkery's mountain Spring Water. A tag, so a data
-     * pack can add another mod's fluid.
-     */
+    /** Water that is Pure wherever it lies. Empty as shipped; a tag, so a data pack can add a fluid. */
     private static final TagKey<Fluid> PURE_WATER = TagKey.create(
             Registries.FLUID, ThirstWasTaken2.id("pure_water"));
+    /**
+     * Water that is salty wherever it lies, such as Spelunkery's Spring Water: a sluice sifts rock salt
+     * and sulfur out of it, so it is mineral water, not a mountain stream. With {@code enableSeaWater}
+     * off it is graded by its biome like any other water.
+     */
+    private static final TagKey<Fluid> SALT_WATER = TagKey.create(
+            Registries.FLUID, ThirstWasTaken2.id("salt_water"));
     private static final int SURFACE_MOUNTAIN_Y = 100;
     /** The best grade water out of the sky's reach can have: Murky. */
     private static final int COVERED_MAX = 1;
@@ -268,8 +272,9 @@ public final class WaterPurity {
         ThirstConfig config = ThirstConfig.get();
         FluidState fluid = state.getFluidState();
         if (!fluid.is(FluidTags.WATER)) return WaterQuality.fresh(config.defaultQuality);
-        // Before the sea check: a spring is Pure even by the coast.
+        // Before the sea check: a Pure fluid is Pure even by the coast.
         if (fluid.is(PURE_WATER)) return WaterQuality.fresh(MAX);
+        if (config.enableSeaWater && fluid.is(SALT_WATER)) return WaterQuality.SALT;
 
         var biome = level.getBiome(pos);
         // The sea is not a grade of fresh water, so it never reaches the scoring below. This also
