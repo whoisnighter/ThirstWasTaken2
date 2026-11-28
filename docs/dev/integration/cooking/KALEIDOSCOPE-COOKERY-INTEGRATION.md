@@ -24,14 +24,14 @@ NeoForge release.
 
 | Node | Mod | Version | Modrinth id | Teapot | Dripstone into teapot |
 |---|---|---|---|---|---|
-| `1.21.1-neoforge` | official | `1.6.0-neoforge+mc1.21.1` (published 2026-09-22, same targets as 1.5.0) | `g8w0b2ly` | yes | yes |
-| `1.21.1` | Refabricated | `1.6.0.9-fabric+mc1.21.1` | `JHI49bug` | yes | yes |
-| `1.20.1-forge` | official | `1.6.0-forge+mc1.20.1` | `Ghp0qCKY` | yes | yes |
-| `1.20.1` | Refabricated | `1.6.0.9-fabric+mc1.20.1` | `ReRZM8PP` | yes | yes |
+| `1.21.1-neoforge` | official | `1.7.0-neoforge+mc1.21.1` (published 2026-09-22, same targets as 1.5.0) | `COtTVhOl` | yes | yes |
+| `1.21.1` | Refabricated | `1.7.0.2-fabric+mc1.21.1` | `WHBpkSgD` | yes | yes |
+| `1.20.1-forge` | official | `1.7.0-forge+mc1.20.1` | `Jtm73Mqn` | yes | yes |
+| `1.20.1` | Refabricated | `1.7.0.2-fabric+mc1.20.1` | `f8gTK2kC` | yes | yes |
 | `1.21.11` | Refabricated | `1.3.0.10-fabric+mc1.21.11`, hotfixes only from 1.3.0.10 on ("no longer update future contents") | `T5QYqq9P` | yes | no |
-| `26.1.x` | Refabricated | `1.6.0.9-fabric+mc26.1.2` | `jrnadXkk` | yes | no |
-| `26.2.x` | Refabricated | `1.6.0.9-fabric+mc26.2` | `4wHT06v6` | yes | no |
-| `26.3.x` | Refabricated | `1.6.0.9-fabric+mc26.3` | `9DVxyClE` | yes | no |
+| `26.1.x` | Refabricated | `1.7.0.2-fabric+mc26.1.2` | `ZK6yCyQ7` | yes | no |
+| `26.2.x` | Refabricated | `1.7.0.2-fabric+mc26.2` | `qLJ091Gi` | yes | no |
+| `26.3.x` | Refabricated | `1.7.0.2-fabric+mc26.3` | `C4lX9Tqp` | yes | no |
 | `26.x-neoforge` | none | — | — | — | — |
 
 The official mod has no NeoForge build past 1.21.1, so the NeoForge nodes past 1.21.1 get nothing.
@@ -132,8 +132,8 @@ of different Minecraft versions share one version number). Nothing in the other 
 # [fabric."26.3.x"]
 # Kaleidoscope Cookery Refabricated, the unofficial Fabric port with the official team's permission:
 # the official Fabric build stopped at 1.0.1. See docs/dev/integration/cooking/KALEIDOSCOPE-COOKERY-INTEGRATION.md.
-# 1.6.0.9-fabric+mc26.3, the Fabric upload.
-deps.kaleidoscope_cookery = "9DVxyClE"
+# 1.7.0.2-fabric+mc26.3, the Fabric upload.
+deps.kaleidoscope_cookery = "C4lX9Tqp"
 ```
 
 Add to `MODRINTH_DEPS` in `../../../../.github/scripts/update_mc_deps.py`, with `by_id=True`, **under two project
